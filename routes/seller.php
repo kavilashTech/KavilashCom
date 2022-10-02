@@ -18,6 +18,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Seller', 'prefix' => 'seller'
     });
     
     // Product 
+    /*
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index')->name('products');
         Route::get('/product/create', 'create')->name('products.create');
@@ -32,6 +33,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Seller', 'prefix' => 'seller'
         Route::post('/products/published', 'updatePublished')->name('products.published');
         Route::get('/products/destroy/{id}', 'destroy')->name('products.destroy');
     });
+    */
 
     // Product Bulk Upload
     Route::controller(ProductBulkUploadController::class)->group(function () {

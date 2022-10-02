@@ -201,6 +201,21 @@
                                 <div class="d-lg-none" data-toggle="class-toggle" data-target=".front-header-search">
                                     <button class="btn px-2" type="button"><i class="la la-2x la-long-arrow-left"></i></button>
                                 </div>
+                                <div class="form-group category-select d-none d-xl-block" style="margin-top: 15px;">
+                                            <select class="form-control selectpicker" name="category">
+                                                <option value="">{{translate('All Categories')}}</option>
+                                                @foreach (\App\Models\Category::all() as $key => $category)
+                                                <option value="{{ $category->slug }}"
+                                                    @isset($category_id)
+                                                        @if ($category_id == $category->id)
+                                                            selected
+                                                        @endif
+                                                    @endisset
+                                                    >{{ __($category->name) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        
                                 <div class="input-group">
                                     <input type="text" class="border-0 border-lg form-control" id="search" name="keyword" @isset($query)
                                         value="{{ $query }}"

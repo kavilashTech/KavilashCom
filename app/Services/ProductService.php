@@ -171,6 +171,9 @@ class ProductService
         if(!isset($collection['todays_deal'])){
             $collection['todays_deal'] = 0;
         }
+        if(!isset($collection['returnable'])){
+            $collection['returnable'] = 0;
+        }
 
         if ($collection['lang'] != env("DEFAULT_LANGUAGE")) {
             unset($collection['name']);
@@ -272,6 +275,8 @@ class ProductService
         }
 
         unset($collection['button']);
+
+        //dd($collection);
         
         $data = $collection->merge(compact(
             'discount_start_date',
@@ -280,7 +285,7 @@ class ProductService
             'slug',
             'colors',
             'choice_options',
-            'attributes',
+            'attributes'
         ))->toArray();
         
         $product->update($data);

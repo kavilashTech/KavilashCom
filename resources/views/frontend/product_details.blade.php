@@ -448,6 +448,10 @@
                                     <div class="aiz-share"></div>
                                 </div>
                             </div>
+                            @if($detailedProduct->returnable == 1)
+                            <img src="https://images-na.ssl-images-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB484059092_.png">
+                            Returnable
+                            @endif
                         </div>
                     </div>
                 </div>

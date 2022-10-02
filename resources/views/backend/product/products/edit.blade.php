@@ -600,6 +600,27 @@
                     </div>
                 </div>
 
+                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">{{translate('Product Returnable ?')}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-md-6 col-from-label">{{translate('Status')}}</label>
+                                    <div class="col-md-6">
+                                        <label class="aiz-switch aiz-switch-success mb-0">
+                                            <input type="checkbox" name="returnable" value="1" @if($product->returnable == 1) checked @endif>
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">{{translate('Todays Deal')}}</h5>
