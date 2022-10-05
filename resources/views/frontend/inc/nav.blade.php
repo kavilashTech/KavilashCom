@@ -177,23 +177,12 @@
                             <img src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-30px h-md-40px" height="40">
                         @endif
                     </a>
-
-                    @if(Route::currentRouteName() != 'home')
-                        <div class="d-none d-xl-block align-self-stretch category-menu-icon-box ml-auto mr-0">
-                            <div class="h-100 d-flex align-items-center" id="category-menu-icon">
-                                <div class="dropdown-toggle navbar-light bg-light h-40px w-50px pl-2 rounded border c-pointer">
-                                    <span class="navbar-toggler-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
                 </div>
                 <div class="d-lg-none ml-auto mr-0">
                     <a class="p-2 d-block text-reset" href="javascript:void(0);" data-toggle="class-toggle" data-target=".front-header-search">
                         <i class="las la-search la-flip-horizontal la-2x"></i>
                     </a>
                 </div>
-
                 <div class="flex-grow-1 front-header-search d-flex align-items-center bg-white">
                     <div class="position-relative flex-grow-1">
                         <form action="{{ route('search') }}" method="GET" class="stop-propagation">
@@ -270,17 +259,7 @@
 
             </div>
         </div>
-        @if(Route::currentRouteName() != 'home')
-        <div class="hover-category-menu position-absolute w-100 top-100 left-0 right-0 d-none z-3" id="hover-category-menu">
-            <div class="container">
-                <div class="row gutters-10 position-relative">
-                    <div class="col-lg-3 position-static">
-                        @include('frontend.partials.category_menu')
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
+        
     </div>
     @if ( get_setting('header_menu_labels') !=  null )
         <div class="bg-white border-top border-gray-200 py-1">
