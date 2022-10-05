@@ -201,7 +201,7 @@
                                 <div class="d-lg-none" data-toggle="class-toggle" data-target=".front-header-search">
                                     <button class="btn px-2" type="button"><i class="la la-2x la-long-arrow-left"></i></button>
                                 </div>
-                                <div class="form-group category-select d-none d-xl-block" style="margin-top: 15px;">
+                                <div style="width:50%;">
                                             <select class="form-control selectpicker" name="category">
                                                 <option value="">{{translate('All Categories')}}</option>
                                                 @foreach (\App\Models\Category::all() as $key => $category)
