@@ -449,10 +449,10 @@
                                 </div>
                             </div>
                             @if($detailedProduct->returnable == 1)
-                            <!-- <img src="{{ static_asset('assets/img/placeholder.jpg') }}https://images-na.ssl-images-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB484059092_.png"> -->
                             <img src="{{ static_asset('assets/img/return_icon_green.jpg') }}">
-                            &nbsp;&nbsp;Returnable
+                            &nbsp;&nbsp;Returnable  
                             @endif
+                            {{$detailedProduct->returnable_days}}
                         </div>
                     </div>
                 </div>
