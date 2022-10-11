@@ -152,7 +152,7 @@
                             <a href="{{ route('user.login') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('Login')}}</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ route('user.registration') }}" class="d-inline-block py-2" style="color:#005A00";>{{ translate('Become a Partner')}}</a>
+                            <a href="{{ route('user.registration') }}" class="d-inline-block py-2" style="color:#243824";>{{ translate('Become a Partner')}}</a>
                         </li>
                     @endauth
                 </ul>
