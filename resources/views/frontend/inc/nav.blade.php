@@ -72,8 +72,8 @@
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                             <a href="tel:{{ get_setting('helpline_number') }}" class="text-reset d-inline-block opacity-60 py-2">
                                 <i class="la la-phone"></i>
-                                <span>{{ translate('Help line')}}</span>  
-                                <span>{{ get_setting('helpline_number') }}</span>    
+                                <span>{{ translate('Contact')}}</span>  
+                                <span>({{ get_setting('helpline_number') }} / {{ get_setting('helpline_number') }})</span>    
                             </a>
                         </li>
                     @endif
@@ -152,7 +152,7 @@
                             <a href="{{ route('user.login') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('Login')}}</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ route('user.registration') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('Registration')}}</a>
+                            <a href="{{ route('user.registration') }}" class="d-inline-block py-2" style="color:#005A00";>{{ translate('Become a Partner')}}</a>
                         </li>
                     @endauth
                 </ul>
@@ -208,7 +208,7 @@
                                 <div class="input-group">
                                     <input type="text" class="border-0 border-lg form-control" id="search" name="keyword" @isset($query)
                                         value="{{ $query }}"
-                                    @endisset placeholder="{{translate('I am shopping for...')}}" autocomplete="off">
+                                    @endisset placeholder="{{translate('Search Products...')}}" autocomplete="off">
                                     <div class="input-group-append d-none d-lg-block">
                                         <button class="btn btn-primary" type="submit">
                                             <i class="la la-search la-flip-horizontal fs-18"></i>
