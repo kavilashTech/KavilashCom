@@ -9193,6 +9193,7 @@ ul.social.colored [class*="linkedin"] {
 }
 
 /*hover category menu*/
+/*
 .aiz-category-menu .sub-cat-menu {
     display: none;
     position: absolute;
@@ -9204,7 +9205,21 @@ ul.social.colored [class*="linkedin"] {
     z-index: 9;
     background-color: #fff;
     overflow-y: auto;
+}*/
+.aiz-category-menu .sub-cat-menu {
+    display: none;
+    position: absolute;
+    width: 15%;
+    left: calc(25% - 10px);
+    height: calc(100% + 20px);
+    overflow: hidden;
+    top: 0;
+    z-index: 9;
+    background-color:gray;
+    color: #fff;;
+    overflow-y: auto;
 }
+
 [dir="rtl"] .aiz-category-menu .sub-cat-menu {
     left: auto;
     right: calc(25% - 10px);
