@@ -9,13 +9,13 @@
 </div>
 @endif
 <!-- Top Bar -->
-<div class="top-navbar bg-white border-bottom border-soft-secondary z-1035 h-35px h-sm-auto">
+<div class="top-navbar border-bottom border-soft-secondary z-1035 h-35px h-sm-auto" style="background-color:#243824;">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7 col">
+            <div class="col-lg-6 col">
                 <ul class="list-inline d-flex justify-content-between justify-content-lg-start mb-0">
                     @if(get_setting('show_language_switcher') == 'on')
-                    <li class="list-inline-item dropdown mr-3" id="lang-change">
+                   <!--  <li class="list-inline-item dropdown mr-3" id="lang-change">
                         @php
                             if(Session::has('locale')){
                                 $locale = Session::get('locale', Config::get('app.locale'));
@@ -38,11 +38,11 @@
                                 </li>
                             @endforeach
                         </ul>
-                    </li>
+                    </li> -->
                     @endif
 
                     @if(get_setting('show_currency_switcher') == 'on')
-                    <li class="list-inline-item dropdown ml-auto ml-lg-0 mr-0" id="currency-change">
+                   <!--  <li class="list-inline-item dropdown ml-auto ml-lg-0 mr-0" id="currency-change">
                         @php
                             if(Session::has('currency_code')){
                                 $currency_code = Session::get('currency_code');
@@ -61,19 +61,19 @@
                                 </li>
                             @endforeach
                         </ul>
-                    </li>
+                    </li> -->
                     @endif
                 </ul>
             </div>
 
-            <div class="col-5 text-right d-none d-lg-block">
+            <div class="col-lg-6 text-right d-none d-lg-block">
                 <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
                     @if (get_setting('helpline_number'))
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                            <a href="tel:{{ get_setting('helpline_number') }}" class="text-reset d-inline-block opacity-60 py-2">
-                                <i class="la la-phone"></i>
-                                <span>{{ translate('Contact')}}</span>  
-                                <span>({{ get_setting('helpline_number') }} / {{ get_setting('helpline_number') }})</span>    
+                            <a href="tel:{{ get_setting('helpline_number') }}" class=" d-inline-block  py-2">
+                                <i class="la la-phone" style="color:#fff;"></i>
+                                <span style="color:#fff;">{{ translate('Contact')}}</span>  
+                                <span style="color:#fff;">({{ get_setting('helpline_number') }} / {{ get_setting('helpline_number') }})</span>    
                             </a>
                         </li>
                     @endif
@@ -149,10 +149,10 @@
                         </li>
                     @else
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                            <a href="{{ route('user.login') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('Login')}}</a>
+                            <a href="{{ route('user.login') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('Login')}}</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ route('user.registration') }}" class="d-inline-block py-2" style="color:#243824";>{{ translate('Become a Partner')}}</a>
+                            <a href="{{ route('user.registration') }}" class="becomePartnerBtn">{{ translate('Become a Partner')}}</a>
                         </li>
                     @endauth
                 </ul>

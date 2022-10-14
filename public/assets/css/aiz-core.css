@@ -6009,7 +6009,7 @@ a {
 }
 a:hover {
     text-decoration: none;
-    color: var(--hov-primary);
+    color: #fff;
 }
 :focus,
 a:focus,
@@ -9772,4 +9772,10 @@ ul.social.colored [class*="linkedin"] {
 }
 [dir="rtl"] .badge-custom {
     border-radius: 50em 0 0 50em;
+}
+
+.becomePartnerBtn{
+    color: #fff;
+    border: 1px solid white;
+    padding: 4px;
 }
