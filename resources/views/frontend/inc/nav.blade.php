@@ -15,7 +15,7 @@
             <div class="col-lg-6 col">
                 <ul class="list-inline d-flex justify-content-between justify-content-lg-start mb-0">
                     @if(get_setting('show_language_switcher') == 'on')
-                   <!--  <li class="list-inline-item dropdown mr-3" id="lang-change">
+                 <li class="list-inline-item dropdown mr-3" id="lang-change">
                         @php
                             if(Session::has('locale')){
                                 $locale = Session::get('locale', Config::get('app.locale'));
@@ -38,11 +38,11 @@
                                 </li>
                             @endforeach
                         </ul>
-                    </li> -->
+                    </li>
                     @endif
 
                     @if(get_setting('show_currency_switcher') == 'on')
-                   <!--  <li class="list-inline-item dropdown ml-auto ml-lg-0 mr-0" id="currency-change">
+                   <li class="list-inline-item dropdown ml-auto ml-lg-0 mr-0" id="currency-change">
                         @php
                             if(Session::has('currency_code')){
                                 $currency_code = Session::get('currency_code');
@@ -61,7 +61,7 @@
                                 </li>
                             @endforeach
                         </ul>
-                    </li> -->
+                    </li>
                     @endif
                 </ul>
             </div>
@@ -72,8 +72,7 @@
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                             <a href="tel:{{ get_setting('helpline_number') }}" class=" d-inline-block  py-2">
                                 <i class="la la-phone" style="color:#fff;"></i>
-                                <span style="color:#fff;">{{ translate('Contact')}}</span>  
-                                <span style="color:#fff;">({{ get_setting('helpline_number') }} / {{ get_setting('helpline_number') }})</span>    
+                                <span style="color:#fff;">{{ translate('Contact')}} :  {{ get_setting('helpline_number') }}</span>  
                             </a>
                         </li>
                     @endif
