@@ -87,7 +87,7 @@
                                 <a class="dropdown-toggle no-arrow text-reset" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
                                     <span class="">
                                         <span class="position-relative d-inline-block">
-                                            <i class="las la-bell fs-18"></i>
+                                            <i class="las la-bell fs-18" style="color:#fff;" ></i>
                                             @if(count(Auth::user()->unreadNotifications) > 0)
                                                 <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>
                                             @endif
@@ -137,14 +137,14 @@
 
                             <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                                 @if (Auth::user()->user_type == 'seller')
-                                    <a href="{{ route('seller.dashboard') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('My Panel')}}</a>
+                                    <a href="{{ route('seller.dashboard') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('My Panel')}}</a>
                                 @else
-                                    <a href="{{ route('dashboard') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('My Panel')}}</a>
+                                    <a href="{{ route('dashboard') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('My Panel')}}</a>
                                 @endif
                             </li>
                         @endif
                         <li class="list-inline-item">
-                            <a href="{{ route('logout') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('Logout')}}</a>
+                            <a href="{{ route('logout') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('Logout')}}</a>
                         </li>
                     @else
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
