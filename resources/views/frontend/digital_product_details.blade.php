@@ -242,9 +242,9 @@
                                         {{ translate('Add to wishlist')}}
                                     </button>
                                     <!-- Add to compare button -->
-                                    <button type="button" class="btn btn-link btn-icon-left fw-600" onclick="addToCompare({{ $detailedProduct->id }})">
+                                    <!-- <button type="button" class="btn btn-link btn-icon-left fw-600" onclick="addToCompare({{ $detailedProduct->id }})">
                                         {{ translate('Add to compare')}}
-                                    </button>
+                                    </button> -->
                                     @if(Auth::check() && addon_is_activated('affiliate_system') && (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status || \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) && Auth::user()->affiliate_user != null && Auth::user()->affiliate_user->status)
                                         @php
                                             if(Auth::check()){
