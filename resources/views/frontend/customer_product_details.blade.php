@@ -75,7 +75,7 @@
                             </h1>
 
                             <div class="row no-gutters mt-3">
-                                <div class="col-2" style="">
+                                <div class="col-2">
                                     <div class="opacity-50 mt-2">{{ translate('Price')}}:</div>
                                 </div>
                                 <div class="col-10">
