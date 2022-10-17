@@ -62,9 +62,13 @@
                                         @endphp
                                         <td>
                                             @if(home_base_price($product) != home_discounted_base_price($product))
+<<<<<<< Updated upstream
                                                 <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product) }}</del>
+=======
+                                                <div class="fw-600 opacity-50 mr-1">{{ home_base_price($product) }}<span class="fw-700 text-primary">{{ home_discounted_base_price($product) }}</span></div>
+>>>>>>> Stashed changes
                                             @endif
-                                            <span class="fw-700 text-primary">{{ home_discounted_base_price($product) }}</span>
+                                            
                                         </td>
                                     @endforeach
                                 </tr>
