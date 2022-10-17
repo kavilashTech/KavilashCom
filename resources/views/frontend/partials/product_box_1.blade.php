@@ -35,7 +35,7 @@
             </a>
         </div>
     </div>
-    <div class="p-md-3 p-2 text-left">
+    <div class="p-ms-3 text-left">
         <div class="fs-15">
             @if(home_base_price($product) != home_discounted_base_price($product))
                 <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product) }}</del>
