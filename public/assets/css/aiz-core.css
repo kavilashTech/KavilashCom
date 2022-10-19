@@ -9793,4 +9793,11 @@ ul.social.colored [class*="linkedin"] {
     color: #fff;
     border: 1px solid white;
     padding: 4px;
+    background-color: rgb(82, 106, 81);
+    border-radius: 4px;
+}
+
+.becomePartnerBtn:hover{
+    background-color: rgb(255, 255, 255);
+    color:darkgreen;
 }
