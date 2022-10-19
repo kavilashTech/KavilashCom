@@ -138,12 +138,12 @@
                             </a>
                         </li>
 
-                        <li class="aiz-side-nav-item">
+                      <!--   <li class="aiz-side-nav-item">
                             <a href="{{ route('compare') }}" class="aiz-side-nav-link {{ areActiveRoutes(['compare'])}}">
                                 <i class="la la-refresh aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">{{ translate('Compare') }}</span>
                             </a>
-                        </li>
+                        </li> -->
 
                     @if(get_setting('classified_product') == 1)
                         <li class="aiz-side-nav-item">
@@ -244,13 +244,13 @@
                                     ->count();
                     @endphp
 
-                    <li class="aiz-side-nav-item">
+                    <!-- <li class="aiz-side-nav-item">
                         <a href="{{ route('support_ticket.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket.index'])}}">
                             <i class="las la-atom aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{translate('Support Ticket')}}</span>
                             @if($support_ticket > 0)<span class="badge badge-inline badge-success">{{ $support_ticket }}</span> @endif
                         </a>
-                    </li>
+                    </li> -->
                 @endif
                 <li class="aiz-side-nav-item">
                     <a href="{{ route('profile') }}" class="aiz-side-nav-link {{ areActiveRoutes(['profile'])}}">

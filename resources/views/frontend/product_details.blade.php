@@ -125,7 +125,7 @@
                             <hr>
 
                             <div class="row align-items-center">
-                                <div class="col-auto">
+                                <!-- <div class="col-auto">
                                     <small class="mr-2 opacity-50">{{ translate('Sold by') }}: </small><br>
                                     @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
                                         <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}"
@@ -133,7 +133,7 @@
                                     @else
                                         {{ translate('Inhouse product') }}
                                     @endif
-                                </div>
+                                </div> -->
                                 @if (get_setting('conversation_system') == 1)
                                     <div class="col-auto">
                                         <button class="btn btn-sm btn-soft-primary"
@@ -152,7 +152,7 @@
                                 @endif
                             </div>
 
-                            <hr>
+                            <!-- <hr> -->
 
                             @if ($detailedProduct->wholesale_product)
                                 <table class="table mb-0">
@@ -392,10 +392,10 @@
                                         {{ translate('Add to wishlist') }}
                                     </button>
                                     <!-- Add to compare button -->
-                                    <button type="button" class="btn btn-link btn-icon-left fw-600"
+                                    <!-- <button type="button" class="btn btn-link btn-icon-left fw-600"
                                         onclick="addToCompare({{ $detailedProduct->id }})">
                                         {{ translate('Add to compare') }}
-                                    </button>
+                                    </button> -->
                                     @if (Auth::check() && addon_is_activated('affiliate_system') && (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status || \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) && Auth::user()->affiliate_user != null && Auth::user()->affiliate_user->status)
                                         @php
                                             if (Auth::check()) {
@@ -449,10 +449,10 @@
                                 </div>
                             </div>
                             @if($detailedProduct->returnable == 1)
-                            <!-- <img src="{{ static_asset('assets/img/placeholder.jpg') }}https://images-na.ssl-images-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB484059092_.png"> -->
                             <img src="{{ static_asset('assets/img/return_icon_green.jpg') }}">
-                            &nbsp;&nbsp;Returnable
+                            &nbsp;&nbsp;Returnable  
                             @endif
+                            {{$detailedProduct->returnable_days}}
                         </div>
                     </div>
                 </div>

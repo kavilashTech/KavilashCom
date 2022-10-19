@@ -27,15 +27,15 @@
             <a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})" data-toggle="tooltip" data-title="{{ translate('Add to wishlist') }}" data-placement="left">
                 <i class="la la-heart-o"></i>
             </a>
-            <a href="javascript:void(0)" onclick="addToCompare({{ $product->id }})" data-toggle="tooltip" data-title="{{ translate('Add to compare') }}" data-placement="left">
+            <!-- <a href="javascript:void(0)" onclick="addToCompare({{ $product->id }})" data-toggle="tooltip" data-title="{{ translate('Add to compare') }}" data-placement="left">
                 <i class="las la-sync"></i>
-            </a>
+            </a> -->
             <a href="javascript:void(0)" onclick="showAddToCartModal({{ $product->id }})" data-toggle="tooltip" data-title="{{ translate('Add to cart') }}" data-placement="left">
                 <i class="las la-shopping-cart"></i>
             </a>
         </div>
     </div>
-    <div class="p-md-3 p-2 text-left">
+    <div class="p-ms-3 text-left">
         <div class="fs-15">
             @if(home_base_price($product) != home_discounted_base_price($product))
                 <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product) }}</del>

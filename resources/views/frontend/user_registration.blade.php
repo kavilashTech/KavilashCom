@@ -26,13 +26,13 @@
                                         </div>
 
                                         @if (addon_is_activated('otp_system'))
-                                            <div class="form-group phone-form-group mb-1">
+                                            <div class="form-group phone-form-group mb-1 d-none">
                                                 <input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="" name="phone" autocomplete="off">
                                             </div>
 
                                             <input type="hidden" name="country_code" value="">
 
-                                            <div class="form-group email-form-group mb-1 d-none">
+                                            <div class="form-group email-form-group">
                                                 <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email"  autocomplete="off">
                                                 @if ($errors->has('email'))
                                                     <span class="invalid-feedback" role="alert">
@@ -41,9 +41,9 @@
                                                 @endif
                                             </div>
 
-                                            <div class="form-group text-right">
+                                          <!--   <div class="form-group text-right">
                                                 <button class="btn btn-link p-0 opacity-50 text-reset" type="button" onclick="toggleEmailPhone(this)">{{ translate('Use Email Instead') }}</button>
-                                            </div>
+                                            </div> -->
                                         @else
                                             <div class="form-group">
                                                 <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email">

@@ -617,6 +617,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-md-6 col-from-label">{{translate('Number of days')}}</label>
+                                    <div class="col-md-6">
+                                            <input type="text" maxlength="50" name="returnable_days"
+                                            value="{{$product->returnable_days}}" class="form-control">
+                                            <span></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

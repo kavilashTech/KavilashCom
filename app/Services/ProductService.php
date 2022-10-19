@@ -174,6 +174,9 @@ class ProductService
         if(!isset($collection['returnable'])){
             $collection['returnable'] = 0;
         }
+        if(!isset($collection['returnable_days'])){
+            $collection['returnable_days'] = "";
+        }
 
         if ($collection['lang'] != env("DEFAULT_LANGUAGE")) {
             unset($collection['name']);
