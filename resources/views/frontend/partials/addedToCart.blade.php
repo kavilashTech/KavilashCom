@@ -48,13 +48,9 @@
                         <div class="p-md-3 p-2 text-left">
                             <div class="fs-15">
                                 @if(home_base_price($related_product) != home_discounted_base_price($related_product))
-<<<<<<< Updated upstream
                                     <del class="fw-600 opacity-50 mr-1">{{ home_base_price($related_product) }}</del>
-=======
-                                    <div class="fw-600 opacity-50 mr-1" >{{ home_base_price($related_product) }}<span class="fw-700 text-primary">{{ home_discounted_base_price($related_product) }}</span></div>
->>>>>>> Stashed changes
                                 @endif
-                                
+                                <span class="fw-700 text-primary">{{ home_discounted_base_price($related_product) }}</span>
                             </div>
                             <div class="rating rating-sm mt-1">
                                 {{ renderStarRating($related_product->rating) }}
