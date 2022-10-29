@@ -225,7 +225,8 @@ class ProductController extends Controller
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
 
-        return redirect()->route('products.admin');
+        //return redirect()->route('products.admin');
+        return redirect()->route('products.all');
     }
 
     /**
