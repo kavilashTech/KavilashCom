@@ -174,6 +174,7 @@
                                     </tbody>
                                 </table>
                             @else
+                               
                                 @if (home_price($detailedProduct) != home_discounted_price($detailedProduct))
                                     <div class="row no-gutters mt-3">
                                         <div class="col-sm-2">
@@ -225,6 +226,12 @@
                                         </div>
                                     </div>
                                 @endif
+                            @endif
+                            @if(!empty($detailedProduct->stocks->first()->hsn_code))
+                                <div class="col-sm-2">
+                                    <div class="opacity-50 my-2">{{ translate('HSN Code') }}:</div>
+                                </div>
+                                <div class="col-sm-10"><span class="opacity-70">{{$detailedProduct->stocks->first()->hsn_code}}</span></div>
                             @endif
 
                             @if (addon_is_activated('club_point') && $detailedProduct->earn_point > 0)

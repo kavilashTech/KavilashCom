@@ -28,6 +28,7 @@ class ProductStockService
                 $product_stock->variant = $str;
                 $product_stock->price = request()['price_' . str_replace('.', '_', $str)];
                 $product_stock->sku = request()['sku_' . str_replace('.', '_', $str)];
+                $product_stock->hsn_code = request()['hsn_code_' . str_replace('.', '_', $str)];
                 $product_stock->qty = request()['qty_' . str_replace('.', '_', $str)];
                 $product_stock->image = request()['img_' . str_replace('.', '_', $str)];
                 $product_stock->save();
@@ -52,6 +53,7 @@ class ProductStockService
             $product_stock->variant     = $stock->variant;
             $product_stock->price       = $stock->price;
             $product_stock->sku         = $stock->sku;
+            $product_stock->hsn_code    = $stock->hsn_code;
             $product_stock->qty         = $stock->qty;
             $product_stock->save();
         }

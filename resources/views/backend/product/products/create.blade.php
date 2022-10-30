@@ -264,6 +264,14 @@
                                     <input type="text" placeholder="{{ translate('SKU') }}" name="sku" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('HSN Code')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="{{ translate('HSN Code') }}" name="hsn_code" class="form-control">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">

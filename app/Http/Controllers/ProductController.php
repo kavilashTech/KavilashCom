@@ -211,7 +211,7 @@ class ProductController extends Controller
 
         //Product Stock
         $this->productStockService->store($request->only([
-            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'current_stock', 'product_id'
+            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'hsn_code', 'current_stock', 'product_id'
         ]), $product);
 
         // Product Translations
@@ -308,7 +308,7 @@ class ProductController extends Controller
 
         $request->merge(['product_id' => $product->id]);
         $this->productStockService->store($request->only([
-            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'current_stock', 'product_id'
+            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'hsn_code', 'current_stock', 'product_id'
         ]), $product);
 
         //Flash Deal
