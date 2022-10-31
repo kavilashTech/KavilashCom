@@ -114,12 +114,12 @@
                             </a>
                         </li>
 
-                        <li class="aiz-side-nav-item">
+                        <!-- <li class="aiz-side-nav-item">
                             <a href="{{ route('digital_purchase_history.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['digital_purchase_history.index'])}}">
                                 <i class="las la-download aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">{{ translate('Downloads') }}</span>
                             </a>
-                        </li>
+                        </li> -->
                     @endif
 
                         @if (addon_is_activated('refund_request'))
