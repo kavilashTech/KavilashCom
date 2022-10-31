@@ -325,6 +325,14 @@
                                     <input type="text" placeholder="{{ translate('SKU') }}" value="{{ optional($product->stocks->first())->sku }}" name="sku" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('HSN Code')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="{{ translate('HSN Code') }}" value="{{ optional($product->stocks->first())->hsn_code }}" name="hsn_code" class="form-control">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">
