@@ -37,7 +37,7 @@
 
                                     <div class="form-group text-right">
                                         <button class="btn btn-link p-0 opacity-50 text-reset" type="button"
-                                            onclick="toggleEmailPhone(this)">{{ translate('Use Email Instead') }}</button>
+                                            onclick="toggleEmailPhone(this)">{{ translate('Use Phone Instead') }}</button>
                                     </div>
                                 @else
                                     <div class="form-group">
@@ -91,7 +91,9 @@
                 country.dialCode = '88';
             }
         }
-
+        window.onload = function() {
+            toggleEmailPhone();
+        };
         var iti = intlTelInput(input, {
             separateDialCode: true,
             utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
@@ -112,7 +114,6 @@
 
         var country = iti.getSelectedCountryData();
         $('input[name=country_code]').val(country.dialCode);
-
         input.addEventListener("countrychange", function(e) {
             // var currentMask = e.currentTarget.placeholder;
 
