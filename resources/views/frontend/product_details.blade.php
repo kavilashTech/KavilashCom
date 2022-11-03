@@ -123,7 +123,28 @@
                             </div>
 
                             <hr>
-
+                            @if(isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
+                            <div class="row no-gutters mt-3">
+                                <div class="col-sm-2">
+                                    <div class="opacity-50">SKU:</div>
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="opacity-70">{{ $detailedProduct->stocks[0]['sku'] }}</div>
+                                </div>
+                            </div>
+                            @endif
+                            @if(isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
+                            <div class="row no-gutters my-2">
+                                <div class="col-sm-2">
+                                    <div class="opacity-50">HSN:</div>
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="opacity-70">{{ $detailedProduct->stocks[0]['hsn_code'] }}</div>
+                                </div>
+                            </div>
+                            @endif
+                            <hr>  
+                            </hr>
                             <div class="row align-items-center">
                                 <!-- <div class="col-auto">
                                     <small class="mr-2 opacity-50">{{ translate('Sold by') }}: </small><br>
@@ -227,12 +248,12 @@
                                     </div>
                                 @endif
                             @endif
-                            @if(!empty($detailedProduct->stocks->first()->hsn_code))
+                            <!-- @if(!empty($detailedProduct->stocks->first()->hsn_code))
                                 <div class="col-sm-2">
-                                    <div class="opacity-50 my-2">{{ translate('HSN Code') }}:</div>
+                                    <div class="opacity-50 my-2">HSN Code:</div>
                                 </div>
                                 <div class="col-sm-10"><span class="opacity-70">{{$detailedProduct->stocks->first()->hsn_code}}</span></div>
-                            @endif
+                            @endif -->
 
                             @if (addon_is_activated('club_point') && $detailedProduct->earn_point > 0)
                                 <div class="row no-gutters mt-4">

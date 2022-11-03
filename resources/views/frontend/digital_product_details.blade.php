@@ -111,8 +111,29 @@
                                 </div>
                             </div>
 
-
                             <hr>
+                            @if(isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
+                            <div class="row no-gutters mt-3">
+                                <div class="col-sm-2">
+                                    <div class="opacity-50">SKU:</div>
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="opacity-70">{{ $detailedProduct->stocks[0]['sku'] }}</div>
+                                </div>
+                            </div>
+                            @endif
+                            @if(isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
+                            <div class="row no-gutters my-2">
+                                <div class="col-sm-2">
+                                    <div class="opacity-50">HSN:</div>
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="opacity-70">{{ $detailedProduct->stocks[0]['hsn_code'] }}</div>
+                                </div>
+                            </div>
+                            @endif
+                            <hr>  
+
 
                             <div class="row align-items-center">
                                 <div class="col-auto">
