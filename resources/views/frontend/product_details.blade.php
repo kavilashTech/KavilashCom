@@ -124,12 +124,12 @@
 
                             <hr>
                             @if(isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
-                            <div class="row no-gutters mt-3">
+                            <div class="row no-gutters mt-3 sku_main">
                                 <div class="col-sm-2">
                                     <div class="opacity-50">SKU:</div>
                                 </div>
                                 <div class="col-sm-10">
-                                    <div class="opacity-70">{{ $detailedProduct->stocks[0]['sku'] }}</div>
+                                    <div class="opacity-70" id="sku_spec">{{ $detailedProduct->stocks[0]['sku'] }}</div>
                                 </div>
                             </div>
                             @endif
@@ -287,10 +287,10 @@
                                                 <div class="aiz-radio-inline">
                                                     @foreach ($choice->values as $key => $value)
                                                         @php
-                                                            $hsn_code = '';
+                                                            $sku_code = '';
                                                             foreach ($detailedProduct->stocks as $stocks) {
                                                                 if($stocks->variant == $value){
-                                                                    $hsn_code = $stocks->hsn_code;
+                                                                    $sku_code = $stocks->sku;
                                                                 }
                                                             }
                                                         @endphp
@@ -299,7 +299,7 @@
                                                                 class="model-radio"
                                                                 name="attribute_id_{{ $choice->attribute_id }}"
                                                                 value="{{ $value }}"
-                                                                data-hsn="{{$hsn_code}}"
+                                                                data-sku="{{$sku_code}}"
                                                                 @if ($key == 0) checked @endif>
                                                             <span
                                                                 class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center py-2 px-3 mb-2">
@@ -1065,12 +1065,12 @@
         }
 
         $('.model-radio').on('change', function() {
-            var hsnValue = $(this).filter(':checked').data('hsn');
-            $('.hsn_code_main').show();
-            if(hsnValue){
-                $('#hsn_code_spec').text(hsnValue);
+            var skuValue = $(this).filter(':checked').data('sku');
+            $('.sku_main').show();
+            if(skuValue){
+                $('#sku_spec').text(skuValue);
             }else{
-                $('.hsn_code_main').hide();
+                $('.sku_main').hide();
             }
         });
         
