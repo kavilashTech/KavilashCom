@@ -517,14 +517,10 @@
                 AIZ.plugins.notify('warning', "{{ translate('Please choose all the options') }}");
             }
         }
-
     </script>
-
     @yield('script')
-
     @php
         echo get_setting('footer_script');
     @endphp
-
 </body>
 </html>
