@@ -190,19 +190,19 @@
                                     <button class="btn px-2" type="button"><i class="la la-2x la-long-arrow-left"></i></button>
                                 </div>
                                 <div style="width:50%;">
-                                            <select class="form-control selectpicker" name="category">
-                                                <option value="">{{translate('All Categories')}}</option>
-                                                @foreach (\App\Models\Category::all() as $key => $category)
-                                                <option value="{{ $category->slug }}"
-                                                    @isset($category_id)
-                                                        @if ($category_id == $category->id)
-                                                            selected
-                                                        @endif
-                                                    @endisset
-                                                    >{{ __($category->name) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <select class="form-control "  name="category">
+                                        <option value="">{{translate('All Categories')}}</option>
+                                        @foreach (\App\Models\Category::all() as $key => $category)
+                                        <option value="{{ $category->slug }}"
+                                            @isset($_GET['category'])
+                                                @if ($_GET['category'] == $category->slug)
+                                                    selected
+                                                @endif
+                                            @endisset
+                                            >{{ __($category->name) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                         
                                 <div class="input-group">
                                     <input type="text" class="border-0 border-lg form-control" id="search" name="keyword" @isset($query)

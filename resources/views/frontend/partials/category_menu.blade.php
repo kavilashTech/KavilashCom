@@ -37,29 +37,34 @@ $all_category = \App\Models\Category::where('level', 0)->get();
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title">All Categories</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <ul class="list-unstyled mb-0 row gutters-5">
+        <section class="bg-white border-top mt-auto">
+    <div class="container">
+        <div class="row no-gutters">
             @foreach($all_category as $category)
-            <li class="minw-0 col-4 col-md mt-3">
-                <a href="http://localhost/kavilashcom/category/fresh-vegetable" class="d-block rounded bg-white p-2 text-reset shadow-sm">
-                    <img
+            <div class="col-lg-3 col-md-6">
+                <img
                         class="cat-image lazyload mr-2 opacity-60"
                         src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                        data-src="{{ uploaded_asset($category->banner) }}"
+                        data-src="{{ uploaded_asset($category->icon) }}"
                         width="16"
                         alt="{{ $category->getTranslation('name') }}"
                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                     >
-                    <div class="text-truncate fs-12 fw-600 mt-2 opacity-70">{{ $category->getTranslation('name') }}</div>
-                </a>
-            </li>
-            @endforeach                                     
-        </ul>
+                    <h4 class="h6 allCategory" data-slug="{{ $category->slug}}">{{ $category->getTranslation('name') }}</h4>
+                
+            </div>
+            @endforeach
+
+        </div>
+    </div>
+</section>
+
       </div>
     </div>
   </div>
