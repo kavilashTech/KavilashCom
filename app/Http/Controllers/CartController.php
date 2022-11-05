@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Cart;
+use App\Models\Tax;
 use Auth;
 use Session;
 use Cookie;
@@ -147,17 +148,32 @@ class CartController extends Controller
             }
 
             //calculation of taxes
+            $data['tax1'] =  0.00;
+            $data['tax1_amount'] =  0.00;
+            $data['tax2'] = 0.00;
+            $data['tax2_amount'] =  0.00;
+            $data['quantity'] = $request['quantity'];
+            if ($request['quantity'] == null){
+                $data['quantity'] = 1;
+            }
             foreach ($product->taxes as $product_tax) {
+                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
                 if($product_tax->tax_type == 'percent'){
                     $tax += ($price * $product_tax->tax) / 100;
                 }
                 elseif($product_tax->tax_type == 'amount'){
                     $tax += $product_tax->tax;
                 }
+                if(!empty($tax_name) && $tax_name->name == 'CGST'){
+                    $data['tax1'] =  $product_tax->tax;
+                    $data['tax1_amount'] =(($price * $data['tax1']) / 100);
+                }
+                if(!empty($tax_name) && $tax_name->name == 'SGST'){
+                    $data['tax2'] =  $product_tax->tax;
+                    $data['tax2_amount'] =(($price * $data['tax2']) / 100);
+                }
             }
-
-            $data['quantity'] = $request['quantity'];
-            $data['price'] = $price;
+            $data['price'] = $price ;
             $data['tax'] = $tax;
             //$data['shipping'] = 0;
             $data['shipping_cost'] = 0;
@@ -165,9 +181,6 @@ class CartController extends Controller
             $data['cash_on_delivery'] = $product->cash_on_delivery;
             $data['digital'] = $product->digital;
 
-            if ($request['quantity'] == null){
-                $data['quantity'] = 1;
-            }
 
             if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
                 $data['product_referral_code'] = Cookie::get('product_referral_code');
@@ -340,7 +353,9 @@ class CartController extends Controller
                     $price = $wholesalePrice->price;
                 }
             }
-
+            // $cartItem['tax1_amount'] =(($price * $cartItem['tax1']) / 100);
+            // $cartItem['tax2_amount'] =(($price * $cartItem['tax2']) / 100);
+            // $cartItem['price'] = $price +  $cartItem['tax1_amount'] +  $cartItem['tax2_amount'];
             $cartItem['price'] = $price;
             $cartItem->save();
         }
