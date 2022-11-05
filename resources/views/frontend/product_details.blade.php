@@ -134,12 +134,12 @@
                             </div>
                             @endif
                             @if(isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
-                            <div class="row no-gutters my-2">
+                            <div class="row no-gutters my-2 hsn_code_main">
                                 <div class="col-sm-2">
                                     <div class="opacity-50">HSN:</div>
                                 </div>
                                 <div class="col-sm-10">
-                                    <div class="opacity-70">{{ $detailedProduct->stocks[0]['hsn_code'] }}</div>
+                                    <div class="opacity-70" id="hsn_code_spec">{{ $detailedProduct->stocks[0]['hsn_code'] }}</div>
                                 </div>
                             </div>
                             @endif
@@ -286,10 +286,20 @@
                                             <div class="col-sm-10">
                                                 <div class="aiz-radio-inline">
                                                     @foreach ($choice->values as $key => $value)
+                                                        @php
+                                                            $hsn_code = '';
+                                                            foreach ($detailedProduct->stocks as $stocks) {
+                                                                if($stocks->variant == $value){
+                                                                    $hsn_code = $stocks->hsn_code;
+                                                                }
+                                                            }
+                                                        @endphp
                                                         <label class="aiz-megabox pl-0 mr-2">
                                                             <input type="radio"
+                                                                class="model-radio"
                                                                 name="attribute_id_{{ $choice->attribute_id }}"
                                                                 value="{{ $value }}"
+                                                                data-hsn="{{$hsn_code}}"
                                                                 @if ($key == 0) checked @endif>
                                                             <span
                                                                 class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center py-2 px-3 mb-2">
@@ -1054,6 +1064,16 @@
             @endif
         }
 
+        $('.model-radio').on('change', function() {
+            var hsnValue = $(this).filter(':checked').data('hsn');
+            $('.hsn_code_main').show();
+            if(hsnValue){
+                $('#hsn_code_spec').text(hsnValue);
+            }else{
+                $('.hsn_code_main').hide();
+            }
+        });
+        
         // Pagination using ajax
         $(window).on('hashchange', function() {
             if (window.location.hash) {
