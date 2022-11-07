@@ -584,15 +584,15 @@ if (!function_exists('home_discounted_price')) {
             }
         }
 
-        foreach ($product->taxes as $product_tax) {
-            if ($product_tax->tax_type == 'percent') {
-                $lowest_price += ($lowest_price * $product_tax->tax) / 100;
-                $highest_price += ($highest_price * $product_tax->tax) / 100;
-            } elseif ($product_tax->tax_type == 'amount') {
-                $lowest_price += $product_tax->tax;
-                $highest_price += $product_tax->tax;
-            }
-        }
+        // foreach ($product->taxes as $product_tax) {
+        //     if ($product_tax->tax_type == 'percent') {
+        //         $lowest_price += ($lowest_price * $product_tax->tax) / 100;
+        //         $highest_price += ($highest_price * $product_tax->tax) / 100;
+        //     } elseif ($product_tax->tax_type == 'amount') {
+        //         $lowest_price += $product_tax->tax;
+        //         $highest_price += $product_tax->tax;
+        //     }
+        // }
 
         if ($formatted) {
             if ($lowest_price == $highest_price) {
