@@ -26,6 +26,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use App\Models\Tax;
 
 class HomeController extends Controller
 {
@@ -225,7 +226,6 @@ class HomeController extends Controller
     public function product(Request $request, $slug)
     {
         $detailedProduct  = Product::with('reviews', 'brand', 'stocks', 'user', 'user.shop')->where('auction_product', 0)->where('slug', $slug)->where('approved', 1)->first();
-
         $product_queries = ProductQuery::where('product_id', $detailedProduct->id)->where('customer_id', '!=', Auth::id())->latest('id')->paginate(10);
         $total_query = ProductQuery::where('product_id', $detailedProduct->id)->count();
         // Pagination using Ajax
@@ -394,17 +394,26 @@ class HomeController extends Controller
                 $price -= $product->discount;
             }
         }
-
+        
         // taxes
-        foreach ($product->taxes as $product_tax) {
-            if ($product_tax->tax_type == 'percent') {
-                $tax += ($price * $product_tax->tax) / 100;
-            } elseif ($product_tax->tax_type == 'amount') {
-                $tax += $product_tax->tax;
-            }
-        }
-
-        $price += $tax;
+        // foreach ($product->taxes as $product_tax) {
+        //     $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+        //     if(!empty($tax_name) && ($tax_name->name == 'CGST' || $tax_name->name == 'SGST')){
+        //         if($product_tax->tax_type == 'percent'){
+        //             $tax += ($price * $product_tax->tax) / 100;
+        //         }
+        //         elseif($product_tax->tax_type == 'amount'){
+        //             $tax += $product_tax->tax;
+        //         }
+        //     }
+           
+        //     // if ($product_tax->tax_type == 'percent') {
+        //     //     $tax += ($price * $product_tax->tax) / 100;
+        //     // } elseif ($product_tax->tax_type == 'amount') {
+        //     //     $tax += $product_tax->tax;
+        //     // }
+        // }
+        // $price += $tax;
 
         return array(
             'price' => single_price($price * $request->quantity),

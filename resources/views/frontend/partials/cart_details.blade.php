@@ -98,7 +98,7 @@
                                             <span
                                                 class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST Amount') }}</span>
                                             <span
-                                                    class="fw-600 fs-16">-{{ $cartItem->tax2_amount * $cartItem['quantity']}}</span>
+                                                    class="fw-600 fs-16">{{ $cartItem->tax2_amount * $cartItem['quantity']}}</span>
                                             @php
                                                 $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
                                             @endphp
