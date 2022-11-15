@@ -23,7 +23,7 @@
                         <ul class="list-group list-group-flush">
                             @php
                                 $total = 0;
-                                $subTotal = 0;
+                                $subTotal = 0; 
                             @endphp
                             @foreach ($carts as $key => $cartItem)
                                 @php
