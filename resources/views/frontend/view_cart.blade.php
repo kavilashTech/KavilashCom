@@ -72,6 +72,7 @@
                                 <ul class="list-group list-group-flush">
                                     @php
                                         $total = 0;
+                                        $subTotal = 0; 
                                     @endphp
                                     @foreach ($carts as $key => $cartItem)
                                         @php
@@ -79,6 +80,7 @@
                                             $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
                                             // $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
                                             $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                            $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
                                             $product_name_with_choice = $product->getTranslation('name');
                                             if ($cartItem['variation'] != null) {
                                                 $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
@@ -191,7 +193,7 @@
 
                             <div class="px-3 py-2 border-top d-flex justify-content-end">
                                 <span class="opacity-60 fs-15">{{ translate('Subtotal') }}</span>
-                                <span class="fw-600 fs-17 pl-3">{{ single_price($total) }}</span>
+                                <span class="fw-600 fs-17 pl-3">{{ single_price($subTotal) }}</span>
                             </div>
 
                             <div class="px-3 py-2 d-flex justify-content-end mt-n3">
