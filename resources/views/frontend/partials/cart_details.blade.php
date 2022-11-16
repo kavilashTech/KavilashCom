@@ -108,7 +108,7 @@
 
                                         <div class="col-lg col-4 order-3 order-lg-0 my-3 my-lg-0">
                                             <span class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Total')}}</span>
-                                            <span class="fw-600 fs-16 text-primary">{{ single_price(($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity']) }}</span>
+                                            <span class="fw-600 fs-16 text-primary">{{ single_price(($cartItem['price'] ) * $cartItem['quantity']) }}</span>
                                         </div>
                                         <div class="col-lg-auto col-6 order-5 order-lg-0 text-right">
                                             <a href="javascript:void(0)" onclick="removeFromCartView(event, {{ $cartItem['id'] }})" class="btn btn-icon btn-sm btn-soft-primary btn-circle">
