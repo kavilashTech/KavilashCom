@@ -12,6 +12,15 @@
                 {{translate('SKU')}}
             </td>
             <td class="text-center" data-breakpoints="lg">
+                {{translate('Expiry Month')}}
+            </td>
+            <td class="text-center" data-breakpoints="lg">
+                {{translate('Expiry Year')}}
+            </td>
+            <td class="text-center" data-breakpoints="lg">
+                {{translate('Batch Number')}}
+            </td>
+            <td class="text-center" data-breakpoints="lg">
                 {{translate('Quantity')}}
             </td>
             <td class="text-center" data-breakpoints="lg">
@@ -79,6 +88,52 @@
                             }
                             else {
                                 echo $str;
+                            }
+                           @endphp" class="form-control">
+                </td>
+                <td>
+                    @php
+                        if($stock != null) {
+                            $expiryMonth = $stock->expiry_month;
+                        }
+                        else {
+                            $expiryMonth = $str;
+                        }
+                    @endphp
+                    <div class="col-md-8">
+                        <select class="form-control aiz-selectpicker" name="expiry_month_{{ $str }}" id="expiry_month" data-live-search="true">
+                            <option value="">Select Expiry Month</option>
+                            @foreach (json_decode( get_setting('expiry_month_array'), true) as $key => $value)
+                                <option value="{{ $value }}" <?php if ($expiryMonth == $value) echo "selected"; ?> >{{ $value }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    @php
+                        if($stock != null) {
+                            $expiryYear = $stock->expiry_year;
+                        }
+                        else {
+                            $expiryYear = $str;
+                        }
+                    @endphp
+                    <div class="col-md-8">
+                        <select class="form-control aiz-selectpicker" name="expiry_year_{{ $str }}" id="expiry_year" data-live-search="true">
+                            <option value="">Select Expiry Year</option>
+                            @foreach (json_decode( get_setting('expiry_year_array'), true) as $key => $value)
+                                <option value="{{ $value }}" <?php if ($expiryYear == $value) echo "selected"; ?> >{{ $value }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <input type="text" name="batch_number_{{ $str }}" value="@php
+                            if($stock != null) {
+                                echo $stock->batch_number;
+                            }
+                            else {
+                                echo '';
                             }
                            @endphp" class="form-control">
                 </td>

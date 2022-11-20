@@ -211,7 +211,7 @@ class ProductController extends Controller
 
         //Product Stock
         $this->productStockService->store($request->only([
-            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'hsn_code', 'current_stock', 'product_id'
+            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'hsn_code','expiry_month','expiry_year','batch_number', 'current_stock', 'product_id'
         ]), $product);
 
         // Product Translations
@@ -308,7 +308,7 @@ class ProductController extends Controller
 
         $request->merge(['product_id' => $product->id]);
         $this->productStockService->store($request->only([
-            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'hsn_code', 'current_stock', 'product_id'
+            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku','expiry_month','expiry_year','batch_number', 'hsn_code', 'current_stock', 'product_id'
         ]), $product);
 
         //Flash Deal
@@ -543,6 +543,7 @@ class ProductController extends Controller
         }
 
         $combinations = Combinations::makeCombinations($options);
+
         return view('backend.product.products.sku_combinations_edit', compact('combinations', 'unit_price', 'colors_active', 'product_name', 'product'));
     }
 }
