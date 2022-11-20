@@ -75,11 +75,23 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-            ]);
+            if(isset($data['franchisee'])){
+                $user = User::create([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password']),
+                    'city' => $data['city_id'],
+                    'state' => $data['state_id'],
+                    'phone' => '+91'.$data['phone'],
+                    'user_type' => 'partner',
+                ]);
+            }else{
+                $user = User::create([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password']),
+                ]);
+            }
         }
         else {
             if (addon_is_activated('otp_system')){

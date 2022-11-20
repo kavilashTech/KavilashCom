@@ -333,7 +333,10 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/addresses/set_default/{id}', 'set_default')->name('addresses.set_default');
     });
 });
-
+Route::controller(AddressController::class)->group(function () {
+    Route::post('/get-states-for-franchisee', 'getStates')->name('get-state-for-franchisee');
+    Route::post('/get-cities-for-franchisee', 'getCities')->name('get-city-for-franchisee');
+});
 Route::resource('shops', ShopController::class);
 
 Route::get('/instamojo/payment/pay-success', [InstamojoController::class, 'success'])->name('instamojo.success');
