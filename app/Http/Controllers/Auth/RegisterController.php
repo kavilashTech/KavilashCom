@@ -60,10 +60,20 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+        if(isset($data['franchisee'])){
+            return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+                'phone' => 'required|min:50',
+                'state_id' => 'required',
+                'city_id' => 'required',
+            ]);
+        }else{
+            return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+        }
     }
 
     /**
