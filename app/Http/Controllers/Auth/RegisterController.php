@@ -64,7 +64,7 @@ class RegisterController extends Controller
             return Validator::make($data, [
                 'name' => 'required|string|max:255',
                 'password' => 'required|string|min:6|confirmed',
-                'phone' => 'required|min:50',
+                'phone' => 'required',
                 'state_id' => 'required',
                 'city_id' => 'required',
             ]);
@@ -174,7 +174,9 @@ class RegisterController extends Controller
                 }
             }
         }
-
+        if(isset($user->user_type) && $user->user_type == 'partner'){
+            return redirect()->route('dashboard');
+        }
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());
     }
