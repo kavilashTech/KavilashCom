@@ -71,8 +71,7 @@ class ProductService
         if (
             isset($collection['colors_active']) &&
             $collection['colors_active'] &&
-            $collection['colors'] &&
-            count($collection['colors']) > 0
+            isset($collection['colors']) && (!empty($collection['colors']) > 0)
         ) {
             $colors = json_encode($collection['colors']);
         }
@@ -226,8 +225,7 @@ class ProductService
         if (
             isset($collection['colors_active']) && 
             $collection['colors_active'] &&
-            $collection['colors'] &&
-            count($collection['colors']) > 0
+            isset($collection['colors']) && (!empty($collection['colors']) > 0)
         ) {
             $colors = json_encode($collection['colors']);
         }

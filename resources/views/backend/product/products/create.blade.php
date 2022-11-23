@@ -264,6 +264,44 @@
                                     <input type="text" placeholder="{{ translate('SKU') }}" name="sku" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row" id="expiryMonth">
+                                <label class="col-md-3 col-from-label">{{translate('Expiry Month ')}}</label>
+                                <div class="col-md-8">
+                                    <select class="form-control aiz-selectpicker" name="expiry_month" id="expiry_month" data-live-search="true">
+                                        <option value="">Select Expiry Month</option>
+                                        @foreach (json_decode( get_setting('expiry_month_array'), true) as $key => $value)
+                                        <option value="{{ $value }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="expiryYear">
+                                <label class="col-md-3 col-from-label">{{translate('Expiry Year ')}}</label>
+                                <div class="col-md-8">
+                                    <select class="form-control aiz-selectpicker" name="expiry_year" id="expiry_year" data-live-search="true">
+                                        <option value="">Select Expiry Year</option>
+                                        @foreach (json_decode( get_setting('expiry_year_array'), true) as $key => $value)
+                                        <option value="{{ $value }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Batch Number')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="{{ translate('Batch Number') }}" name="batch_number" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('HSN Code')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="{{ translate('HSN Code') }}" name="hsn_code" class="form-control">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">
@@ -646,7 +684,6 @@
 @endsection
 
 @section('script')
-
 <script type="text/javascript">
     $('form').bind('submit', function (e) {
 		if ( $(".action-btn").attr('attempted') == 'true' ) {

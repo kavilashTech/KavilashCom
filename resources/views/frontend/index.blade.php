@@ -406,6 +406,15 @@
 @section('script')
     <script>
         $(document).ready(function(){
+            $('.allCategory').hover(function(){
+                $(this).css('cursor', 'pointer');
+            });
+                
+            $('.allCategory').click(function(){
+                window.location.href = 
+                "{{url('/')}}/search?category="+$(this).attr('data-slug')+"";
+            });
+
             $.post('{{ route('home.section.featured') }}', {_token:'{{ csrf_token() }}'}, function(data){
                 $('#section_featured').html(data);
                 AIZ.plugins.slickCarousel();

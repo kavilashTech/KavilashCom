@@ -6587,8 +6587,8 @@ input[type="number"] {
 }
 .aiz-p-hov-icon a {
     display: block;
-    height: 32px;
-    width: 32px;
+    height: 35px;
+    width: 35px;
     line-height: 32px;
     border-radius: 50%;
     text-align: center;
@@ -9791,7 +9791,9 @@ ul.social.colored [class*="linkedin"] {
 
 .becomePartnerBtn{
     color: #fff;
-    border: 1px solid white;
+    border: 1px solid rgb(27, 12, 12);
+    background-color: rgb(82, 106, 81);
+    border-radius: 4px;
     padding: 4px;
     background-color: rgb(82, 106, 81);
     border-radius: 4px;
@@ -9801,3 +9803,4 @@ ul.social.colored [class*="linkedin"] {
     background-color: rgb(255, 255, 255);
     color:darkgreen;
 }
+

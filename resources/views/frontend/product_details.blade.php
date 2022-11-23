@@ -123,7 +123,28 @@
                             </div>
 
                             <hr>
-
+                            @if(isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
+                            <div class="row no-gutters mt-3 sku_main">
+                                <div class="col-sm-2">
+                                    <div class="opacity-50">SKU:</div>
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="opacity-70" id="sku_spec">{{ $detailedProduct->stocks[0]['sku'] }}</div>
+                                </div>
+                            </div>
+                            @endif
+                            @if(isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
+                            <div class="row no-gutters my-2 hsn_code_main">
+                                <div class="col-sm-2">
+                                    <div class="opacity-50">HSN:</div>
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="opacity-70" id="hsn_code_spec">{{ $detailedProduct->stocks[0]['hsn_code'] }}</div>
+                                </div>
+                            </div>
+                            @endif
+                            <hr>  
+                            </hr>
                             <div class="row align-items-center">
                                 <!-- <div class="col-auto">
                                     <small class="mr-2 opacity-50">{{ translate('Sold by') }}: </small><br>
@@ -174,6 +195,7 @@
                                     </tbody>
                                 </table>
                             @else
+                               
                                 @if (home_price($detailedProduct) != home_discounted_price($detailedProduct))
                                     <div class="row no-gutters mt-3">
                                         <div class="col-sm-2">
@@ -226,6 +248,12 @@
                                     </div>
                                 @endif
                             @endif
+                            <!-- @if(!empty($detailedProduct->stocks->first()->hsn_code))
+                                <div class="col-sm-2">
+                                    <div class="opacity-50 my-2">HSN Code:</div>
+                                </div>
+                                <div class="col-sm-10"><span class="opacity-70">{{$detailedProduct->stocks->first()->hsn_code}}</span></div>
+                            @endif -->
 
                             @if (addon_is_activated('club_point') && $detailedProduct->earn_point > 0)
                                 <div class="row no-gutters mt-4">
@@ -258,10 +286,20 @@
                                             <div class="col-sm-10">
                                                 <div class="aiz-radio-inline">
                                                     @foreach ($choice->values as $key => $value)
+                                                        @php
+                                                            $sku_code = '';
+                                                            foreach ($detailedProduct->stocks as $stocks) {
+                                                                if($stocks->variant == $value){
+                                                                    $sku_code = $stocks->sku;
+                                                                }
+                                                            }
+                                                        @endphp
                                                         <label class="aiz-megabox pl-0 mr-2">
                                                             <input type="radio"
+                                                                class="model-radio"
                                                                 name="attribute_id_{{ $choice->attribute_id }}"
                                                                 value="{{ $value }}"
+                                                                data-sku="{{$sku_code}}"
                                                                 @if ($key == 0) checked @endif>
                                                             <span
                                                                 class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center py-2 px-3 mb-2">
@@ -1026,6 +1064,16 @@
             @endif
         }
 
+        $('.model-radio').on('change', function() {
+            var skuValue = $(this).filter(':checked').data('sku');
+            $('.sku_main').show();
+            if(skuValue){
+                $('#sku_spec').text(skuValue);
+            }else{
+                $('.sku_main').hide();
+            }
+        });
+        
         // Pagination using ajax
         $(window).on('hashchange', function() {
             if (window.location.hash) {

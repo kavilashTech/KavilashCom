@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use DebugBar\DebugBar;
 // use App\Models\Role;
+use Illuminate\Http\Request;
 use App\Models\RoleTranslation;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -50,7 +51,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->permissions);
+
         $role = Role::create(['name' => $request->name]);
         $role->givePermissionTo($request->permissions);
 
@@ -95,8 +96,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // app('debugbar')->error('Watch out..');
+        // dd($request); die;
+
         $role = Role::findOrFail($id);
         $role->name = $request->name;
+        // dd($role); die;
         $role->syncPermissions($request->permissions);
         $role->save();
 

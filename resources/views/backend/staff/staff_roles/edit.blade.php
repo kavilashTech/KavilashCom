@@ -21,7 +21,8 @@
       			</ul>
             <form class="p-4" action="{{ route('roles.update', $role->id) }}" method="POST">
                 <input name="_method" type="hidden" value="PATCH">
-                <input type="hidden" name="lang" value="{{ $lang }}">
+                <input type="hidden" name="lang" value="{{ $language->code }}">
+                <!-- <input type="hidden" name="lang" value="en"> -->
             	   @csrf
                 <div class="form-group row">
                     <label class="col-md-3 col-from-label" for="name">{{translate('Name')}} <i class="las la-language text-danger" title="{{translate('Translatable')}}"></i></label>

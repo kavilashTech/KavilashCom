@@ -52,18 +52,27 @@
                 <div class="row">
                     <div class="col-xxl-8 col-xl-10 mx-auto">
                         <div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
+                            @php
+                             $CGST_total = '0.00';
+                             $SGST_total = '0.00';
+                            @endphp
                             <div class="mb-4">
                                 <div class="row gutters-5 d-none d-lg-flex border-bottom mb-3 pb-3">
-                                    <div class="col-md-5 fw-600">{{ translate('Product') }}</div>
+                                    <div class="col-md-1 fw-600">{{ translate('Product') }}</div>
                                     <div class="col fw-600">{{ translate('Price') }}</div>
-                                    <div class="col fw-600">{{ translate('Tax') }}</div>
+                                    <!-- <div class="col fw-600">{{ translate('Tax') }}</div> -->
                                     <div class="col fw-600">{{ translate('Quantity') }}</div>
+                                    <div class="col fw-600">{{ translate('CGST %') }}</div>
+                                    <div class="col fw-600">{{ translate('CGST Amount') }}</div>
+                                    <div class="col fw-600">{{ translate('SGST %') }}</div>
+                                    <div class="col fw-600">{{ translate('SGST Amount') }}</div>
                                     <div class="col fw-600">{{ translate('Total') }}</div>
                                     <div class="col-auto fw-600">{{ translate('Remove') }}</div>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     @php
                                         $total = 0;
+                                        $subTotal = 0; 
                                     @endphp
                                     @foreach ($carts as $key => $cartItem)
                                         @php
@@ -71,6 +80,7 @@
                                             $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
                                             // $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
                                             $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                            $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
                                             $product_name_with_choice = $product->getTranslation('name');
                                             if ($cartItem['variation'] != null) {
                                                 $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
@@ -78,13 +88,13 @@
                                         @endphp
                                         <li class="list-group-item px-0 px-lg-3">
                                             <div class="row gutters-5">
-                                                <div class="col-lg-5 d-flex">
+                                                <div class="col-lg-1">
                                                     <span class="mr-2 ml-0">
                                                         <img src="{{ uploaded_asset($product->thumbnail_img) }}"
                                                             class="img-fit size-60px rounded"
                                                             alt="{{ $product->getTranslation('name') }}">
                                                     </span>
-                                                    <span class="fs-14 opacity-60">{{ $product_name_with_choice }}</span>
+                                                    <span class="d-block fs-14 opacity-60">{{ $product_name_with_choice }}</span>
                                                 </div>
 
                                                 <div class="col-lg col-4 order-1 order-lg-0 my-3 my-lg-0">
@@ -93,12 +103,12 @@
                                                     <span
                                                         class="fw-600 fs-16">{{ cart_product_price($cartItem, $product, true, false) }}</span>
                                                 </div>
-                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                <!-- <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Tax') }}</span>
                                                     <span
                                                         class="fw-600 fs-16">{{ cart_product_tax($cartItem, $product) }}</span>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="col-lg col-6 order-4 order-lg-0">
                                                     @if ($cartItem['digital'] != 1 && $product->auction_product == 0)
@@ -127,11 +137,46 @@
                                                         <span class="fw-600 fs-16">1</span>
                                                     @endif
                                                 </div>
+
+                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                    <span
+                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('CGST %') }}</span>
+                                                    <span
+                                                        class="fw-600 fs-16">{{ $cartItem->tax1 }}</span>
+                                                </div>
+
+                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                    <span
+                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('CGST Amount') }}</span>
+                                                    <span
+                                                        class="fw-600 fs-16">{{ $cartItem->tax1_amount * $cartItem['quantity']}}</span>
+                                                    @php
+                                                       $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
+                                                    @endphp
+                                                </div>
+                                                
+                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                    <span
+                                                    class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST %') }}</span>
+                                                    <span
+                                                        class="fw-600 fs-16">{{ $cartItem->tax2 }}</span>
+                                                    </div>
+
+                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                    <span
+                                                    class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST Amount') }}</span>
+                                                    <span
+                                                    class="fw-600 fs-16">{{ $cartItem->tax2_amount * $cartItem['quantity']}}</span>
+                                                    @php
+                                                       $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
+                                                    @endphp
+                                                </div>
+
                                                 <div class="col-lg col-4 order-3 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Total') }}</span>
                                                     <span
-                                                        class="fw-600 fs-16 text-primary">{{ single_price(cart_product_price($cartItem, $product, false) * $cartItem['quantity']) }}</span>
+                                                        class="fw-600 fs-16 text-primary">{{ single_price(($cartItem['price'] ) * $cartItem['quantity']) }}</span>
                                                 </div>
                                                 <div class="col-lg-auto col-6 order-5 order-lg-0 text-right">
                                                     <a href="javascript:void(0)"
@@ -146,10 +191,31 @@
                                 </ul>
                             </div>
 
-                            <div class="px-3 py-2 mb-4 border-top d-flex justify-content-between">
+                            <div class="px-3 py-2 border-top d-flex justify-content-end">
                                 <span class="opacity-60 fs-15">{{ translate('Subtotal') }}</span>
-                                <span class="fw-600 fs-17">{{ single_price($total) }}</span>
+                                <span class="fw-600 fs-17 pl-3">{{ single_price($subTotal) }}</span>
                             </div>
+
+                            <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                <span class="opacity-60 fs-15">{{ translate('CGST') }}</span>
+                                <span class="fw-600 fs-17 pl-3">{{ single_price($CGST_total) }}</span>
+                            </div>
+
+                            <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                <span class="opacity-60 fs-15">{{ translate('SGST') }}</span>
+                                <span class="fw-600 fs-17 pl-3">{{ single_price($SGST_total) }}</span>
+                            </div>
+
+                            <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                <span class="opacity-60 fs-15">{{ translate('Total') }}</span>
+                                <span class="fw-600 fs-17 pl-3">{{ single_price($total) }}</span>
+                            </div>
+
+                            <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                <span class="opacity-60 fs-15">{{ translate('Balance Due') }}</span>
+                                <span class="fw-600 fs-17 pl-3">{{ single_price($total) }}</span>
+                            </div>
+
                             <div class="row align-items-center">
                                 <div class="col-md-6 text-center text-md-left order-1 order-md-0">
                                     <a href="{{ route('home') }}" class="btn btn-link">

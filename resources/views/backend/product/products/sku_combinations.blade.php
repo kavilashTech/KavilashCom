@@ -12,6 +12,15 @@
 				{{translate('SKU')}}
 			</td>
 			<td class="text-center" data-breakpoints="lg">
+				{{translate('Expiry Month')}}
+			</td>
+			<td class="text-center" data-breakpoints="lg">
+				{{translate('Expiry Year')}}
+			</td>
+			<td class="text-center" data-breakpoints="lg">
+				{{translate('Batch Number')}}
+			</td>
+			<td class="text-center" data-breakpoints="lg">
 				{{translate('Quantity')}}
 			</td>
 			<td class="text-center" data-breakpoints="lg">
@@ -56,6 +65,29 @@
 				</td>
 				<td>
 					<input type="text" name="sku_{{ $str }}" value="" class="form-control">
+				</td>
+				<td>
+					<div class="col-md-8">
+                        <select class="form-control aiz-selectpicker" name="expiry_month_{{ $str }}" id="expiry_month" data-live-search="true">
+                            <option value="">Select Expiry Month</option>
+                            @foreach (json_decode( get_setting('expiry_month_array'), true) as $key => $value)
+                            	<option value="{{ $value }}">{{ $value }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+				</td>
+				<td>
+					<div class="col-md-8">
+                        <select class="form-control aiz-selectpicker" name="expiry_year_{{ $str }}" id="expiry_year" data-live-search="true">
+                            <option value="">Select Expiry Year</option>
+                            @foreach (json_decode( get_setting('expiry_year_array'), true) as $key => $value)
+                            	<option value="{{ $value }}">{{ $value }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+				</td>
+				<td>
+					<input type="text" name="batch_number_{{ $str }}" value="" class="form-control">
 				</td>
 				<td>
 					<input type="number" lang="en" name="qty_{{ $str }}" value="10" min="0" step="1" class="form-control" required>
