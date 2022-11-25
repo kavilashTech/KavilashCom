@@ -8,22 +8,22 @@
             <td class="text-center">
                 {{translate('Variant Price')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="xl">
                 {{translate('SKU')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="xl">
                 {{translate('Expiry Month')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="xl">
                 {{translate('Expiry Year')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="xl">
                 {{translate('Batch Number')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="xl">
                 {{translate('Quantity')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="xl">
                 {{translate('Photo')}}
             </td>
         </tr>
