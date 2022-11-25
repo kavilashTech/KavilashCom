@@ -642,7 +642,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0 h6">{{translate('VAT & Tax')}}</h5>
+                        <h5 class="mb-0 h6">{{translate('GST')}}</h5>
                     </div>
                     <div class="card-body">
                         @foreach(\App\Models\Tax::where('tax_status', 1)->get() as $tax)
