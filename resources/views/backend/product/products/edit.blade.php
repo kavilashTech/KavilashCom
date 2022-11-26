@@ -310,6 +310,15 @@
                             </div>
                         @endif
 
+                        <div class="form-group row">
+                            <label class="col-md-3 col-from-label">
+                                {{translate('HSN Code')}}
+                            </label>
+                            <div class="col-md-6">
+                                <input type="text" placeholder="{{ translate('HSN Code') }}" value="{{ optional($product->stocks->first())->hsn_code }}" name="hsn_code" class="form-control">
+                            </div>
+                        </div>
+                        
                         <div id="show-hide-div">
                             <div class="form-group row" id="quantity">
                                 <label class="col-lg-3 col-from-label">{{translate('Quantity')}}</label>
@@ -327,12 +336,39 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 col-from-label">
-                                    {{translate('HSN Code')}}
+                                    {{translate('Expiry Month')}}
                                 </label>
-                                <div class="col-md-6">
-                                    <input type="text" placeholder="{{ translate('HSN Code') }}" value="{{ optional($product->stocks->first())->hsn_code }}" name="hsn_code" class="form-control">
+                                <div class="col-md-5">
+                                    <select class="form-control aiz-selectpicker" name="expiry_month" id="expiry_month" data-live-search="true">
+                                        <option value="">Select Expiry Month</option>
+                                        @foreach (json_decode( get_setting('expiry_month_array'), true) as $key => $value)
+                                            <option value="{{$value}}" <?php if (!empty($product->stocks[0]->expiry_month) && $product->stocks[0]->expiry_month == $value) echo "selected"; ?>>{{ $value }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Expiry Year')}}
+                                </label>
+                                <div class="col-md-5">
+                                    <select class="form-control aiz-selectpicker" name="expiry_year" id="expiry_year" data-live-search="true">
+                                        <option value="">Select Expiry Year</option>
+                                        @foreach (json_decode( get_setting('expiry_year_array'), true) as $key => $value)
+                                            <option value="{{ $value }}" <?php if (!empty($product->stocks[0]->expiry_year) && $product->stocks[0]->expiry_year == $value) echo "selected"; ?> >{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Batch Number')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="{{ translate('Batch Number') }}" value="{{ optional($product->stocks->first())->batch_number }}" name="batch_number" class="form-control">
+                                </div>
+                            </div>
+                            
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">

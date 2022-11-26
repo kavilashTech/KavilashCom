@@ -1,4 +1,3 @@
-.env.php
 /node_modules
 /public/hot
 /public/storage
@@ -18,3 +17,4 @@ install.zip
 /nbproject
 
 public/uploads.zip
+.env

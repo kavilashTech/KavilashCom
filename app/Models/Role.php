@@ -10,6 +10,7 @@ class Role extends Model
     protected $with = ['role_translations'];
 
     public function getTranslation($field = '', $lang = false){
+      // dd($lang); die;
         $lang = $lang == false ? App::getLocale() : $lang;
         $role_translation = $this->role_translations->where('lang', $lang)->first();
         return $role_translation != null ? $role_translation->$field : $this->$field;

@@ -523,7 +523,7 @@ if (!function_exists('home_price')) {
             }
         }
 
-        foreach ($product->taxes as $product_tax) {
+        /*foreach ($product->taxes as $product_tax) {
             if ($product_tax->tax_type == 'percent') {
                 $lowest_price += ($lowest_price * $product_tax->tax) / 100;
                 $highest_price += ($highest_price * $product_tax->tax) / 100;
@@ -531,7 +531,7 @@ if (!function_exists('home_price')) {
                 $lowest_price += $product_tax->tax;
                 $highest_price += $product_tax->tax;
             }
-        }
+        }*/
 
         if ($formatted) {
             if ($lowest_price == $highest_price) {
@@ -621,7 +621,7 @@ if (!function_exists('home_base_price_by_stock_id')) {
                 $tax += $product_tax->tax;
             }
         }
-        $price += $tax;
+        //$price += $tax;
         return format_price(convert_price($price));
     }
 }
@@ -638,7 +638,7 @@ if (!function_exists('home_base_price')) {
                 $tax += $product_tax->tax;
             }
         }
-        $price += $tax;
+        //$price += $tax;
         return $formatted ? format_price(convert_price($price)) : $price;
     }
 }
@@ -678,7 +678,7 @@ if (!function_exists('home_discounted_base_price_by_stock_id')) {
                 $tax += $product_tax->tax;
             }
         }
-        $price += $tax;
+        //$price += $tax;
 
         return format_price(convert_price($price));
     }
@@ -717,7 +717,7 @@ if (!function_exists('home_discounted_base_price')) {
                 $tax += $product_tax->tax;
             }
         }
-        $price += $tax;
+        //$price += $tax;
 
         return $formatted ? format_price(convert_price($price)) : $price;
     }

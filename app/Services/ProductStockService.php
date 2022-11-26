@@ -23,12 +23,16 @@ class ProductStockService
             $product->save();
             foreach ($combinations as $key => $combination) {
                 $str = ProductUtility::get_combination_string($combination, $collection);
+                
                 $product_stock = new ProductStock();
                 $product_stock->product_id = $product->id;
                 $product_stock->variant = $str;
                 $product_stock->price = request()['price_' . str_replace('.', '_', $str)];
                 $product_stock->sku = request()['sku_' . str_replace('.', '_', $str)];
-                $product_stock->hsn_code = request()['hsn_code_' . str_replace('.', '_', $str)];
+                $product_stock->hsn_code = $data['hsn_code'] ?? "";
+                $product_stock->expiry_month = request()['expiry_month_' . str_replace('.', '_', $str)];
+                $product_stock->expiry_year = request()['expiry_year_' . str_replace('.', '_', $str)];
+                $product_stock->batch_number = request()['batch_number_' . str_replace('.', '_', $str)];
                 $product_stock->qty = request()['qty_' . str_replace('.', '_', $str)];
                 $product_stock->image = request()['img_' . str_replace('.', '_', $str)];
                 $product_stock->save();
