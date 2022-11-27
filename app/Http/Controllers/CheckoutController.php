@@ -13,8 +13,10 @@ use App\Models\Address;
 use App\Models\Carrier;
 use App\Models\CombinedOrder;
 use App\Models\Product;
+use App\Models\Country;
 use App\Utility\PayhereUtility;
 use App\Utility\NotificationUtility;
+use Illuminate\Support\Facades\Http;
 use Session;
 use Auth;
 
@@ -188,7 +190,9 @@ class CheckoutController extends Controller
             }
             $total = $subtotal + $tax + $shipping;
 
-            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total'));
+            $countries = Country::where('id',101)->get();
+
+            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total','countries'));
 
         } else {
             flash(translate('Your Cart was empty'))->warning();
@@ -344,5 +348,68 @@ class CheckoutController extends Controller
         }
 
         return view('frontend.order_confirmed', compact('combined_order'));
+    }
+    public function shiprocketAuthToken(){
+        $response = Http::withHeaders([
+                    'Content-Type' => 'application/json' 
+                ])->post('https://apiv2.shiprocket.in/v1/external/auth/login', [
+            'email' => 'kavilashtech@gmail.com',
+            'password' => 'Kavilash@123#',
+        ]);
+        $result = json_decode($response,true);
+        return $result;
+    }
+    public function shipping_couriers_list(Request $request){
+        //Get Auth token
+        $result = $this->shiprocketAuthToken();
+        
+        if(!empty($result) && !empty($result['token'])){
+            $pickupPostcode = get_setting('pickup_point') ?? "";
+            $deliveryPostcode = $request->postcode;
+            if(!empty($deliveryPostcode)){
+                $response = Http::withToken($result['token'])->get('https://apiv2.shiprocket.in/v1/external/courier/serviceability',[
+                    'pickup_postcode' => $pickupPostcode,
+                    'delivery_postcode' => $deliveryPostcode,
+                    'weight' => '1',
+                    'cod' => '1',
+                ]);
+
+                $result = json_decode($response,true);
+                //echo "<pre>";print_r($result);die;
+                $data = [];
+                if(!empty($result) && !empty($result['data']['available_courier_companies'])){
+                    foreach($result['data']['available_courier_companies'] as $key => $value){
+                        $data['data'][$key]['estimated_delivery_date'] = $value['etd'];
+                        $data['data'][$key]['courier_name'] = $value['courier_name'];
+                        $data['data'][$key]['rate'] = $value['rate'];
+                        $data['data'][$key]['freight_charge'] = $value['freight_charge'];
+                    }
+                    $data['status']="success";
+                }else{
+                    $data['status'] = "invalid_delivery_postcode";
+                }
+                echo json_encode($data);
+            }else{
+                $data['status'] = "postcode_empty";
+                echo json_encode($data);
+            }
+        }else{
+            $data['status'] = "invalid_token";
+            echo json_encode($data);
+        }
+    }
+    public function add_shipping_charge(Request $request){
+        $grandTotal = $request->grandTotal;
+        $shipCost = $request->shipCost;
+
+        $total = $grandTotal + $shipCost;
+        $grandTotal = single_price($total);
+        $shippingCost = single_price($shipCost);
+
+        $data['status'] = "success";
+        $data['grandTotal'] = $grandTotal;
+        $data['shippingCost'] = $shippingCost;
+
+        echo json_encode($data);
     }
 }
