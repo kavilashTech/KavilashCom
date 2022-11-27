@@ -83,15 +83,25 @@
 
                                         <h6>Preferred Location</h6>
                                         <div class="form-group">
-                                                <select class="form-control aiz-selectpicker" data-live-search="true" name="state_id" required>
+                                                <select class="form-control aiz-selectpicker" data-live-search="true" name="state_id" >
 
                                                 </select>
+                                                @if ($errors->has('state_id'))
+                                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                                        <strong>The state field is required</strong>
+                                                    </span>
+                                                @endif
                                         </div>
 
                                         <div class="form-group">
-                                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" required>
+                                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" >
 
                                                 </select>
+                                                @if ($errors->has('city_id'))
+                                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                                        <strong>The city field is required</strong>
+                                                    </span>
+                                                @endif
                                         </div>
 
 

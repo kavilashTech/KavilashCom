@@ -132,6 +132,8 @@ class HomeController extends Controller
             return view('frontend.user.customer.dashboard');
         } elseif (Auth::user()->user_type == 'delivery_boy') {
             return view('delivery_boys.frontend.dashboard');
+        } elseif(Auth::user()->user_type == 'partner'){
+            return view('frontend.partner.dashboard');
         } else {
             abort(404);
         }

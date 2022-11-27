@@ -62,6 +62,13 @@ class ProductsImport implements ToCollection, WithHeadingRow, WithValidation, To
                     'slug' => preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', strtolower($row['slug']))) . '-' . Str::random(5),
                     'thumbnail_img' => $this->downloadThumbnail($row['thumbnail_img']),
                     'photos' => $this->downloadGalleryImages($row['photos']),
+                    'returnable' => $row['returnable'],
+                   'returnable_days' => $row['returnable_days'],
+                    'current_stock' => $row['current_stock'],
+                    'discount' => $row['discount'],
+                    'discount_type' => $row['discount_type'],
+                    'earn_point' => $row['earn_point']
+
                 ]);
                 ProductStock::create([
                     'product_id' => $productId->id,
@@ -69,6 +76,11 @@ class ProductsImport implements ToCollection, WithHeadingRow, WithValidation, To
                     'price' => $row['unit_price'],
                     'sku' => $row['sku'],
                     'variant' => '',
+                    'expiry_month' => $row['expiry_month'],
+                    'expiry_year' => $row['expiry_year'],
+                    'batch_number' => $row['batch_number'],
+                    'hsn_code' => $row['hsn_code']
+
                 ]);
             }
 

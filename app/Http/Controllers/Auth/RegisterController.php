@@ -60,10 +60,20 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+        if(isset($data['franchisee'])){
+            return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+                'phone' => 'required',
+                'state_id' => 'required',
+                'city_id' => 'required',
+            ]);
+        }else{
+            return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+        }
     }
 
     /**
@@ -164,7 +174,9 @@ class RegisterController extends Controller
                 }
             }
         }
-
+        if(isset($user->user_type) && $user->user_type == 'partner'){
+            return redirect()->route('dashboard');
+        }
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());
     }
