@@ -671,6 +671,7 @@
                     $("#cart_summary").html(data);
                 }
             })
-        })
+        });
+
     </script>
 @endsection
