@@ -75,6 +75,7 @@
                     $shipping = 0;
                     $product_shipping_cost = 0;
                     $shipping_region = $shipping_info['city'];
+                    $shipWithCurrency = single_price($shipping);
                 @endphp
                 @foreach ($carts as $key => $cartItem)
                     @php
@@ -124,9 +125,23 @@
                 </tr>
 
                 <tr class="cart-shipping">
-                    <th>{{ translate('Total Shipping') }}</th>
+                    <th>{{ translate('Total Shipping') }} <button onclick="calculateShipping()">Calculate</button></th>
+                    
                     <td class="text-right">
-                        <span class="font-italic">{{ single_price($shipping) }}</span>
+                        <span class="font-italic" id="shipping_charge">{{ single_price($shipping) }}</span>
+                        <div id="shipping_couriers_list">
+                            
+                        </div>
+                        <div id="shipping_estimate" style="display:none;">
+                            <select name="country" id="country">
+                                @foreach ($countries as $country)
+                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                            <input type="text" name="postcode" id="postcode" value="">
+                            <span id="postcodeErr" style="color: red;"></span>
+                            <button onclick="getShippingCouriers()">Update</button>
+                        </div>
                     </td>
                 </tr>
 
@@ -156,12 +171,13 @@
                     if ($coupon_discount > 0) {
                         $total -= $coupon_discount;
                     }
+                    $totalWithCurrency = single_price($total);
                 @endphp
 
                 <tr class="cart-total">
                     <th><span class="strong-600">{{ translate('Total') }}</span></th>
                     <td class="text-right">
-                        <strong><span>{{ single_price($total) }}</span></strong>
+                        <strong><span id="grand_total">{{ single_price($total) }}</span></strong>
                     </td>
                 </tr>
             </tfoot>
@@ -220,3 +236,78 @@
 
     </div>
 </div>
+
+@section('script')
+    <script type="text/javascript">
+        function calculateShipping(){
+            $("#shipping_estimate").show();
+        }
+        function getShippingCouriers(){
+            var countryId = $("#country").val();
+            var postcode = $("#postcode").val();
+            var grandTotal = '<?= $total ?>';
+            var totalWithCurrency = '<?= $totalWithCurrency ?>';
+            var shipWithCurrency = '<?= $shipWithCurrency ?>';
+
+            $("#grand_total").html(totalWithCurrency);
+            $("#shipping_charge").html(shipWithCurrency);
+
+            if(postcode != ""){
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('checkout.shipping_couriers_list')}}",
+                    type: 'POST',
+                    data: {
+                        countryId:countryId,
+                        postcode:postcode
+                    },
+                    success: function (data) {
+                        var response = JSON.parse(data);
+                        //console.log(response);
+                        if(response != '' && response.status == "success") {
+                            $("#postcodeErr").html("");
+                            $("#shipping_couriers_list").html("");
+                            $.each(response.data, function(index, value){
+                                $("#shipping_couriers_list").append('<input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value)" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :'+ value.rate +'<b><br>');
+                            });
+                        }else if(response.status == "invalid_delivery_postcode"){
+                            $("#postcodeErr").html("Invalid delivery postcode");
+                        }else if(response.status == "postcode_empty"){
+                            $("#postcodeErr").html("Delivery postcode required");
+                        }else if(response.status == "invalid_token"){
+                            $("#postcodeErr").html("Invalid token");
+                        }
+                    }
+                });
+            }else{
+                $("#postcodeErr").html("Delivery postcode required");
+            }
+        }
+        function selectShippingCharge(shipCost){
+            var grandTotal = '<?= $total ?>';
+            if(grandTotal > 0){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('checkout.add_shipping_charge')}}",
+                    type: 'POST',
+                    data: {
+                        grandTotal:grandTotal,
+                        shipCost:shipCost
+                    },
+                    success: function (data) {
+                        var response = JSON.parse(data);
+                        if(response != '' && response.status == "success") {
+                            $("#grand_total").html(response.grandTotal);
+                            $("#shipping_charge").html(response.shippingCost);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+@endsection

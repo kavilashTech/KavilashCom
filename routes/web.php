@@ -257,6 +257,8 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() 
             //Club point
             Route::post('/apply-club-point', 'apply_club_point')->name('checkout.apply_club_point');
             Route::post('/remove-club-point', 'remove_club_point')->name('checkout.remove_club_point'); 
+            Route::post('/shipping_couriers_list', 'shipping_couriers_list')->name('checkout.shipping_couriers_list');
+            Route::post('/add_shipping_charge', 'add_shipping_charge')->name('checkout.add_shipping_charge');
         });
     });
 
