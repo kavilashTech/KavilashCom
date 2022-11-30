@@ -8,22 +8,34 @@
             <td class="text-center">
                 {{translate('Variant Price')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="all">
                 {{translate('SKU')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="all">
+				{{translate('Dimensions(Optional)')}}
+			</td>
+            <td class="text-center" data-breakpoints="all">
+				{{translate('USD Price')}}
+			</td>
+            <td class="text-center" data-breakpoints="all">
+				{{translate('USD Points')}}
+			</td>
+            <td class="text-center" data-breakpoints="all">
+				{{translate('Dispatch Days')}}
+			</td>
+            <td class="text-center" data-breakpoints="all">
                 {{translate('Expiry Month')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="all">
                 {{translate('Expiry Year')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="all">
                 {{translate('Batch Number')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="all">
                 {{translate('Quantity')}}
             </td>
-            <td class="text-center" data-breakpoints="lg">
+            <td class="text-center" data-breakpoints="all">
                 {{translate('Photo')}}
             </td>
         </tr>
@@ -90,6 +102,62 @@
                                 echo $str;
                             }
                            @endphp" class="form-control">
+                </td>
+                <td>
+				    <input class="txtdimension dimension" name="width_{{ $str }}" type="text"  placeholder="width"  value="@php
+                            if($stock != null){
+                                echo $stock->width;
+                            }
+                            else{
+                                echo '';
+                            }
+                           @endphp">
+                    <input class="txtdimension dimension" name="breadth_{{ $str }}" type="text"  placeholder="breadth" value="@php
+                            if($stock != null){
+                                echo $stock->breadth;
+                            }
+                            else{
+                                echo '';
+                            }
+                           @endphp">
+                    <input class="txtdimension dimension" name="height_{{ $str }}" type="text"   placeholder="height" value="@php
+                            if($stock != null){
+                                echo $stock->height;
+                            }
+                            else{
+                                echo '';
+                            }
+                           @endphp">
+                </td>
+                <td>
+                    <input type="number" lang="en" name="usd_price_{{ $str }}" value="@php
+                            if($stock != null){
+                                echo $stock->usd_price;
+                            }
+                            else{
+                                echo '';
+                            }
+                           @endphp" min="0" step="1" class="form-control" required>
+                </td>
+                <td>
+                    <input type="number" lang="en" name="usd_points_{{ $str }}" value="@php
+                            if($stock != null){
+                                echo $stock->usd_points;
+                            }
+                            else{
+                                echo '';
+                            }
+                           @endphp" min="0" step="1" class="form-control" required>
+                </td>
+                <td>
+                    <input type="number" lang="en" name="dispatch_days_{{ $str }}" value="@php
+                            if($stock != null){
+                                echo $stock->dispatch_days;
+                            }
+                            else{
+                                echo '';
+                            }
+                           @endphp" min="0" step="1" class="form-control" required>
                 </td>
                 <td>
                     @php
@@ -171,3 +239,14 @@
     </tbody>
 </table>
 @endif
+<style>
+    .dimension{
+        width:32% !important;
+        line-height:34px;
+        padding: 0.6rem 1rem;
+        font-size: 0.875rem;
+        height: calc(1.3125rem + 1.2rem + 2px);
+        border: 1px solid #e2e5ec;
+        color: #898b92;
+    }
+</style>
