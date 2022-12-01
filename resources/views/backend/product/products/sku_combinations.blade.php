@@ -12,7 +12,7 @@
 				{{translate('SKU')}}
 			</td>
 			<td class="text-center" data-breakpoints="all">
-				{{translate('Dimensions(Optional)')}}
+				{{translate('Dimensions(cm)')}}
 			</td>
             <td class="text-center" data-breakpoints="all">
 				{{translate('USD Price')}}
@@ -79,18 +79,18 @@
 					<input type="text" name="sku_{{ $str }}" value="" class="form-control">
 				</td>
 				<td>
-					<input class="txtdimension dimension" type="text" name="width_{{ $str }}"  placeholder="width">
-					<input class="txtdimension dimension" type="text" name="breadth_{{ $str }}" placeholder="breadth">
-					<input class="txtdimension dimension" type="text" name="height_{{ $str }}" placeholder="height">
+					<input class="txtdimension dimension" type="number" name="width_{{ $str }}"  placeholder="width" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					<input class="txtdimension dimension" type="number" name="breadth_{{ $str }}" placeholder="breadth" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					<input class="txtdimension dimension" type="number" name="height_{{ $str }}" placeholder="height" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
 				</td>
 				<td>
 					<input type="number" name="usd_price_{{ $str }}" class="form-control" required>
 				</td>
 				<td>
-					<input type="number" name="usd_points_{{ $str }}" class="form-control" required>
+					<input type="number" name="usd_points_{{ $str }}" class="form-control"  min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
 				</td>
 				<td>
-					<input type="number" name="dispatch_days_{{ $str }}" class="form-control" required>
+					<input type="number" name="dispatch_days_{{ $str }}" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
 				</td>
 				<td>
 					<div class="col-md-8">
