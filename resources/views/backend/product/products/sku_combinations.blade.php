@@ -12,7 +12,7 @@
 				{{translate('SKU')}}
 			</td>
 			<td class="text-center" data-breakpoints="all">
-				{{translate('Dimensions(cm)')}}
+				{{translate('Dimensions(cm)') }}
 			</td>
             <td class="text-center" data-breakpoints="all">
 				{{translate('USD Price')}}
