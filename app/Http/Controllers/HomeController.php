@@ -176,6 +176,21 @@ class HomeController extends Controller
         return back();
     }
 
+    public function userCompanyUpdate(Request $request)
+    {
+        if (env('DEMO_MODE') == 'On') {
+            flash(translate('Sorry! the action is not permitted in demo '))->error();
+            return back();
+        }
+        $user = Auth::user();
+        $user->company_name = $request->company_name;
+        $user->gst_no = $request->gst_no;
+        $user->save();
+
+        flash(translate('Your Company details has been updated successfully!'))->success();
+        return back();
+    }
+
     public function flash_deal_details($slug)
     {
         $flash_deal = FlashDeal::where('slug', $slug)->first();

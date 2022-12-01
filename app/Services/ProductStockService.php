@@ -11,7 +11,7 @@ class ProductStockService
     public function store(array $data, $product)
     {
         $collection = collect($data);
-
+        
         $options = ProductUtility::get_attribute_options($collection);
         
         //Generates the combinations of customer choice options
@@ -30,6 +30,12 @@ class ProductStockService
                 $product_stock->price = request()['price_' . str_replace('.', '_', $str)];
                 $product_stock->sku = request()['sku_' . str_replace('.', '_', $str)];
                 $product_stock->hsn_code = $data['hsn_code'] ?? "";
+                $product_stock->width  =  request()['width_' . str_replace('.','_', $str)];
+                $product_stock->breadth  =  request()['breadth_' . str_replace('.','_', $str)];
+                $product_stock->height  =  request()['height_' . str_replace('.','_', $str)];
+                $product_stock->usd_price  =  request()['usd_price_' . str_replace('.','_', $str)];
+                $product_stock->usd_points  =  request()['usd_points_' . str_replace('.','_', $str)];
+                $product_stock->dispatch_days  =  request()['dispatch_days_' . str_replace('.','_', $str)];
                 $product_stock->expiry_month = request()['expiry_month_' . str_replace('.', '_', $str)];
                 $product_stock->expiry_year = request()['expiry_year_' . str_replace('.', '_', $str)];
                 $product_stock->batch_number = request()['batch_number_' . str_replace('.', '_', $str)];
