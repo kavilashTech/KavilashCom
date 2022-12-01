@@ -66,6 +66,35 @@
 
     <br>
 
+    <form action="{{ route('user.company.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <!-- Company details -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 h6">{{ translate('Company Details')}}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">{{ translate('Company Name') }}</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" placeholder="{{ translate('Company Name') }}" name="company_name" value="{{ Auth::user()->company_name }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">{{ translate('GST No') }}</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" placeholder="{{ translate('GST No')}}" name="gst_no" value="{{ Auth::user()->gst_no }}">
+                    </div>
+                </div>
+
+                <div class="form-group mb-0 text-right">
+                    <button type="submit" class="btn btn-primary">{{translate('Update Company')}}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <!-- Address -->
     <div class="card">
         <div class="card-header">
@@ -175,23 +204,23 @@
 @section('script')
     <script type="text/javascript">
         
-        $('.new-email-verification').on('click', function() {
-            $(this).find('.loading').removeClass('d-none');
-            $(this).find('.default').addClass('d-none');
-            var email = $("input[name=email]").val();
+        // $('.new-email-verification').on('click', function() {
+        //     $(this).find('.loading').removeClass('d-none');
+        //     $(this).find('.default').addClass('d-none');
+        //     var email = $("input[name=email]").val();
 
-            $.post('{{ route('user.new.verify') }}', {_token:'{{ csrf_token() }}', email: email}, function(data){
-                data = JSON.parse(data);
-                $('.default').removeClass('d-none');
-                $('.loading').addClass('d-none');
-                if(data.status == 2)
-                    AIZ.plugins.notify('warning', data.message);
-                else if(data.status == 1)
-                    AIZ.plugins.notify('success', data.message);
-                else
-                    AIZ.plugins.notify('danger', data.message);
-            });
-        });
+        //     $.post('{{ route('user.new.verify') }}', {_token:'{{ csrf_token() }}', email: email}, function(data){
+        //         data = JSON.parse(data);
+        //         $('.default').removeClass('d-none');
+        //         $('.loading').addClass('d-none');
+        //         if(data.status == 2)
+        //             AIZ.plugins.notify('warning', data.message);
+        //         else if(data.status == 1)
+        //             AIZ.plugins.notify('success', data.message);
+        //         else
+        //             AIZ.plugins.notify('danger', data.message);
+        //     });
+        // });
     </script>
 
     @if (get_setting('google_map') == 1)
