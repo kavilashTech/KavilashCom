@@ -12,7 +12,7 @@
                 {{translate('SKU')}}
             </td>
             <td class="text-center" data-breakpoints="all">
-				{{translate('Dimensions(Optional)')}}
+				{{translate('Dimensions(cm)') }}
 			</td>
             <td class="text-center" data-breakpoints="all">
 				{{translate('USD Price')}}
@@ -104,7 +104,7 @@
                            @endphp" class="form-control">
                 </td>
                 <td>
-				    <input class="txtdimension dimension" name="width_{{ $str }}" type="text"  placeholder="width"  value="@php
+				    <input class="txtdimension dimension" name="width_{{ $str }}" type="number" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  placeholder="width"  value="@php
                             if($stock != null){
                                 echo $stock->width;
                             }
@@ -112,7 +112,7 @@
                                 echo '';
                             }
                            @endphp">
-                    <input class="txtdimension dimension" name="breadth_{{ $str }}" type="text"  placeholder="breadth" value="@php
+                    <input class="txtdimension dimension" name="breadth_{{ $str }}" type="number" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  placeholder="breadth" value="@php
                             if($stock != null){
                                 echo $stock->breadth;
                             }
@@ -120,7 +120,7 @@
                                 echo '';
                             }
                            @endphp">
-                    <input class="txtdimension dimension" name="height_{{ $str }}" type="text"   placeholder="height" value="@php
+                    <input class="txtdimension dimension" name="height_{{ $str }}" type="number" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"   placeholder="height" value="@php
                             if($stock != null){
                                 echo $stock->height;
                             }
@@ -140,7 +140,7 @@
                            @endphp" min="0" step="1" class="form-control" required>
                 </td>
                 <td>
-                    <input type="number" lang="en" name="usd_points_{{ $str }}" value="@php
+                    <input type="number" lang="en" name="usd_points_{{ $str }}" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" value="@php
                             if($stock != null){
                                 echo $stock->usd_points;
                             }
@@ -150,7 +150,7 @@
                            @endphp" min="0" step="1" class="form-control" required>
                 </td>
                 <td>
-                    <input type="number" lang="en" name="dispatch_days_{{ $str }}" value="@php
+                    <input type="number" lang="en" name="dispatch_days_{{ $str }}" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" value="@php
                             if($stock != null){
                                 echo $stock->dispatch_days;
                             }
