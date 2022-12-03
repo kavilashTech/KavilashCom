@@ -234,6 +234,7 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
         Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/user/update-profile', 'userProfileUpdate')->name('user.profile.update');
+        Route::post('/user/update-company', 'userCompanyUpdate')->name('user.company.update');
     });
     
     Route::get('/all-notifications', [NotificationController::class, 'index'])->name('all-notifications');
