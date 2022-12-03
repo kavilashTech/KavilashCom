@@ -8,22 +8,34 @@
 			<td class="text-center">
 				{{translate('Variant Price')}}
 			</td>
-			<td class="text-center" data-breakpoints="lg">
+			<td class="text-center" data-breakpoints="all">
 				{{translate('SKU')}}
 			</td>
-			<td class="text-center" data-breakpoints="lg">
+			<td class="text-center" data-breakpoints="all">
+				{{translate('Dimensions(cm)') }}
+			</td>
+            <td class="text-center" data-breakpoints="all">
+				{{translate('USD Price')}}
+			</td>
+            <td class="text-center" data-breakpoints="all">
+				{{translate('USD Points')}}
+			</td>
+            <td class="text-center" data-breakpoints="all">
+				{{translate('Dispatch Days')}}
+			</td>
+			<td class="text-center" data-breakpoints="all">
 				{{translate('Expiry Month')}}
 			</td>
-			<td class="text-center" data-breakpoints="lg">
+			<td class="text-center" data-breakpoints="all">
 				{{translate('Expiry Year')}}
 			</td>
-			<td class="text-center" data-breakpoints="lg">
+			<td class="text-center" data-breakpoints="all">
 				{{translate('Batch Number')}}
 			</td>
-			<td class="text-center" data-breakpoints="lg">
+			<td class="text-center" data-breakpoints="all">
 				{{translate('Quantity')}}
 			</td>
-			<td class="text-center" data-breakpoints="lg">
+			<td class="text-center" data-breakpoints="all">
 				{{translate('Photo')}}
 			</td>
 		</tr>
@@ -67,6 +79,20 @@
 					<input type="text" name="sku_{{ $str }}" value="" class="form-control">
 				</td>
 				<td>
+					<input class="txtdimension dimension" type="number" name="width_{{ $str }}"  placeholder="width" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					<input class="txtdimension dimension" type="number" name="breadth_{{ $str }}" placeholder="breadth" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					<input class="txtdimension dimension" type="number" name="height_{{ $str }}" placeholder="height" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+				</td>
+				<td>
+					<input type="number" name="usd_price_{{ $str }}" class="form-control" required>
+				</td>
+				<td>
+					<input type="number" name="usd_points_{{ $str }}" class="form-control"  min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+				</td>
+				<td>
+					<input type="number" name="dispatch_days_{{ $str }}" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+				</td>
+				<td>
 					<div class="col-md-8">
                         <select class="form-control aiz-selectpicker" name="expiry_month_{{ $str }}" id="expiry_month" data-live-search="true">
                             <option value="">Select Expiry Month</option>
@@ -108,3 +134,14 @@
 	</tbody>
 </table>
 @endif
+<style>
+    .dimension{
+        width:32% !important;
+        line-height:34px;
+        padding: 0.6rem 1rem;
+        font-size: 0.875rem;
+        height: calc(1.3125rem + 1.2rem + 2px);
+        border: 1px solid #e2e5ec;
+        color: #898b92;
+    }
+</style>
