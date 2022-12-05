@@ -264,6 +264,40 @@
                                     <input type="text" placeholder="{{ translate('SKU') }}" name="sku" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Dimensions(cm)')}}
+                                </label>
+                                <div class="col-md-6 d-flex">
+                                    <input class="form-control" type="number" name="width"  placeholder="width" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					                <input class="form-control" type="number" name="breadth" placeholder="breadth" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					                <input class="form-control" type="number" name="height" placeholder="height" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('USD Price')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="{{ translate('USD Price') }}" name="usd_price" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('USD Points')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="{{ translate('USD Points') }}" name="usd_points" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Dispatch Days')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="{{ translate('Dispatch Days') }}" name="dispatch_days" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+                                </div>
+                            </div>
                             <div class="form-group row" id="expiryMonth">
                                 <label class="col-md-3 col-from-label">{{translate('Expiry Month ')}}</label>
                                 <div class="col-md-8">

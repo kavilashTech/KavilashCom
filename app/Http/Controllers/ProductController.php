@@ -193,7 +193,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $product = $this->productService->store($request->except([
-            '_token', 'sku', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
+            '_token', 'sku', 'width','breadth','height','usd_price','usd_points','dispatch_days', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
         ]));
         $request->merge(['product_id' => $product->id]);
 
@@ -211,7 +211,7 @@ class ProductController extends Controller
 
         //Product Stock
         $this->productStockService->store($request->only([
-            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku', 'hsn_code','expiry_month','expiry_year','batch_number', 'current_stock', 'product_id'
+            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku','width','breadth','height','usd_price','usd_points','dispatch_days', 'hsn_code','expiry_month','expiry_year','batch_number', 'current_stock', 'product_id'
         ]), $product);
 
         // Product Translations
@@ -298,7 +298,7 @@ class ProductController extends Controller
     {
         //Product
         $product = $this->productService->update($request->except([
-            '_token', 'sku', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
+            '_token', 'sku','width','breadth','height','usd_price','usd_points','dispatch_days', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
         ]), $product);
 
         //Product Stock
@@ -308,7 +308,7 @@ class ProductController extends Controller
 
         $request->merge(['product_id' => $product->id]);
         $this->productStockService->store($request->only([
-            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku','expiry_month','expiry_year','batch_number', 'hsn_code', 'current_stock', 'product_id'
+            'colors_active', 'colors', 'choice_no', 'unit_price', 'sku','width','breadth','height','usd_price','usd_points','dispatch_days','expiry_month','expiry_year','batch_number', 'hsn_code', 'current_stock', 'product_id'
         ]), $product);
 
         //Flash Deal
@@ -395,7 +395,6 @@ class ProductController extends Controller
         $product_new = $product->replicate();
         $product_new->slug = $product_new->slug . '-' . Str::random(5);
         $product_new->save();
-        
         //Product Stock
         $this->productStockService->product_duplicate_store($product->stocks, $product_new);
 
