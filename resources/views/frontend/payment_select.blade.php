@@ -50,7 +50,8 @@
                         id="checkout-form">
                         @csrf
                         <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
-
+                        <input type="hidden" name="shipping_courier_cost" id="shipping_courier_cost" value="{{ $shippingCourierCost }}">
+                        <input type="hidden" name="shipping_courier_name" id="shipping_courier_name" value="{{ $shippingCourierName }}">
 
                         <div class="card rounded border-0 shadow-sm">
                             <div class="card-header p-3">
@@ -706,7 +707,9 @@
                             $("#postcodeErr").html("");
                             $("#shipping_couriers_list").html("");
                             $.each(response.data, function(index, value){
-                                $("#shipping_couriers_list").append('<tr class="courier-info" id="courier-list-'+ value.courier_name +'"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value)" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :</td><td>'+ value.rate +'<b></td></tr>');
+                                var courierName = value.courier_name;
+                                var rate = value.rate;
+                                $("#shipping_couriers_list").append('<tr class="courier-info" id="courier-list-'+ value.courier_name +'"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value,\''+value.courier_name+'\')" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :</td><td>'+ value.rate +'<b></td></tr>');
                             });
                         }else if(response.status == "invalid_delivery_postcode"){
                             $("#postcodeErr").html("Invalid delivery postcode");
@@ -721,24 +724,29 @@
                 $("#postcodeErr").html("Delivery postcode required");
             }
         }
-        function selectShippingCharge(shipCost){
+        function selectShippingCharge(shipCost,courierName){
             var grandTotal = $("#total").val();
-            if(grandTotal > 0){
+            var shipDefaultCost = $("#shipping_courier_default_cost").val();
+            if(grandTotal > 0 && shipDefaultCost != "" && shipCost != "" && courierName != ""){
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{route('checkout.add_shipping_charge')}}",
+                    url: "{{route('checkout.apply_shipping_charge')}}",
                     type: 'POST',
                     data: {
                         grandTotal:grandTotal,
-                        shipCost:shipCost
+                        shipDefaultCost:shipDefaultCost,
+                        shipCost:shipCost,
+                        courierName:courierName,
                     },
                     success: function (data) {
                         var response = JSON.parse(data);
                         if(response != '' && response.status == "success") {
                             $("#grand_total").html(response.grandTotal);
                             $("#shipping_charge").html(response.shippingCost);
+                            $("#shipping_courier_cost").val(shipCost);
+                            $("#shipping_courier_name").val(courierName);
                         }
                     }
                 });
