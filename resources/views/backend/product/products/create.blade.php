@@ -279,7 +279,7 @@
                                     {{translate('USD Price')}}
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="number" placeholder="{{ translate('USD Price') }}" name="usd_price" class="form-control" required>
+                                    <input type="number" placeholder="{{ translate('USD Price') }}" id="usd_price" name="usd_price" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -287,7 +287,7 @@
                                     {{translate('USD Points')}}
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="number" placeholder="{{ translate('USD Points') }}" name="usd_points" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+                                    <input type="number" placeholder="{{ translate('USD Points') }}" id="usd_points" name="usd_points" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -295,7 +295,7 @@
                                     {{translate('Dispatch Days')}}
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="number" placeholder="{{ translate('Dispatch Days') }}" name="dispatch_days" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+                                    <input type="number" placeholder="{{ translate('Dispatch Days') }}" id="dispatch_days" name="dispatch_days" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
                                 </div>
                             </div>
                             <div class="form-group row" id="expiryMonth">
@@ -830,6 +830,9 @@
                    $('#show-hide-div').hide();
                 }
                 else {
+                    $("#usd_price").prop('required',true);
+                    $("#usd_points").prop('required',true);
+                    $("#dispatch_days").prop('required',true);
                     $('#show-hide-div').show();
                 }
            }
