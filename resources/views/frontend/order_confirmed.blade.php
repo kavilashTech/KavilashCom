@@ -86,9 +86,13 @@
                                         <td class="w-50 fw-600">{{ translate('Total order amount')}}:</td>
                                         <td>{{ single_price($combined_order->grand_total) }}</td>
                                     </tr>
-                                    <tr>
+                                   <!--  <tr>
                                         <td class="w-50 fw-600">{{ translate('Shipping')}}:</td>
-                                        <td>{{ translate('Flat shipping rate')}}</td>
+                                        <td>{{ translate('Flat shipping rate')}} </td>
+                                    </tr>  -->
+                                    <tr>
+                                        <td class="w-50 fw-600">{{ translate('Shipping Courier Name')}}:</td>
+                                        <td>{{ $first_order->shipping_courier_name }}</td>
                                     </tr>
                                     <tr>
                                         <td class="w-50 fw-600">{{ translate('Payment method')}}:</td>
@@ -172,10 +176,16 @@
                                                             <span class="fw-600">{{ single_price($order->orderDetails->sum('price')) }}</span>
                                                         </td>
                                                     </tr>
-                                                    <tr>
+                                                    <!-- <tr>
                                                         <th>{{ translate('Shipping')}}</th>
                                                         <td class="text-right">
                                                             <span class="font-italic">{{ single_price($order->orderDetails->sum('shipping_cost')) }}</span>
+                                                        </td>
+                                                    </tr> -->
+                                                    <tr>
+                                                        <th>{{ translate('Shipping')}}</th>
+                                                        <td class="text-right">
+                                                            <span class="font-italic">{{ single_price($order->shipping_courier_charge) }}</span>
                                                         </td>
                                                     </tr>
                                                     <tr>

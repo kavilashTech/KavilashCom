@@ -72,10 +72,11 @@
                 @php
                     $subtotal = 0;
                     $tax = 0;
+                    $shipping_courier_cost = $shippingCourierCost;
                     $shipping = 0;
                     $product_shipping_cost = 0;
                     $shipping_region = $shipping_info['city'];
-                    $shipWithCurrency = single_price($shipping);
+                    $shipWithCurrency = single_price($shipping_courier_cost);
                 @endphp
                 @foreach ($carts as $key => $cartItem)
                     @php
@@ -126,10 +127,9 @@
 
                 <tr class="cart-shipping">
                     <th>{{ translate('Total Shipping') }}</th>
-                    
-                    <td class="text-right">
-                        <span class="font-italic" id="shipping_charge">{{ single_price($shipping) }}</span>
                         
+                    <td class="text-right">
+                        <span class="font-italic" id="shipping_charge">{{ single_price($shipping_courier_cost) }}</span>
                         <div id="shipping_estimate" style="display:none;">
                             <select name="country" id="country">
                                 @foreach ($countries as $country)
@@ -170,7 +170,7 @@
                 @endif
 
                 @php
-                    $total = $subtotal + $tax + $shipping;
+                    $total = $subtotal + $tax + $shipping + $shipping_courier_cost;
                     if (Session::has('club_point')) {
                         $total -= Session::get('club_point');
                     }
@@ -181,6 +181,7 @@
                 @endphp
                 <input type="hidden" name="totalWithCurrency" id="totalWithCurrency" value='<?= $totalWithCurrency ?>'>
                 <input type="hidden" name="total" id="total" value='<?= $total ?>'>
+                <input type="hidden" name="shipping_courier_default_cost" id="shipping_courier_default_cost" value='<?= $shipping_courier_cost ?>'>
                 <input type="hidden" name="shipWithCurrency" id="shipWithCurrency" value='<?= $shipWithCurrency ?>'>
                 <tr class="cart-total">
                     <th><span class="strong-600">{{ translate('Total') }}</span></th>

@@ -170,6 +170,9 @@ class OrderController extends Controller
             //     $order->carrier_id = $cartItem['carrier_id'];
             // }
 
+            $order->shipping_courier_name = $request->shipping_courier_name;
+            $order->shipping_courier_charge = $request->shipping_courier_cost;
+
             $order->payment_type = $request->payment_option;
             $order->delivery_viewed = '0';
             $order->payment_status_viewed = '0';
@@ -248,7 +251,9 @@ class OrderController extends Controller
                 }
             }
 
-            $order->grand_total = $subtotal + $tax + $shipping;
+            $shippingCourierCost = $request->shipping_courier_cost ?? 0;
+
+            $order->grand_total = $subtotal + $tax + $shipping + $shippingCourierCost;
 
             if ($seller_product[0]->coupon_code != null) {
                 $order->coupon_discount = $coupon_discount;
