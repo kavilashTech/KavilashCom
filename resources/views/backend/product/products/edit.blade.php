@@ -349,7 +349,7 @@
                                     {{translate('USD Price')}}
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="number" placeholder="{{ translate('USD Price') }}" value="{{ optional($product->stocks->first())->usd_price }}" name="usd_price" class="form-control" required>
+                                    <input type="number" placeholder="{{ translate('USD Price') }}" value="{{ optional($product->stocks->first())->usd_price }}" name="usd_price" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -357,7 +357,7 @@
                                     {{translate('USD Points')}}
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="number" placeholder="{{ translate('USD Points') }}" value="{{ optional($product->stocks->first())->usd_points }}" name="usd_points" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+                                    <input type="number" placeholder="{{ translate('USD Points') }}" value="{{ optional($product->stocks->first())->usd_points }}" name="usd_points" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -365,7 +365,7 @@
                                     {{translate('Dispatch Days')}}
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="number" placeholder="{{ translate('Dispatch Days') }}" value="{{ optional($product->stocks->first())->dispatch_days }}" name="dispatch_days" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+                                    <input type="number" placeholder="{{ translate('Dispatch Days') }}" value="{{ optional($product->stocks->first())->dispatch_days }}" name="dispatch_days" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -940,6 +940,9 @@
                     $('#show-hide-div').hide();
                 }
                 else {
+                    $("#usd_price").prop('required',true);
+                    $("#usd_points").prop('required',true);
+                    $("#dispatch_days").prop('required',true);
                     $('#show-hide-div').show();
                 }
            }
