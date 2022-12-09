@@ -952,7 +952,11 @@
     AIZ.plugins.tagify();
 
     $(document).ready(function(){
-        update_sku();
+
+        var variant = '<?= $product->variant_product ?>';
+        if(variant == 1){
+            update_sku();
+        }
 
         $('.remove-files').on('click', function(){
             $(this).parents(".col-md-4").remove();

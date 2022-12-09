@@ -801,11 +801,11 @@
     });
 
     $('input[name="unit_price"]').on('keyup', function() {
-        update_sku();
+        //update_sku();
     });
 
     $('input[name="name"]').on('keyup', function() {
-        update_sku();
+        //update_sku();
     });
 
     function delete_row(em){
@@ -824,6 +824,7 @@
            data:$('#choice_form').serialize(),
            success: function(data) {
                 $('#sku_combination').html(data);
+
                 AIZ.uploader.previewGenerate();
                 AIZ.plugins.fooTable();
                 if (data.length > 1) {
