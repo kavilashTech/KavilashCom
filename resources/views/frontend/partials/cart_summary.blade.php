@@ -72,10 +72,11 @@
                 @php
                     $subtotal = 0;
                     $tax = 0;
+                    $shipping_courier_cost = $shippingCourierCost;
                     $shipping = 0;
                     $product_shipping_cost = 0;
                     $shipping_region = $shipping_info['city'];
-                    $shipWithCurrency = single_price($shipping);
+                    $shipWithCurrency = single_price($shipping_courier_cost);
                 @endphp
                 @foreach ($carts as $key => $cartItem)
                     @php
@@ -125,13 +126,10 @@
                 </tr>
 
                 <tr class="cart-shipping">
-                    <th>{{ translate('Total Shipping') }} <button onclick="calculateShipping()">Calculate</button></th>
-                    
+                    <th>{{ translate('Total Shipping') }}</th>
+                        
                     <td class="text-right">
-                        <span class="font-italic" id="shipping_charge">{{ single_price($shipping) }}</span>
-                        <div id="shipping_couriers_list">
-                            
-                        </div>
+                        <span class="font-italic" id="shipping_charge">{{ single_price($shipping_courier_cost) }}</span>
                         <div id="shipping_estimate" style="display:none;">
                             <select name="country" id="country">
                                 @foreach ($countries as $country)
@@ -144,6 +142,14 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td><button onclick="calculateShipping()">Calculate</button></td>
+                </tr>
+                <table class="bordered">
+                    <div id="shipping_couriers_list">
+                                
+                    </div>
+                </table>
 
                 @if (Session::has('club_point'))
                     <tr class="cart-shipping">
@@ -164,7 +170,7 @@
                 @endif
 
                 @php
-                    $total = $subtotal + $tax + $shipping;
+                    $total = $subtotal + $tax + $shipping + $shipping_courier_cost;
                     if (Session::has('club_point')) {
                         $total -= Session::get('club_point');
                     }
@@ -173,7 +179,10 @@
                     }
                     $totalWithCurrency = single_price($total);
                 @endphp
-
+                <input type="hidden" name="totalWithCurrency" id="totalWithCurrency" value='<?= $totalWithCurrency ?>'>
+                <input type="hidden" name="total" id="total" value='<?= $total ?>'>
+                <input type="hidden" name="shipping_courier_default_cost" id="shipping_courier_default_cost" value='<?= $shipping_courier_cost ?>'>
+                <input type="hidden" name="shipWithCurrency" id="shipWithCurrency" value='<?= $shipWithCurrency ?>'>
                 <tr class="cart-total">
                     <th><span class="strong-600">{{ translate('Total') }}</span></th>
                     <td class="text-right">
@@ -237,77 +246,6 @@
     </div>
 </div>
 
-@section('script')
-    <script type="text/javascript">
-        function calculateShipping(){
-            $("#shipping_estimate").show();
-        }
-        function getShippingCouriers(){
-            var countryId = $("#country").val();
-            var postcode = $("#postcode").val();
-            var grandTotal = '<?= $total ?>';
-            var totalWithCurrency = '<?= $totalWithCurrency ?>';
-            var shipWithCurrency = '<?= $shipWithCurrency ?>';
 
-            $("#grand_total").html(totalWithCurrency);
-            $("#shipping_charge").html(shipWithCurrency);
 
-            if(postcode != ""){
 
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{route('checkout.shipping_couriers_list')}}",
-                    type: 'POST',
-                    data: {
-                        countryId:countryId,
-                        postcode:postcode
-                    },
-                    success: function (data) {
-                        var response = JSON.parse(data);
-                        //console.log(response);
-                        if(response != '' && response.status == "success") {
-                            $("#postcodeErr").html("");
-                            $("#shipping_couriers_list").html("");
-                            $.each(response.data, function(index, value){
-                                $("#shipping_couriers_list").append('<input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value)" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :'+ value.rate +'<b><br>');
-                            });
-                        }else if(response.status == "invalid_delivery_postcode"){
-                            $("#postcodeErr").html("Invalid delivery postcode");
-                        }else if(response.status == "postcode_empty"){
-                            $("#postcodeErr").html("Delivery postcode required");
-                        }else if(response.status == "invalid_token"){
-                            $("#postcodeErr").html("Invalid token");
-                        }
-                    }
-                });
-            }else{
-                $("#postcodeErr").html("Delivery postcode required");
-            }
-        }
-        function selectShippingCharge(shipCost){
-            var grandTotal = '<?= $total ?>';
-            if(grandTotal > 0){
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{route('checkout.add_shipping_charge')}}",
-                    type: 'POST',
-                    data: {
-                        grandTotal:grandTotal,
-                        shipCost:shipCost
-                    },
-                    success: function (data) {
-                        var response = JSON.parse(data);
-                        if(response != '' && response.status == "success") {
-                            $("#grand_total").html(response.grandTotal);
-                            $("#shipping_charge").html(response.shippingCost);
-                        }
-                    }
-                });
-            }
-        }
-    </script>
-@endsection

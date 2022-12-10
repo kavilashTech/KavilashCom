@@ -46,6 +46,7 @@ class CheckoutController extends Controller
         // Minumum order amount check end
         
         if ($request->payment_option != null) {
+
             (new OrderController)->store($request);
 
             $request->session()->put('payment_type', 'cart_payment');
@@ -93,9 +94,14 @@ class CheckoutController extends Controller
             $order->payment_status = 'paid';
             $order->payment_details = $payment;
             $order->save();
+            
+            //TODO : Uncomment this for club point
+            //calculateCommissionAffilationClubPoint($order);
 
-            calculateCommissionAffilationClubPoint($order);
+            //Shiprocket create order api integration
+            $response = $this->shiprocketCreateOrder($order);
         }
+
         Session::put('combined_order_id', $combined_order_id);
         return redirect()->route('order_confirmed');
     }
@@ -188,11 +194,21 @@ class CheckoutController extends Controller
                 $shipping += $cartItem['shipping_cost'];
                 $cartItem->save();
             }
+            //Get customer postcode based courier charge
+            $courierRes = $this->getSingleCourierList($shipping_info->postal_code);
+            if(!empty($courierRes) && $courierRes['status'] == "success"){
+                $shippingCourierCost = $courierRes['rate'];
+                $shippingCourierName = $courierRes['courier_name'];
+            }else{
+                $shippingCourierCost = 0;
+                $shippingCourierName = "";
+            }
+
             $total = $subtotal + $tax + $shipping;
 
             $countries = Country::where('id',101)->get();
 
-            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total','countries'));
+            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total','countries','shippingCourierCost','shippingCourierName'));
 
         } else {
             flash(translate('Your Cart was empty'))->warning();
@@ -398,18 +414,153 @@ class CheckoutController extends Controller
             echo json_encode($data);
         }
     }
-    public function add_shipping_charge(Request $request){
+    public function apply_shipping_charge(Request $request){
         $grandTotal = $request->grandTotal;
         $shipCost = $request->shipCost;
+        $shipDefaultCost = $request->shipDefaultCost;
 
-        $total = $grandTotal + $shipCost;
+        $withoutShipCostTotal = $grandTotal - $shipDefaultCost;
+
+        $total = $withoutShipCostTotal + $shipCost;
         $grandTotal = single_price($total);
         $shippingCost = single_price($shipCost);
+        
 
         $data['status'] = "success";
         $data['grandTotal'] = $grandTotal;
         $data['shippingCost'] = $shippingCost;
 
         echo json_encode($data);
+    }
+    public function shiprocketCreateOrder($order){
+
+        //Get Auth token
+        $tokenResult = $this->shiprocketAuthToken();
+
+        $customerDetails = json_decode($order->shipping_address,true);
+        $customerPhoneNo = explode(' ',$customerDetails['phone']);
+        
+        if(!empty($tokenResult) && !empty($tokenResult['token'])){
+            //Get the cart details
+            $carts = Cart::where('user_id', Auth::user()->id)
+            ->select('id','product_id','price','quantity','tax','discount')
+            ->get();
+
+            $orderItems = [];
+            $subTotal = 0;
+            if(!empty($carts)){
+                foreach($carts as $key => $value){
+                    //Get the product details
+                    $product = Product::where('id',$value['product_id'])
+                    ->select('id','name')
+                    ->first();
+
+                    $cartItems['name'] = $product->name ?? "";
+                    $cartItems['sku'] = $product->stocks[0]->sku ?? "";
+                    $cartItems['units'] = $value->quantity ?? "";
+                    $cartItems['selling_price'] = $value->price ?? "";
+                    $cartItems['discount'] = $value->discount ?? "";
+                    $cartItems['tax'] = $value->tax ?? "";
+                    $cartItems['hsn'] = $product->stocks[0]->hsn_code ?? "";
+
+                    $orderItems[] = $cartItems;
+                    $subTotal += $value->price;
+                }
+
+                $orderValues = [
+                    'order_id' => $order->code,
+                    'order_date' => $order->created_at,
+                    'pickup_location' => "Primary",
+                    'channel_id' => "Custom",
+                    'comment' => "Create Order",
+                    'billing_customer_name' => $customerDetails['name'],
+                    'billing_last_name' => $customerDetails['name'],
+                    'billing_address' => $customerDetails['address'],
+                    'billing_address_2' => "",
+                    'billing_city' => $customerDetails['city'],
+                    'billing_pincode' => $customerDetails['postal_code'],
+                    'billing_state' => $customerDetails['state'],
+                    'billing_country' => $customerDetails['country'],
+                    'billing_email' => $customerDetails['email'],
+                    'billing_phone' => $customerPhoneNo[1],
+                    'shipping_is_billing' => true,
+                    'shipping_customer_name' => "",
+                    'shipping_last_name' => "",
+                    'shipping_address' => "",
+                    'shipping_address_2' => "",
+                    'shipping_city' => "",
+                    'shipping_pincode' => "",
+                    'shipping_country' => "",
+                    'shipping_state' => "",
+                    'shipping_email' => "",
+                    'shipping_phone' => "",
+                    'order_items' => $orderItems,
+                    'payment_method' => $order->payment_type,
+                    'shipping_charges' => $order->shipping_courier_charge ?? 0,
+                    'giftwrap_charges' => 0,
+                    'transaction_charges' => 0,
+                    'total_discount' => $order->coupon_discount,
+                    'sub_total' => $subTotal,
+                    'length' => 10,
+                    'breadth' => 15,
+                    'height' => 20,
+                    'weight' => 2.5
+                ];
+
+                if(!empty($orderValues)){
+                    //Shiprocket order api call
+                    $response = Http::withToken($tokenResult['token'])->post('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc',$orderValues);
+                    $result = json_decode($response,true);
+                    //echo "<pre>";print_r($result);die;
+                    if(!empty($result) ){
+                        return "success";
+                    }else{
+                        return "failure";
+                    }
+                }else{
+                    return "failure";
+                }
+            }
+        }else{
+            return "failure";
+        }
+    }
+    //Get shiprocket first courier details
+    public function getSingleCourierList($deliveryPostcode){
+        //Get Auth token
+        $result = $this->shiprocketAuthToken();
+        
+        if(!empty($result) && !empty($result['token'])){
+            $pickupPostcode = get_setting('pickup_point') ?? "";
+            if(!empty($deliveryPostcode)){
+                $response = Http::withToken($result['token'])->get('https://apiv2.shiprocket.in/v1/external/courier/serviceability',[
+                    'pickup_postcode' => $pickupPostcode,
+                    'delivery_postcode' => $deliveryPostcode,
+                    'weight' => '1',
+                    'cod' => '1',
+                ]);
+
+                $result = json_decode($response,true);
+                //echo "<pre>";print_r($result);die;
+                $data = [];
+                if(!empty($result) && !empty($result['data']['available_courier_companies'])){
+
+                    $courier = $result['data']['available_courier_companies'];
+                    $data['courier_name'] = $courier[0]['courier_name'];
+                    $data['rate'] = $courier[0]['rate'];
+                    
+                    $data['status']="success";
+                }else{
+                    $data['status'] = "failure";
+                }
+                return $data;
+            }else{
+                $data['status'] = "failure";
+                return $data;
+            }
+        }else{
+            $data['status'] = "failure";
+            return $data;
+        }
     }
 }

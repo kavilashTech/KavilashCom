@@ -24,7 +24,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">{{translate('Product Name')}} <span class="text-danger">*</span></label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" name="name" placeholder="{{ translate('Product Name') }}" onchange="update_sku()" required>
+                                <input type="text" class="form-control" name="name" placeholder="{{ translate('Product Name') }}" required>
                             </div>
                         </div>
                         <div class="form-group row" id="category">
@@ -262,6 +262,40 @@
                                 </label>
                                 <div class="col-md-6">
                                     <input type="text" placeholder="{{ translate('SKU') }}" name="sku" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Dimensions(cm)')}}
+                                </label>
+                                <div class="col-md-6 d-flex">
+                                    <input class="form-control" type="number" name="width"  placeholder="width" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					                <input class="form-control" type="number" name="breadth" placeholder="breadth" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+					                <input class="form-control" type="number" name="height" placeholder="height" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('USD Price')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="{{ translate('USD Price') }}" id="usd_price" name="usd_price" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('USD Points')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="{{ translate('USD Points') }}" id="usd_points" name="usd_points" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Dispatch Days')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="{{ translate('Dispatch Days') }}" id="dispatch_days" name="dispatch_days" class="form-control" min="0" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
                                 </div>
                             </div>
                             <div class="form-group row" id="expiryMonth">
@@ -767,11 +801,11 @@
     });
 
     $('input[name="unit_price"]').on('keyup', function() {
-        update_sku();
+        //update_sku();
     });
 
     $('input[name="name"]').on('keyup', function() {
-        update_sku();
+        //update_sku();
     });
 
     function delete_row(em){
@@ -790,12 +824,16 @@
            data:$('#choice_form').serialize(),
            success: function(data) {
                 $('#sku_combination').html(data);
+
                 AIZ.uploader.previewGenerate();
                 AIZ.plugins.fooTable();
                 if (data.length > 1) {
                    $('#show-hide-div').hide();
                 }
                 else {
+                    $("#usd_price").prop('required',true);
+                    $("#usd_points").prop('required',true);
+                    $("#dispatch_days").prop('required',true);
                     $('#show-hide-div').show();
                 }
            }

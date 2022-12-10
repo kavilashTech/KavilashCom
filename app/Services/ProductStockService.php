@@ -63,6 +63,12 @@ class ProductStockService
             $product_stock->variant     = $stock->variant;
             $product_stock->price       = $stock->price;
             $product_stock->sku         = $stock->sku;
+            $product_stock->width       = $stock->width;
+            $product_stock->breadth     = $stock->breadth;
+            $product_stock->height      = $stock->height;
+            $product_stock->usd_price   = $stock->usd_price;
+            $product_stock->usd_points  = $stock->usd_points;
+            $product_stock->dispatch_days = $stock->dispatch_days;
             $product_stock->hsn_code    = $stock->hsn_code;
             $product_stock->qty         = $stock->qty;
             $product_stock->save();
