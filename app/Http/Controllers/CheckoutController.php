@@ -166,6 +166,10 @@ class CheckoutController extends Controller
         $tax = 0;
         $shipping = 0;
         $subtotal = 0;
+        $totalWeight = 0;
+        $productWidth = "";
+        $productHeight = "";
+        $productBreadth = "";
 
         if ($carts && count($carts) > 0) {
             foreach ($carts as $key => $cartItem) {
@@ -191,11 +195,31 @@ class CheckoutController extends Controller
                     $cartItem['shipping_cost'] = getShippingCost($carts, $key, $cartItem['carrier_id']);
                 }
 
+                if(!empty($product->stocks)){
+                    if(!empty($product->stocks[0]->width) && $key == 0){
+                        $productWidth = $product->stocks[0]->width;
+                    }
+                    if(!empty($product->stocks[0]->height) && $key == 0){
+                        $productHeight = $product->stocks[0]->height;
+                    }
+                    if(!empty($product->stocks[0]->breadth) && $key == 0){
+                        $productBreadth = $product->stocks[0]->breadth;
+                    }
+                }
+
+                //Get total weight of the cart added products
+                $totalWeight += $product->weight;
+
                 $shipping += $cartItem['shipping_cost'];
                 $cartItem->save();
             }
+            $prodDimensionDetails['totalWeight'] = $totalWeight;
+            $prodDimensionDetails['productWidth'] = $productWidth;
+            $prodDimensionDetails['productHeight'] = $productHeight;
+            $prodDimensionDetails['productBreadth'] = $productBreadth;
+
             //Get customer postcode based courier charge
-            $courierRes = $this->getSingleCourierList($shipping_info->postal_code);
+            $courierRes = $this->getSingleCourierList($shipping_info->postal_code,$prodDimensionDetails);
             if(!empty($courierRes) && $courierRes['status'] == "success"){
                 $shippingCourierCost = $courierRes['rate'];
                 $shippingCourierName = $courierRes['courier_name'];
@@ -208,7 +232,7 @@ class CheckoutController extends Controller
 
             $countries = Country::where('id',101)->get();
 
-            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total','countries','shippingCourierCost','shippingCourierName'));
+            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total','countries','shippingCourierCost','shippingCourierName','prodDimensionDetails'));
 
         } else {
             flash(translate('Your Cart was empty'))->warning();
@@ -382,16 +406,23 @@ class CheckoutController extends Controller
         if(!empty($result) && !empty($result['token'])){
             $pickupPostcode = get_setting('pickup_point') ?? "";
             $deliveryPostcode = $request->postcode;
+            $productBreadth = $request->productBreadth;
+            $productWidth = $request->productWidth;
+            $productHeight = $request->productHeight;
+            $prodTotalWeight = $request->prodTotalWeight;
+
             if(!empty($deliveryPostcode)){
                 $response = Http::withToken($result['token'])->get('https://apiv2.shiprocket.in/v1/external/courier/serviceability',[
                     'pickup_postcode' => $pickupPostcode,
                     'delivery_postcode' => $deliveryPostcode,
-                    'weight' => '1',
-                    'cod' => '1',
+                    'weight' => ($prodTotalWeight > 0) ? $prodTotalWeight : 1,
+                    'cod' => '1',  //Todo - To check in future
+                    'breadth' => $productBreadth ?? "",
+                    'height' => $productHeight ?? "",
+                    'length' => $productWidth ?? "",
                 ]);
 
                 $result = json_decode($response,true);
-                //echo "<pre>";print_r($result);die;
                 $data = [];
                 if(!empty($result) && !empty($result['data']['available_courier_companies'])){
                     foreach($result['data']['available_courier_companies'] as $key => $value){
@@ -448,6 +479,10 @@ class CheckoutController extends Controller
 
             $orderItems = [];
             $subTotal = 0;
+            $totalWeight = 0;
+            $productWidth = "";
+            $productHeight = "";
+            $productBreadth = "";
             if(!empty($carts)){
                 foreach($carts as $key => $value){
                     //Get the product details
@@ -465,6 +500,22 @@ class CheckoutController extends Controller
 
                     $orderItems[] = $cartItems;
                     $subTotal += $value->price;
+
+                    //Get total weight of the cart added products
+                    $totalWeight += $product->weight;
+
+                    //Get dimensions details of the product
+                    if(!empty($product->stocks)){
+                        if(!empty($product->stocks[0]->width) && $key == 0){
+                            $productWidth = $product->stocks[0]->width;
+                        }
+                        if(!empty($product->stocks[0]->height) && $key == 0){
+                            $productHeight = $product->stocks[0]->height;
+                        }
+                        if(!empty($product->stocks[0]->breadth) && $key == 0){
+                            $productBreadth = $product->stocks[0]->breadth;
+                        }
+                    }
                 }
 
                 $orderValues = [
@@ -501,17 +552,16 @@ class CheckoutController extends Controller
                     'transaction_charges' => 0,
                     'total_discount' => $order->coupon_discount,
                     'sub_total' => $subTotal,
-                    'length' => 10,
-                    'breadth' => 15,
-                    'height' => 20,
-                    'weight' => 2.5
+                    'length' => $productWidth ?? 1,
+                    'breadth' => $productBreadth ?? 1,
+                    'height' => $productHeight ?? 1,
+                    'weight' => ($totalWeight > 0) ? $totalWeight : 1,
                 ];
 
                 if(!empty($orderValues)){
                     //Shiprocket order api call
                     $response = Http::withToken($tokenResult['token'])->post('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc',$orderValues);
                     $result = json_decode($response,true);
-                    //echo "<pre>";print_r($result);die;
                     if(!empty($result) ){
                         return "success";
                     }else{
@@ -526,22 +576,24 @@ class CheckoutController extends Controller
         }
     }
     //Get shiprocket first courier details
-    public function getSingleCourierList($deliveryPostcode){
+    public function getSingleCourierList($deliveryPostcode,$prodDimensionDetails){
         //Get Auth token
         $result = $this->shiprocketAuthToken();
         
         if(!empty($result) && !empty($result['token'])){
             $pickupPostcode = get_setting('pickup_point') ?? "";
-            if(!empty($deliveryPostcode)){
+            if(!empty($deliveryPostcode) && !empty($prodDimensionDetails)){
                 $response = Http::withToken($result['token'])->get('https://apiv2.shiprocket.in/v1/external/courier/serviceability',[
                     'pickup_postcode' => $pickupPostcode,
                     'delivery_postcode' => $deliveryPostcode,
-                    'weight' => '1',
-                    'cod' => '1',
+                    'weight' => ($prodDimensionDetails['totalWeight'] > 0) ? $prodDimensionDetails['totalWeight'] : 1,
+                    'cod' => '1', //Todo - To check in future
+                    'breadth' => $prodDimensionDetails['productBreadth'] ?? "",
+                    'height' => $prodDimensionDetails['productHeight'] ?? "",
+                    'length' => $prodDimensionDetails['productWidth'] ?? ""
                 ]);
 
                 $result = json_decode($response,true);
-                //echo "<pre>";print_r($result);die;
                 $data = [];
                 if(!empty($result) && !empty($result['data']['available_courier_companies'])){
 
