@@ -688,6 +688,11 @@
             $("#grand_total").html(totalWithCurrency);
             $("#shipping_charge").html(shipWithCurrency);
 
+            var prodTotalWeight = '<?= $prodDimensionDetails['totalWeight'] ?>';
+            var productWidth = '<?=  $prodDimensionDetails['productWidth'] ?>';
+            var productHeight = '<?= $prodDimensionDetails['productHeight'] ?>';
+            var productBreadth = '<?= $prodDimensionDetails['productBreadth'] ?>';
+
             if(postcode != ""){
 
                 $.ajax({
@@ -698,7 +703,11 @@
                     type: 'POST',
                     data: {
                         countryId:countryId,
-                        postcode:postcode
+                        postcode:postcode,
+                        prodTotalWeight:prodTotalWeight,
+                        productWidth:productWidth,
+                        productHeight:productHeight,
+                        productBreadth:productBreadth,
                     },
                     success: function (data) {
                         var response = JSON.parse(data);
