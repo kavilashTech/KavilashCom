@@ -46,6 +46,7 @@ use App\Http\Controllers\Payment\PaykuController;
 use App\Http\Controllers\ProductQueryController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CustomerController;
 
 /*
   |--------------------------------------------------------------------------
@@ -235,6 +236,13 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/user/update-profile', 'userProfileUpdate')->name('user.profile.update');
         Route::post('/user/update-company', 'userCompanyUpdate')->name('user.company.update');
+    });
+
+    Route::controller(CustomerController::class)->group(function () {
+        Route::get('customerfornices', [CustomerController::class, 'franciesindex'])->name('customer.franciesindex');
+        Route::post('customerfornices_register', [CustomerController::class, 'customerFranchiseeRegister'])->name('customer.franchiee_customer_register');
+        
+     
     });
     
     Route::get('/all-notifications', [NotificationController::class, 'index'])->name('all-notifications');
