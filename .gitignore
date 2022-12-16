@@ -5,6 +5,9 @@
 /public/uploads
 /storage/*.key
 /storage/debugbar
+/vendor
+
+/.idea
 
 /temp
 updates/
@@ -14,7 +17,15 @@ resources/lang/en.json
 updates.zip
 ecommerce.zip
 install.zip
-/nbproject/private/
-/nbproject
 
 public/uploads.zip
+
+/.vscode
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.phpunit.result.cache
+composer.json
+composer.lock
