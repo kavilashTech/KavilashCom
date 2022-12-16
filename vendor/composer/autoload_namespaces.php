@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Requests' => array($vendorDir . '/rmccue/requests/library'),
+    'PayPal' => array($vendorDir . '/paypal/rest-api-sdk-php/lib'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
     'Laracasts\\Flash' => array($vendorDir . '/laracasts/flash/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
