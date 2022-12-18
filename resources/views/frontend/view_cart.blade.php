@@ -55,6 +55,8 @@
                             @php
                              $CGST_total = '0.00';
                              $SGST_total = '0.00';
+                             $IGST_total = 0.00;
+                             $GST_total = 0;
                             @endphp
                             <div class="mb-4">
                                 <div class="row gutters-5 d-none d-lg-flex border-bottom mb-3 pb-3">
@@ -62,10 +64,20 @@
                                     <div class="col fw-600">{{ translate('Price') }}</div>
                                     <!-- <div class="col fw-600">{{ translate('Tax') }}</div> -->
                                     <div class="col fw-600">{{ translate('Quantity') }}</div>
-                                    <div class="col fw-600">{{ translate('CGST %') }}</div>
-                                    <div class="col fw-600">{{ translate('CGST Amount') }}</div>
-                                    <div class="col fw-600">{{ translate('SGST %') }}</div>
-                                    <div class="col fw-600">{{ translate('SGST Amount') }}</div>
+                                    @if(empty($checkUserAddress))
+                                        <div class="col fw-600">{{ translate('GST %') }}</div>
+                                        <div class="col fw-600">{{ translate('GST Amount') }}</div>
+                                    @endif
+                                    @if(!empty($checkUserAddress) && $checkUserAddress == 1)
+                                        <div class="col fw-600">{{ translate('CGST %') }}</div>
+                                        <div class="col fw-600">{{ translate('CGST Amount') }}</div>
+                                        <div class="col fw-600">{{ translate('SGST %') }}</div>
+                                        <div class="col fw-600">{{ translate('SGST Amount') }}</div>
+                                    @endif
+                                    @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                                        <div class="col fw-600">{{ translate('IGST %') }}</div>
+                                        <div class="col fw-600">{{ translate('IGST Amount') }}</div>
+                                    @endif
                                     <div class="col fw-600">{{ translate('Total') }}</div>
                                     <div class="col-auto fw-600">{{ translate('Remove') }}</div>
                                 </div>
@@ -78,8 +90,14 @@
                                         @php
                                             $product = \App\Models\Product::find($cartItem['product_id']);
                                             $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
-                                            // $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
-                                            $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                            if(!empty($checkUserAddress)){
+                                                $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
+                                            }
+                                            else{
+                                                $total = $total + ($cartItem['price']) * $cartItem['quantity'];
+                                            }
+                                            
+                                            //$total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
                                             $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
                                             $product_name_with_choice = $product->getTranslation('name');
                                             if ($cartItem['variation'] != null) {
@@ -137,41 +155,76 @@
                                                         <span class="fw-600 fs-16">1</span>
                                                     @endif
                                                 </div>
-
-                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
-                                                    <span
-                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('CGST %') }}</span>
-                                                    <span
-                                                        class="fw-600 fs-16">{{ $cartItem->tax1 }}</span>
-                                                </div>
-
-                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
-                                                    <span
-                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('CGST Amount') }}</span>
-                                                    <span
-                                                        class="fw-600 fs-16">{{ $cartItem->tax1_amount * $cartItem['quantity']}}</span>
-                                                    @php
-                                                       $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
-                                                    @endphp
-                                                </div>
-                                                
-                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
-                                                    <span
-                                                    class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST %') }}</span>
-                                                    <span
-                                                        class="fw-600 fs-16">{{ $cartItem->tax2 }}</span>
+                                                @if(empty($checkUserAddress))
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('GST %') }}</span>
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $GST_total }}</span>
                                                     </div>
 
-                                                <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
-                                                    <span
-                                                    class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST Amount') }}</span>
-                                                    <span
-                                                    class="fw-600 fs-16">{{ $cartItem->tax2_amount * $cartItem['quantity']}}</span>
-                                                    @php
-                                                       $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
-                                                    @endphp
-                                                </div>
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('GST Amount') }}</span>
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $GST_total }}</span>
+                                                    </div>
+                                                @endif
+                                                @if(!empty($checkUserAddress) && $checkUserAddress == 1)
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('CGST %') }}</span>
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $cartItem->tax1 }}</span>
+                                                    </div>
 
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('CGST Amount') }}</span>
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $cartItem->tax1_amount * $cartItem['quantity']}}</span>
+                                                        @php
+                                                           $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
+                                                        @endphp
+                                                    </div>
+
+                                                
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST %') }}</span>
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $cartItem->tax2 }}</span>
+                                                        </div>
+
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST Amount') }}</span>
+                                                        <span
+                                                        class="fw-600 fs-16">{{ $cartItem->tax2_amount * $cartItem['quantity']}}</span>
+                                                        @php
+                                                           $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
+                                                        @endphp
+                                                    </div>
+                                                @endif
+                                                @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('IGST %') }}</span>
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $cartItem->tax_percentage }}</span>
+                                                    </div>
+
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                        class="opacity-60 fs-12 d-block d-lg-none">{{ translate('IGST Amount') }}</span>
+                                                        <span
+                                                        class="fw-600 fs-16">{{ $cartItem->tax * $cartItem['quantity']}}</span>
+                                                        @php
+                                                           $IGST_total += $cartItem->tax * $cartItem['quantity'];
+                                                        @endphp
+                                                    </div>
+                                                @endif
+                                                
                                                 <div class="col-lg col-4 order-3 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Total') }}</span>
@@ -195,16 +248,30 @@
                                 <span class="opacity-60 fs-15">{{ translate('Subtotal') }}</span>
                                 <span class="fw-600 fs-17 pl-3">{{ single_price($subTotal) }}</span>
                             </div>
+                            @if(empty($checkUserAddress))
+                                <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                    <span class="opacity-60 fs-15">{{ translate('GST Amount') }}</span>
+                                    <span class="fw-600 fs-17 pl-3">{{ single_price($GST_total) }}</span>
+                                </div>
+                            @endif
+                            @if(!empty($checkUserAddress) && $checkUserAddress == 1)
+                                <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                    <span class="opacity-60 fs-15">{{ translate('CGST') }}</span>
+                                    <span class="fw-600 fs-17 pl-3">{{ single_price($CGST_total) }}</span>
+                                </div>
 
-                            <div class="px-3 py-2 d-flex justify-content-end mt-n3">
-                                <span class="opacity-60 fs-15">{{ translate('CGST') }}</span>
-                                <span class="fw-600 fs-17 pl-3">{{ single_price($CGST_total) }}</span>
-                            </div>
+                                <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                    <span class="opacity-60 fs-15">{{ translate('SGST') }}</span>
+                                    <span class="fw-600 fs-17 pl-3">{{ single_price($SGST_total) }}</span>
+                                </div>
+                            @endif
 
-                            <div class="px-3 py-2 d-flex justify-content-end mt-n3">
-                                <span class="opacity-60 fs-15">{{ translate('SGST') }}</span>
-                                <span class="fw-600 fs-17 pl-3">{{ single_price($SGST_total) }}</span>
-                            </div>
+                            @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                                <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                    <span class="opacity-60 fs-15">{{ translate('IGST') }}</span>
+                                    <span class="fw-600 fs-17 pl-3">{{ single_price($IGST_total) }}</span>
+                                </div>
+                            @endif
 
                             <div class="px-3 py-2 d-flex justify-content-end mt-n3">
                                 <span class="opacity-60 fs-15">{{ translate('Total') }}</span>

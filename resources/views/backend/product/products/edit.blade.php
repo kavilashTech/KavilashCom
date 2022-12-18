@@ -819,9 +819,9 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <select class="form-control aiz-selectpicker" name="tax_type[]">
-                                    <option value="amount" @if($tax_type == 'amount') selected @endif>
+                                    <!-- <option value="amount" @if($tax_type == 'amount') selected @endif>
                                         {{translate('Flat')}}
-                                    </option>
+                                    </option> -->
                                     <option value="percent" @if($tax_type == 'percent') selected @endif>
                                         {{translate('Percent')}}
                                     </option>

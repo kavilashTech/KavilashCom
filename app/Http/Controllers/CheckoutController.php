@@ -506,14 +506,10 @@ class CheckoutController extends Controller
 
                     //Get dimensions details of the product
                     if(!empty($product->stocks)){
-                        if(!empty($product->stocks[0]->width) && $key == 0){
-                            $productWidth = $product->stocks[0]->width;
-                        }
-                        if(!empty($product->stocks[0]->height) && $key == 0){
-                            $productHeight = $product->stocks[0]->height;
-                        }
-                        if(!empty($product->stocks[0]->breadth) && $key == 0){
-                            $productBreadth = $product->stocks[0]->breadth;
+                        foreach ($product->stocks as $key => $stocks) {
+                            $productTotalWidth += $stocks->width;
+                            $productTotalHeight += $stocks->height;
+                            $productTotalBreadth += $stocks->breadth;
                         }
                     }
                 }
@@ -552,9 +548,9 @@ class CheckoutController extends Controller
                     'transaction_charges' => 0,
                     'total_discount' => $order->coupon_discount,
                     'sub_total' => $subTotal,
-                    'length' => $productWidth ?? 1,
-                    'breadth' => $productBreadth ?? 1,
-                    'height' => $productHeight ?? 1,
+                    'length' => $productTotalWidth ?? 1,
+                    'breadth' => $productTotalBreadth ?? 1,
+                    'height' => $productTotalHeight ?? 1,
                     'weight' => ($totalWeight > 0) ? $totalWeight : 1,
                 ];
 
