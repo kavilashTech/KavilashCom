@@ -443,6 +443,28 @@
                     </li>
                 @endcanany
 
+
+                   <!-- Customers -->
+                   @canany(['view_all_franchisee'])
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="las la-store aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{ translate('Franchisee') }}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+                        <ul class="aiz-side-nav-list level-2">
+                            @can('view_all_franchisee')
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{ route('franchisee.franchiseeindex') }}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{ translate('Franchisee list') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+                           
+                        </ul>
+                    </li>
+                @endcanany
+
                 <!-- Sellers -->
                 @canany(['view_all_seller','seller_payment_history','view_seller_payout_requests','seller_commission_configuration','view_all_seller_packages','seller_verification_form_configuration'])
                     <li class="aiz-side-nav-item">

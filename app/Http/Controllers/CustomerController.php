@@ -12,9 +12,12 @@ use App\Models\BusinessSetting;
 use Cookie;
 use Session;
 use Auth;
+use Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\SecondEmailVerifyMailManager;
 
 class CustomerController extends Controller
 {
@@ -304,5 +307,76 @@ class CustomerController extends Controller
         $user->save();
         
         return back();
+    }
+
+    public function franchiseeindex(Request $request)
+    {
+        $sort_search = null;
+        $users = User::where('user_type', 'partner')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $users->where(function ($q) use ($sort_search){
+                $q->where('name', 'like', '%'.$sort_search.'%')->orWhere('email', 'like', '%'.$sort_search.'%');
+            });
+        }
+        $users = $users->paginate(15);
+        return view('backend.franchisee.index', compact('users', 'sort_search'));
+    }
+    public function franchiseeapproved(Request $request)
+    {
+
+         $user = User::findOrFail($request->userid);
+         $user->status = 1;
+         $user->reason = '';
+       
+
+        $user->save();
+
+
+        
+      
+
+         
+        if (env('MAIL_USERNAME') != null ) {
+            $array['view'] = 'emails.verification';
+            $array['subject'] = translate('Your Profile approved');
+            $array['from'] = env('MAIL_FROM_ADDRESS');
+            $array['content'] =translate('Franchise approve login to continue.');
+
+            try {
+                Mail::to($user->email)->queue(new SecondEmailVerifyMailManager($array));
+            } catch (\Exception $e) {
+                dd($e);
+
+            }
+        }
+        
+        return 1;
+    }
+
+    public function franchiseerejected(Request $request)
+    {
+        $user = User::findOrFail($request->userid);
+        $user->status = 2;
+        $user->reason = $request->reason;
+      
+
+       $user->save();
+       
+       if (env('MAIL_USERNAME') != null ) {
+        $array['view'] = 'emails.verification';
+        $array['subject'] = translate('Your Profile approved');
+        $array['from'] = env('MAIL_FROM_ADDRESS');
+        $array['content'] =translate('Franchise approve login to continue.');
+
+        try {
+            Mail::to($user->email)->queue(new SecondEmailVerifyMailManager($array));
+        } catch (\Exception $e) {
+
+        }
+    }
+    
+    return 1;
+        
     }
 }
