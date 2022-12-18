@@ -4,7 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 use App\Models\User;
+use App\Models\Cart;
+use App\Models\BusinessSetting;
+use Cookie;
+use Session;
+use Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class CustomerController extends Controller
 {
@@ -34,16 +44,137 @@ class CustomerController extends Controller
         $users = $users->paginate(15);
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
+    public function franciesindex(Request $request)
+    {
+        return view('frontend.user.franchisee_customer');
+    }
+
+    protected function validator(array $data)
+    {
+        if(isset($data['franchisee'])){
+            return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+                'phone' => 'required',
+                'state_id' => 'required',
+                'city_id' => 'required',
+            ]);
+        }else{
+            return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+        }
+    }
+
+
+    protected function create(array $data)
+    {
+       
+        if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            if(isset($data['franchisee'])){
+                $user = User::create([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password']),
+                    'city' => $data['city_id'],
+                    'state' => $data['state_id'],
+                    'phone' => '+91'.$data['phone'],
+                    'user_type' => 'customer',
+                    'franchisee_id' =>Auth::user()->id,
+                ]);
+            }else{
+                $user = User::create([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password']),
+                ]);
+            }
+        }
+        else {
+            if (addon_is_activated('otp_system')){
+                $user = User::create([
+                    'name' => $data['name'],
+                    'phone' => '+'.$data['country_code'].$data['phone'],
+                    'password' => Hash::make($data['password']),
+                    'verification_code' => rand(100000, 999999)
+                ]);
+
+                $otpController = new OTPVerificationController;
+                $otpController->send_code($user);
+            }
+        }
+        
+        if(session('temp_user_id') != null){
+            Cart::where('temp_user_id', session('temp_user_id'))
+                    ->update([
+                        'user_id' => $user->id,
+                        'temp_user_id' => null
+            ]);
+
+            Session::forget('temp_user_id');
+        }
+
+        if(Cookie::has('referral_code')){
+            $referral_code = Cookie::get('referral_code');
+            $referred_by_user = User::where('referral_code', $referral_code)->first();
+            if($referred_by_user != null){
+                $user->referred_by = $referred_by_user->id;
+                $user->save();
+            }
+        }
+
+        return $user;
+    }
+
+
+    public function customerFranchiseeRegister(Request $request)
+    {
+        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            if(User::where('email', $request->email)->first() != null){
+                flash(translate('Email or Phone already exists.'));
+                return back();
+            }
+        }
+        elseif (User::where('phone', '+'.$request->country_code.$request->phone)->first() != null) {
+            flash(translate('Phone already exists.'));
+            return back();
+        }
+
+        $this->validator($request->all())->validate();
+
+        $user = $this->create($request->all());
+
+       
+
+        if(BusinessSetting::where('type', 'email_verification')->first()->value != 1){
+            $user->email_verified_at = date('Y-m-d H:m:s');
+            $user->save();
+            flash(translate('Registration successful.'))->success();
+        }
+        else {
+          
+            try {
+                $user->sendEmailVerificationNotification();
+                flash(translate('Registration successful. Please verify your email.'))->success();
+                return back();
+            } catch (\Throwable $th) {
+               
+                $user->delete();
+               
+                flash(translate('Registration failed. Please try again later.'))->error();
+                return back();
+            }
+        }
+
+    }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+  
 
     /**
      * Store a newly created resource in storage.
