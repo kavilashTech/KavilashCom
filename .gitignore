@@ -5,6 +5,12 @@
 /public/uploads
 /storage/*.key
 /storage/debugbar
+/vendor
+
+/bootstrap/compiled.php
+composer.phar
+composer.lock
+.env.*.php
 
 /temp
 updates/
@@ -18,3 +24,5 @@ install.zip
 /nbproject
 
 public/uploads.zip
+
+

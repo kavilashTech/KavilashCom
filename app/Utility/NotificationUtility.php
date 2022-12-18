@@ -13,6 +13,25 @@ use App\Models\FirebaseNotification;
 
 class NotificationUtility
 {
+
+    public static function sendFranchiseedNotification($user, $request = null)
+    {  
+       
+        
+            $users = User::findMany([$user->id, \App\Models\User::where('user_type', 'admin')->first()->id]);
+        
+
+        $order_notification = array();
+        $order_notification['order_id'] = $user->name;
+        $order_notification['order_code'] = $user->email;
+        $order_notification['user_id'] = $user->user_id;
+        $order_notification['seller_id'] = $user->seller_id;
+        $order_notification['status'] = 'New Franchisee';
+
+        Notification::send($users, new OrderNotification($order_notification));
+
+    }
+    
     public static function sendOrderPlacedNotification($order, $request = null)
     {       
         //sends email to customer with the invoice pdf attached
