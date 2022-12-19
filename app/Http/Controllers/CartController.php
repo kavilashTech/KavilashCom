@@ -122,8 +122,6 @@ class CartController extends Controller
 
             $quantity = $product_stock->qty;
 
-            //echo $request['quantity'];die;
-
             if($quantity < $request['quantity']){
                 return array(
                     'status' => 0,
@@ -171,27 +169,26 @@ class CartController extends Controller
             foreach ($product->taxes as $product_tax) {
                 $tax_name = Tax::where('id',$product_tax->tax_id)->first();
 
-                    if($product_tax->tax_type == 'percent'){
-                        $tax += ($price * $product_tax->tax) / 100;
-                    }
-                   /* elseif($product_tax->tax_type == 'amount'){
-                        $tax += $product_tax->tax;
-                    }*/
-                    
-                    if(!empty($tax_name) && $tax_name->name == 'GST'){
-                        $data['tax'] = $tax;
-                        $data['tax_percentage'] =  $product_tax->tax;
-                    }  
+                if($product_tax->tax_type == 'percent'){
+                    $tax += ($price * $product_tax->tax) / 100;
+                }
+               /* elseif($product_tax->tax_type == 'amount'){
+                    $tax += $product_tax->tax;
+                }*/
                 
-                    $splitTax = $product_tax->tax / 2;
-                    if(!empty($tax_name) && $tax_name->name == 'GST'){
-                        $data['tax1'] =  $splitTax;
-                        $data['tax1_amount'] =(($price * $data['tax1']) / 100);
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax'] = $tax;
+                    $data['tax_percentage'] =  $product_tax->tax;
+                }  
+            
+                $splitTax = $product_tax->tax / 2;
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax1'] =  $splitTax;
+                    $data['tax1_amount'] =(($price * $data['tax1']) / 100);
 
-                        $data['tax2'] =  $splitTax;
-                        $data['tax2_amount'] =(($price * $data['tax2']) / 100);
-                    }
-               
+                    $data['tax2'] =  $splitTax;
+                    $data['tax2_amount'] =(($price * $data['tax2']) / 100);
+                }
             }
            
             $data['price'] = $price ;
@@ -279,8 +276,6 @@ class CartController extends Controller
             $checkUserAddress = $this->checkAuthUserAddress();
 
             $price = $product->bids->max('amount');
-            $data['tax'] = 0;
-            $data['tax_percentage'] =  0;
             foreach ($product->taxes as $product_tax) {
 
                 $tax_name = Tax::where('id',$product_tax->tax_id)->first();

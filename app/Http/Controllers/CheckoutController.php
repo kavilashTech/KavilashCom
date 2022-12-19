@@ -167,9 +167,9 @@ class CheckoutController extends Controller
         $shipping = 0;
         $subtotal = 0;
         $totalWeight = 0;
-        $productWidth = "";
-        $productHeight = "";
-        $productBreadth = "";
+        $productTotalWidth = "";
+        $productTotalHeight = "";
+        $productTotalBreadth = "";
 
         if ($carts && count($carts) > 0) {
             foreach ($carts as $key => $cartItem) {
@@ -194,16 +194,19 @@ class CheckoutController extends Controller
                     $cartItem['carrier_id'] = $request['carrier_id_' . $product->user_id];
                     $cartItem['shipping_cost'] = getShippingCost($carts, $key, $cartItem['carrier_id']);
                 }
-
+                
+                //Get dimensions details of the product
                 if(!empty($product->stocks)){
-                    if(!empty($product->stocks[0]->width) && $key == 0){
-                        $productWidth = $product->stocks[0]->width;
-                    }
-                    if(!empty($product->stocks[0]->height) && $key == 0){
-                        $productHeight = $product->stocks[0]->height;
-                    }
-                    if(!empty($product->stocks[0]->breadth) && $key == 0){
-                        $productBreadth = $product->stocks[0]->breadth;
+                    foreach ($product->stocks as $key => $stocks) {
+                        if(!empty($stocks->width)){
+                            $productTotalWidth += $stocks->width;
+                        }
+                        if(!empty($stocks->height)){
+                            $productTotalHeight += $stocks->height;
+                        }
+                        if(!empty($stocks->breadth)){
+                            $productTotalBreadth += $stocks->breadth;
+                        }
                     }
                 }
 
@@ -214,9 +217,9 @@ class CheckoutController extends Controller
                 $cartItem->save();
             }
             $prodDimensionDetails['totalWeight'] = $totalWeight;
-            $prodDimensionDetails['productWidth'] = $productWidth;
-            $prodDimensionDetails['productHeight'] = $productHeight;
-            $prodDimensionDetails['productBreadth'] = $productBreadth;
+            $prodDimensionDetails['productTotalWidth'] = $productTotalWidth;
+            $prodDimensionDetails['productTotalHeight'] = $productTotalHeight;
+            $prodDimensionDetails['productTotalBreadth'] = $productTotalBreadth;
 
             //Get customer postcode based courier charge
             $courierRes = $this->getSingleCourierList($shipping_info->postal_code,$prodDimensionDetails);
@@ -480,9 +483,9 @@ class CheckoutController extends Controller
             $orderItems = [];
             $subTotal = 0;
             $totalWeight = 0;
-            $productWidth = "";
-            $productHeight = "";
-            $productBreadth = "";
+            $productTotalWidth = "";
+            $productTotalHeight = "";
+            $productTotalBreadth = "";
             if(!empty($carts)){
                 foreach($carts as $key => $value){
                     //Get the product details
@@ -507,9 +510,15 @@ class CheckoutController extends Controller
                     //Get dimensions details of the product
                     if(!empty($product->stocks)){
                         foreach ($product->stocks as $key => $stocks) {
-                            $productTotalWidth += $stocks->width;
-                            $productTotalHeight += $stocks->height;
-                            $productTotalBreadth += $stocks->breadth;
+                            if(!empty($stocks->width)){
+                                $productTotalWidth += $stocks->width;
+                            }
+                            if(!empty($stocks->height)){
+                                $productTotalHeight += $stocks->height;
+                            }
+                            if(!empty($stocks->breadth)){
+                                $productTotalBreadth += $stocks->breadth;
+                            }
                         }
                     }
                 }
@@ -584,9 +593,9 @@ class CheckoutController extends Controller
                     'delivery_postcode' => $deliveryPostcode,
                     'weight' => ($prodDimensionDetails['totalWeight'] > 0) ? $prodDimensionDetails['totalWeight'] : 1,
                     'cod' => '1', //Todo - To check in future
-                    'breadth' => $prodDimensionDetails['productBreadth'] ?? "",
-                    'height' => $prodDimensionDetails['productHeight'] ?? "",
-                    'length' => $prodDimensionDetails['productWidth'] ?? ""
+                    'breadth' => $prodDimensionDetails['productTotalBreadth'] ?? "",
+                    'height' => $prodDimensionDetails['productTotalHeight'] ?? "",
+                    'length' => $prodDimensionDetails['productTotalWidth'] ?? ""
                 ]);
 
                 $result = json_decode($response,true);

@@ -689,9 +689,9 @@
             $("#shipping_charge").html(shipWithCurrency);
 
             var prodTotalWeight = '<?= $prodDimensionDetails['totalWeight'] ?>';
-            var productWidth = '<?=  $prodDimensionDetails['productWidth'] ?>';
-            var productHeight = '<?= $prodDimensionDetails['productHeight'] ?>';
-            var productBreadth = '<?= $prodDimensionDetails['productBreadth'] ?>';
+            var productTotalWidth = '<?=  $prodDimensionDetails['productTotalWidth'] ?>';
+            var productTotalHeight = '<?= $prodDimensionDetails['productTotalHeight'] ?>';
+            var productTotalBreadth = '<?= $prodDimensionDetails['productTotalBreadth'] ?>';
 
             if(postcode != ""){
 
@@ -705,9 +705,9 @@
                         countryId:countryId,
                         postcode:postcode,
                         prodTotalWeight:prodTotalWeight,
-                        productWidth:productWidth,
-                        productHeight:productHeight,
-                        productBreadth:productBreadth,
+                        productTotalWidth:productTotalWidth,
+                        productTotalHeight:productTotalHeight,
+                        productTotalBreadth:productTotalBreadth,
                     },
                     success: function (data) {
                         var response = JSON.parse(data);
