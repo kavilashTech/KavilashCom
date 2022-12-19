@@ -84,6 +84,14 @@ class HomeController extends Controller
         return view('frontend.user_registration');
     }
 
+    public function franchiseeRegistration(Request $request)
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+        return view('frontend.franchisee_registration');
+    }
+
     public function cart_login(Request $request)
     {
         $user = null;

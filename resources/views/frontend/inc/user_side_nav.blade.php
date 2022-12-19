@@ -114,6 +114,14 @@
                             </a>
                         </li>
 
+
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('quotation.list') }}" class="aiz-side-nav-link {{ areActiveRoutes(['quotation.list','quote-view'])}}">
+                                <i class="las la-file-alt aiz-side-nav-icon"></i>
+                                <span class="aiz-side-nav-text">{{ translate('Quotations') }}</span>
+                            </a>
+                        </li>
+
                         <!-- <li class="aiz-side-nav-item">
                             <a href="{{ route('digital_purchase_history.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['digital_purchase_history.index'])}}">
                                 <i class="las la-download aiz-side-nav-icon"></i>

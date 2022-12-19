@@ -12,12 +12,13 @@
                                     {{ translate('Create an account.')}}
                                 </h1>
                                 <h6 class="fw-600">
-                                    User
+                                    Franchisee
                                 </h6>
                             </div>
                             <div class="px-4 py-3 py-lg-4">
                                 <div class="">
                                     <form id="reg-form" class="form-default" role="form" action="{{ route('register') }}" method="POST">
+                                        <input type="hidden" name="franchisee" value="1">
                                         @csrf
                                         <div class="form-group">
                                             <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" placeholder="{{  translate('Full Name') }}" name="name">
@@ -71,16 +72,16 @@
                                             <input type="password" class="form-control" placeholder="{{  translate('Confirm Password') }}" name="password_confirmation">
                                         </div>
 
-                                        <!-- <div class="form-group">
+                                        <div class="form-group">
                                             <input type="number" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="{{  translate('Mobile Number') }}" name="phone" required>
                                             @if ($errors->has('phone'))
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $errors->first('phone') }}</strong>
                                                 </span>
                                             @endif
-                                        </div> -->
+                                        </div>
 
-                                        <!-- <h6>Preferred Location</h6>
+                                        <h6>Preferred Location</h6>
                                         <div class="form-group">
                                                 <select class="form-control aiz-selectpicker" data-live-search="true" name="state_id" >
 
@@ -101,7 +102,7 @@
                                                         <strong>The city field is required</strong>
                                                     </span>
                                                 @endif
-                                        </div> -->
+                                        </div>
 
 
                                         @if(get_setting('google_recaptcha') == 1)
