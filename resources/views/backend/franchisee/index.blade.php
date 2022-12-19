@@ -78,15 +78,24 @@
                                    
                                     @can('ban_customer')
 
-                                   
-                                    <button type="button" class="btn btn-primary approved" data-id = "{{$user->id}}" >
-                                        Approved
+                                   @if($user->status == 0)
+                                   <button type="button" class="btn btn-primary approved" data-id = "{{$user->id}}" >
+                                   Approve
                                     </button>
 
                                     <button type="button" class="btn btn-primary rejected" data-toggle="modal" data-target="#exampleModalLong" data-id = "{{$user->id}}" >
-                                       Rejected
+                                    Reject
                                     </button>
-                                           
+                                    @endif
+                                    @if($user->status != 0)
+                                    <button type="button" class="btn btn-primary approved" data-id = "{{$user->id}}" >
+                                        {{$user->status  == 1 ? 'Approved' : 'Approve'}}
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary rejected" data-toggle="modal" data-target="#exampleModalLong" data-id = "{{$user->id}}" >
+                                    {{$user->status  ==  2 ? 'Rejected' : 'Reject'}}
+                                    </button>
+                                    @endif      
                                            
                                            
 
@@ -117,14 +126,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{translate('Confirmation')}}</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">{{translate('Reason')}}</h5>
 
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-       <input type = "text" class="franchisee_id">
+       <input type = "hidden" class="franchisee_id">
        <textarea id="rejected_reason" name="w3review" rows="4" cols="50">
 
     </textarea>
