@@ -442,7 +442,7 @@
             </div>
 
             <div class="col-lg-4">
-
+                @if(Auth::user()->user_type != 'staff')
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">
@@ -500,6 +500,7 @@
                         @endif
                     </div>
                 </div>
+                @endif
 
                 <div class="card">
                     <div class="card-header">

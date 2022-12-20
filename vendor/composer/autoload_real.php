@@ -29,29 +29,22 @@ class ComposerAutoloaderInit0bdbfefda0692f1b1688329027d38867
         spl_autoload_unregister(array('ComposerAutoloaderInit0bdbfefda0692f1b1688329027d38867', 'loadClassLoader'));
 
         require __DIR__ . '/autoload_static.php';
-        \Composer\Autoload\ComposerStaticInit0bdbfefda0692f1b1688329027d38867::getInitializer($loader)();
+        call_user_func(\Composer\Autoload\ComposerStaticInit0bdbfefda0692f1b1688329027d38867::getInitializer($loader));
 
         $loader->register(true);
 
-        $includeFiles = \Composer\Autoload\ComposerStaticInit0bdbfefda0692f1b1688329027d38867::$files;
-        foreach ($includeFiles as $fileIdentifier => $file) {
-            composerRequire0bdbfefda0692f1b1688329027d38867($fileIdentifier, $file);
+        $filesToLoad = \Composer\Autoload\ComposerStaticInit0bdbfefda0692f1b1688329027d38867::$files;
+        $requireFile = static function ($fileIdentifier, $file) {
+            if (empty($GLOBALS['__composer_autoload_files'][$fileIdentifier])) {
+                $GLOBALS['__composer_autoload_files'][$fileIdentifier] = true;
+
+                require $file;
+            }
+        };
+        foreach ($filesToLoad as $fileIdentifier => $file) {
+            ($requireFile)($fileIdentifier, $file);
         }
 
         return $loader;
-    }
-}
-
-/**
- * @param string $fileIdentifier
- * @param string $file
- * @return void
- */
-function composerRequire0bdbfefda0692f1b1688329027d38867($fileIdentifier, $file)
-{
-    if (empty($GLOBALS['__composer_autoload_files'][$fileIdentifier])) {
-        $GLOBALS['__composer_autoload_files'][$fileIdentifier] = true;
-
-        require $file;
     }
 }
