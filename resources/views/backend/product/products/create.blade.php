@@ -691,7 +691,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <select class="form-control aiz-selectpicker" name="tax_type[]">
-                                    <option value="amount">{{translate('Flat')}}</option>
+                                    <!-- <option value="amount">{{translate('Flat')}}</option> -->
                                     <option value="percent">{{translate('Percent')}}</option>
                                 </select>
                             </div>
