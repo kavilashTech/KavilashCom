@@ -47,7 +47,7 @@ use App\Http\Controllers\Payment\PaykuController;
 use App\Http\Controllers\ProductQueryController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WishlistController;
-
+use App\Http\Controllers\GenerateQuoteController;
 /*
   |--------------------------------------------------------------------------
   | Web Routes
@@ -104,7 +104,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/users/registration', 'registration')->name('user.registration');
     Route::post('/users/login/cart', 'cart_login')->name('cart.login.submit');
     // Route::get('/new-page', 'new_page')->name('new_page');
-
+    Route::get('/franchisee/registration', 'franchiseeRegistration')->name('franchisee.registration');
 
     //Home Page
     Route::get('/', 'index')->name('home');
@@ -318,6 +318,7 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() 
 Route::group(['middleware' => ['auth']], function() {
     
     Route::get('invoice/{order_id}', [InvoiceController::class, 'invoice_download'])->name('invoice.download');
+    Route::get('quotationInvoice/{order_id}', [GenerateQuoteController::class, 'quotation_invoice_download'])->name('quotationInvoice.download');
 
     // Reviews
     Route::resource('/reviews', ReviewController::class);
@@ -436,4 +437,12 @@ Route::controller(PageController::class)->group(function () {
     Route::get('/{slug}', 'show_custom_page')->name('custom-pages.show_custom_page');
 });
 
-
+Route::resource('generate-quote', GenerateQuoteController::class);
+Route::controller(GenerateQuoteController::class)->group(function () {
+    Route::get('quotation/list', 'list')->name('quotation.list');
+    Route::get('quote/view', 'view')->name('quote-view');
+    Route::post('quote/removeFromCart', 'removeFromQuotation')->name('quotation.removeFromQuotation');
+    Route::post('quote/updateQuantity', 'updateQuantity')->name('quotation.updateQuantity');
+    Route::post('quote/sendMail', 'sendMail')->name('quotation.sendMail');
+    Route::get('quote/view/{id}', 'quoteView')->name('quote-view-id');
+});

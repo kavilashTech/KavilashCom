@@ -341,6 +341,11 @@
             $('#cart_items').html(view);
         }
 
+        function updateNavQuotate(view,count){
+            // $('.cart-count').html(count);
+            // $('#cart_items').html(view);
+        }
+
         function removeFromCart(key){
             $.post('{{ route('cart.removeFromCart') }}', {
                 _token  : AIZ.data.csrf,
@@ -349,6 +354,18 @@
                 updateNavCart(data.nav_cart_view,data.cart_count);
                 $('#cart-summary').html(data.cart_view);
                 AIZ.plugins.notify('success', "{{ translate('Item has been removed from cart') }}");
+                $('#cart_items_sidenav').html(parseInt($('#cart_items_sidenav').html())-1);
+            });
+        }
+
+        function removeFromQuotation(key){
+            $.post('{{ route('quotation.removeFromQuotation') }}', {
+                _token  : AIZ.data.csrf,
+                id      :  key
+            }, function(data){
+                updateNavQuotate(data.nav_cart_view,data.cart_count);
+                $('#cart-summary-quo').html(data.cart_view);
+                AIZ.plugins.notify('success', "{{ translate('Item has been removed from quotation') }}");
                 $('#cart_items_sidenav').html(parseInt($('#cart_items_sidenav').html())-1);
             });
         }
@@ -377,6 +394,24 @@
             @else
                 AIZ.plugins.notify('warning', "{{ translate('Please login first') }}");
             @endif
+        }
+
+        function generateQuote(id){
+            $.ajax({
+                type:"POST",
+                url: '{{ route("generate-quote.store") }}',
+                data: $('#option-choice-form').serializeArray(),
+                success: function(data){
+                    AIZ.plugins.notify('success', "Your item has been added to quotation <a href={{ route('quote-view') }}>View Quotation</a>");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR?.responseJSON?.message){
+                        AIZ.plugins.notify('danger', jqXHR.responseJSON.message);
+                    } else{
+                        AIZ.plugins.notify('danger', "Something went wrong");
+                    }
+                }
+            });
         }
 
         function showAddToCartModal(id){

@@ -426,8 +426,12 @@
                                 <div class="d-table-cell">
                                     <!-- Add to wishlist button -->
                                     <button type="button" class="btn pl-0 btn-link fw-600"
-                                        onclick="addToWishList({{ $detailedProduct->id }})">
-                                        {{ translate('Add to wishlist') }}
+                                    onclick="addToWishList({{ $detailedProduct->id }})">
+                                    {{ translate('Add to wishlist') }}
+                                    </button>
+                                    <button type="button" class="btn pl-0 btn-link fw-600 float-end"
+                                        onclick="generateQuote({{ $detailedProduct->id }})">
+                                        {{ translate('Generate Quote') }}
                                     </button>
                                     <!-- Add to compare button -->
                                     <!-- <button type="button" class="btn btn-link btn-icon-left fw-600"
