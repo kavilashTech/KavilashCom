@@ -315,7 +315,7 @@
                     $('.sendingMail').hide();
                     $('#getQuotationButton').show();
                     AIZ.plugins.notify('success', "Your quotation sent to email");
-                    window.location.reload();
+                    window.location.href = "{{ route('home')}}";
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $('.sendingMail').hide();

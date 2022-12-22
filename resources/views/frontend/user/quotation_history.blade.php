@@ -40,6 +40,10 @@
                     {{ $quotations->links() }}
               	</div>
             </div>
+        @else
+            <div class="card-body">
+                <h6 class="text-center"><b>No Quotations Available</b></h6>
+            </div>
         @endif
     </div>
 @endsection
