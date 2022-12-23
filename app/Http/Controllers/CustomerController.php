@@ -312,7 +312,7 @@ class CustomerController extends Controller
     public function franchiseeindex(Request $request)
     {
         $sort_search = null;
-        $users = User::where('user_type', 'partner')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
+        $users = User::where('user_type', 'partner')->where('email_verified_at', '!=', null)->orderBy('status', 'Asc');
         if ($request->has('search')){
             $sort_search = $request->search;
             $users->where(function ($q) use ($sort_search){
@@ -379,4 +379,25 @@ class CustomerController extends Controller
     return 1;
         
     }
+
+    public function moveftanchisee()
+    {
+
+        $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->where('franchisee_id','=' ,0)->orderBy('created_at', 'desc')->get();
+        $usersfranchisee = User::where('user_type', 'partner')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc')->get();
+       
+        return view('backend.customer.franchisee_move', compact('users','usersfranchisee'));
+    }
+
+    public function upgradefranchisee(Request $request)
+    {
+        $user = User::find($request->customer_id);
+        $user->franchisee_id = $request->franchisee_id;
+        $user->user_type = 'partner';
+        $user->status = '1';
+        $user->save();
+        flash('Customer upgrade successfully')->success();
+        return back();
+    }
+
 }

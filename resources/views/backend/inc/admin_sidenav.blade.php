@@ -408,7 +408,7 @@
                 @endif
 
                 <!-- Customers -->
-                @canany(['view_all_customers','view_classified_products','view_classified_packages'])
+                @canany(['view_all_customers','view_classified_products','view_classified_packages','move_franchisee'])
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-user-friends aiz-side-nav-icon"></i>
@@ -438,7 +438,17 @@
                                         </a>
                                     </li>
                                 @endcan
+                               
                             @endif
+                          
+                                @can('move_franchisee')
+                                    <li class="aiz-side-nav-item">
+                                        <a href="{{ route('move_franchisee.moveftanchisee') }}" class="aiz-side-nav-link {{ areActiveRoutes(['move_franchisee.moveftanchisee'])}}">
+                                            <span class="aiz-side-nav-text">{{ translate('Move Franchisee') }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                               
                         </ul>
                     </li>
                 @endcanany
