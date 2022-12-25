@@ -7,11 +7,11 @@
         <div class="col-md-6">
             <h1 class="h3">{{translate('All Taxes')}}</h1>
         </div>
-        <div class="col-md-6 text-md-right">
+       <!--  <div class="col-md-6 text-md-right">
             <a href="#" data-target="#add-tax" data-toggle="modal" class="btn btn-circle btn-info">
                 <span>{{translate('Add New Tax')}}</span>
             </a>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -28,7 +28,7 @@
                     <th>#</th>
                     <th>{{translate('Tax Type')}}</th>
                     <th>{{translate('Status')}}</th>
-                    <th class="text-right">{{translate('Options')}}</th>
+                    <!-- <th class="text-right">{{translate('Options')}}</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -39,19 +39,19 @@
                     
                     <td>
                         <label class="aiz-switch aiz-switch-success mb-0">
-                            <input onchange="update_tax_status(this)" value="{{ $tax->id }}" type="checkbox" <?php if ($tax->tax_status == 1) echo "checked"; ?> >
+                            <input onchange="update_tax_status(this)" value="{{ $tax->id }}" type="checkbox" <?php if ($tax->tax_status == 1) echo "checked"; ?> disabled="disabled">
                             <span class="slider round"></span>
                         </label>
                         
                     </td>
-                    <td class="text-right">
+                    <!-- <td class="text-right">
                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('tax.edit', $tax->id )}}" title="{{ translate('Edit') }}">
                             <i class="las la-edit"></i>
                         </a>
                         <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('tax.destroy', $tax->id)}}" title="{{ translate('Delete') }}">
                             <i class="las la-trash"></i>
                         </a>
-                    </td>
+                    </td> -->
                 </tr>
                 @endforeach
             </tbody>
