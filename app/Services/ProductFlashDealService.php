@@ -12,6 +12,7 @@ class ProductFlashDealService
     {
         $collection = collect($data);
 
+      if(count($collection) != 0){
         if ($collection['flash_deal_id']) {
             $flash_deal_product = FlashDealProduct::firstOrNew([
                 'flash_deal_id' => $collection['flash_deal_id'], 
@@ -28,6 +29,10 @@ class ProductFlashDealService
             $product->discount_end_date   = $flash_deal->end_date;
             $product->save();
         }
+
+      }
+
+       
 
     }
 
