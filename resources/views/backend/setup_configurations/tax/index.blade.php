@@ -56,8 +56,9 @@
                 @endforeach
             </tbody>
         </table>
-        
+        <span style="color:#3d63bd;"><b style="font-weight: inherit;">Note : The Tax Type is fixed and cannot be changed. This page is for information purposes only.</b></span>
     </div>
+
 </div>
 
 @endsection
