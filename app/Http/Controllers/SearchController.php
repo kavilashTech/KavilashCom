@@ -27,6 +27,7 @@ class SearchController extends Controller
         $colors = Color::all();
         $selected_color = null;
 
+
         $conditions = ['published' => 1];
 
         if ($brand_id != null) {
@@ -136,6 +137,7 @@ class SearchController extends Controller
     public function listingByCategory(Request $request, $category_slug)
     {
         $category = Category::where('slug', $category_slug)->first();
+
         if ($category != null) {
             return $this->index($request, $category->id);
         }

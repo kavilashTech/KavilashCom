@@ -411,8 +411,10 @@
             });
                 
             $('.allCategory').click(function(){
+                //window.location.href = 
+                //"{{url('/')}}/search?category="+$(this).attr('data-slug')+"";
                 window.location.href = 
-                "{{url('/')}}/search?category="+$(this).attr('data-slug')+"";
+                "{{url('/')}}/category/"+$(this).attr('data-slug')+"";
             });
 
             $.post('{{ route('home.section.featured') }}', {_token:'{{ csrf_token() }}'}, function(data){
