@@ -73,7 +73,7 @@ class CustomerController extends Controller
 
     protected function create(array $data)
     {
-       
+
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             if(isset($data['franchisee'])){
                 $user = User::create([
@@ -107,7 +107,7 @@ class CustomerController extends Controller
                 $otpController->send_code($user);
             }
         }
-        
+
         if(session('temp_user_id') != null){
             Cart::where('temp_user_id', session('temp_user_id'))
                     ->update([
@@ -148,23 +148,24 @@ class CustomerController extends Controller
 
         $user = $this->create($request->all());
 
-       
+
 
         if(BusinessSetting::where('type', 'email_verification')->first()->value != 1){
             $user->email_verified_at = date('Y-m-d H:m:s');
             $user->save();
             flash(translate('Registration successful.'))->success();
+            return back();
         }
         else {
-          
+
             try {
                 $user->sendEmailVerificationNotification();
                 flash(translate('Registration successful. Please verify your email.'))->success();
                 return back();
             } catch (\Throwable $th) {
-               
+
                 $user->delete();
-               
+
                 flash(translate('Registration failed. Please try again later.'))->error();
                 return back();
             }
@@ -177,7 +178,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-  
+
 
     /**
      * Store a newly created resource in storage.
@@ -192,16 +193,16 @@ class CustomerController extends Controller
             'email'         => 'required|unique:users|email',
             'phone'         => 'required|unique:users',
         ]);
-        
+
         $response['status'] = 'Error';
-        
+
         $user = User::create($request->all());
-        
+
         $customer = new Customer;
-        
+
         $customer->user_id = $user->id;
         $customer->save();
-        
+
         if (isset($user->id)) {
             $html = '';
             $html .= '<option value="">
@@ -214,11 +215,11 @@ class CustomerController extends Controller
                             </option>';
                 }
             }
-            
+
             $response['status'] = 'Success';
             $response['html'] = $html;
         }
-        
+
         echo json_encode($response);
     }
 
@@ -265,22 +266,22 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customer = User::findOrFail($id);
-        $customer->customer_products()->delete(); 
+        $customer->customer_products()->delete();
 
         User::destroy($id);
         flash(translate('Customer has been deleted successfully'))->success();
         return redirect()->route('customers.index');
     }
-    
+
     public function bulk_customer_delete(Request $request) {
         if($request->id) {
             foreach ($request->id as $customer_id) {
                 $customer = User::findOrFail($customer_id);
-                $customer->customer_products()->delete(); 
+                $customer->customer_products()->delete();
                 $this->destroy($customer_id);
             }
         }
-        
+
         return 1;
     }
 
@@ -305,7 +306,7 @@ class CustomerController extends Controller
         }
 
         $user->save();
-        
+
         return back();
     }
 
@@ -328,15 +329,15 @@ class CustomerController extends Controller
          $user = User::findOrFail($request->userid);
          $user->status = 1;
          $user->reason = '';
-       
+
 
         $user->save();
 
 
-        
-      
 
-         
+
+
+
         if (env('MAIL_USERNAME') != null ) {
             $array['view'] = 'emails.verification';
             $array['subject'] = translate('Your Profile approved');
@@ -350,7 +351,7 @@ class CustomerController extends Controller
 
             }
         }
-        
+
         return 1;
     }
 
@@ -359,10 +360,10 @@ class CustomerController extends Controller
         $user = User::findOrFail($request->userid);
         $user->status = 2;
         $user->reason = $request->reason;
-      
+
 
        $user->save();
-       
+
        if (env('MAIL_USERNAME') != null ) {
         $array['view'] = 'emails.verification';
         $array['subject'] = translate('Your Profile approved');
@@ -375,9 +376,9 @@ class CustomerController extends Controller
 
         }
     }
-    
+
     return 1;
-        
+
     }
 
     public function moveftanchisee()
@@ -385,7 +386,7 @@ class CustomerController extends Controller
 
         $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->where('franchisee_id','=' ,0)->orderBy('created_at', 'desc')->get();
         $usersfranchisee = User::where('user_type', 'partner')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc')->get();
-       
+
         return view('backend.customer.franchisee_move', compact('users','usersfranchisee'));
     }
 

@@ -72,7 +72,7 @@
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                             <a href="tel:{{ get_setting('helpline_number') }}" class=" d-inline-block  py-2">
                                 <i class="la la-phone" style="color:#fff;"></i>
-                                <span style="color:#fff;">{{ translate('Contact')}} :  {{ get_setting('helpline_number') }}</span>  
+                                <span style="color:#fff;">{{ translate('Contact')}} :  {{ get_setting('helpline_number') }}</span>
                             </a>
                         </li>
                     @endif
@@ -106,13 +106,13 @@
                                                         @if(Auth::user()->user_type == 'customer')
                                                         <a href="{{route('purchase_history.details', encrypt($notification->data['order_id']))}}" class="text-reset">
                                                             <span class="ml-2">
-                                                                {{translate('Order code: ')}} {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
+                                                            @if (is_int($notification->data['order_id'])) {{translate('Order code: ')}}@else  {{translate('Welcome to Quicklab: ')}} @endif {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
                                                             </span>
                                                         </a>
                                                         @elseif (Auth::user()->user_type == 'seller')
                                                             <a href="{{ route('seller.orders.show', encrypt($notification->data['order_id'])) }}" class="text-reset">
                                                                 <span class="ml-2">
-                                                                    {{translate('Order code: ')}} {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
+                                                                @if (is_int($notification->data['order_id'])) {{translate('Order code: ')}}@else  {{translate('Welcome to Quicklab: ')}} @endif {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
                                                                 </span>
                                                             </a>
                                                         @endif
@@ -203,7 +203,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                        
+
                                 <div class="input-group">
                                     <input type="text" class="border-0 border-lg form-control" id="search" name="keyword" @isset($query)
                                         value="{{ $query }}"
@@ -258,7 +258,7 @@
 
             </div>
         </div>
-        
+
     </div>
 
 
@@ -291,7 +291,7 @@
 
 @section('script')
     <script type="text/javascript">
-        
+
         function show_order_details(order_id)
         {
             $('#order-details-modal-body').html(null);

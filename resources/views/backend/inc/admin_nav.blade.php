@@ -65,7 +65,8 @@
                                             <div class="media-body">
                                                 @if($notification->type == 'App\Notifications\OrderNotification')
                                                     <p class="mb-1 text-truncate-2">
-                                                        {{translate('Order code: ')}} {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
+                                                   @if (is_int($notification->data['order_id'])) {{translate('Order code: ')}}@else  {{translate('Welcome to Quicklab: ')}} @endif
+                                                         {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
                                                     </p>
                                                     <small class="text-muted">
                                                         {{ date("F j Y, g:i a", strtotime($notification->created_at)) }}
