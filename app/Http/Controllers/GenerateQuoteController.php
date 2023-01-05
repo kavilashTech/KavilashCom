@@ -69,10 +69,10 @@ class GenerateQuoteController extends Controller
             $data['temp_user_id'] = $temp_user_id;
             $carts = Quotation::where('temp_user_id', $temp_user_id)->whereNull('quotation_id')->get();
         }
-        
+
         $data['product_id'] = $product->id;
         $data['owner_id'] = $product->user_id;
-        
+
         $str = '';
         $tax = 0;
         if ($product->auction_product == 0) {
@@ -84,7 +84,7 @@ class GenerateQuoteController extends Controller
                     //         'nav_cart_view' => view('frontend.partials.cart')->render(),
                     //     );
                     // }
-                    
+
                     //check the color enabled or disabled for the product
             if ($request->has('color')) {
                 $str = $request['color'];
@@ -99,12 +99,12 @@ class GenerateQuoteController extends Controller
                     }
                 }
             }
-            
+
             $data['variation'] = $str;
-            
+
             $product_stock = $product->stocks->where('variant', $str)->first();
             $price = $product_stock->price;
-            
+
             if ($product->wholesale_product) {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
                 if ($wholesalePrice) {
@@ -122,10 +122,10 @@ class GenerateQuoteController extends Controller
             //         'nav_cart_view' => view('frontend.partials.cart')->render(),
             //     );
             // }
-            
+
             //discount calculation
             $discount_applicable = false;
-            
+
             if ($product->discount_start_date == null) {
                 $discount_applicable = true;
             } elseif (
@@ -134,7 +134,7 @@ class GenerateQuoteController extends Controller
                 ) {
                     $discount_applicable = true;
                 }
-                
+
                 if ($discount_applicable) {
                 if ($product->discount_type == 'percent') {
                     $price -= ($price * $product->discount) / 100;
@@ -142,7 +142,7 @@ class GenerateQuoteController extends Controller
                     $price -= $product->discount;
                 }
             }
-            
+
             //calculation of taxes
             $data['tax1'] =  0.00;
             $data['tax1_amount'] =  0.00;
@@ -182,7 +182,7 @@ class GenerateQuoteController extends Controller
 
             if ($carts && count($carts) > 0) {
                 $foundInCart = false;
-                
+
                 foreach ($carts as $key => $cartItem) {
                     $cart_product = Product::where('id', $cartItem['product_id'])->first();
                     // if($cart_product->auction_product == 1){
@@ -207,18 +207,18 @@ class GenerateQuoteController extends Controller
                                 // }
                                 if (($str != null && $cartItem['variation'] == $str) || $str == null) {
                                     $foundInCart = true;
-                                    
+
                                     $cartItem['quantity'] += $request['quantity'];
-                                    
+
                                     if ($cart_product->wholesale_product) {
                                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
                                 if ($wholesalePrice) {
                                     $price = $wholesalePrice->price;
                                 }
                             }
-                            
+
                             $cartItem['price'] = $price;
-                            
+
                             $cartItem->save();
                         }
                     }
@@ -332,6 +332,8 @@ class GenerateQuoteController extends Controller
     public function view(Request $request)
     {
         //
+        $savequotations = array();
+
         if (auth()->user() != null) {
             $user_id = Auth::user()->id;
             if ($request->session()->get('temp_user_id1')) {
@@ -345,14 +347,20 @@ class GenerateQuoteController extends Controller
 
                 Session::forget('temp_user_id1');
             }
+            $savequotations = Quotation::where('user_id', Auth::user()->id)->whereNotNull('quotation_id')->groupBy('quotation_id')->paginate(9);
+
             $quotation = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->get();
+
         } else {
             $temp_user_id = $request->session()->get('temp_user_id1');
             // $Quotation = Quotation::where('temp_user_id1', $temp_user_id)->get();
             $quotation = ($temp_user_id != null) ? Quotation::where('temp_user_id', $temp_user_id)->whereNull('quotation_id')->get() : [];
+
+
+
         }
 
-        return view('frontend.view_quotation', compact('quotation'));
+        return view('frontend.view_quotation', compact('quotation','savequotations'));
     }
 
     //removes from Quotation
@@ -477,6 +485,7 @@ class GenerateQuoteController extends Controller
 
     public function list()
     {
+
         //
         $quotations = Quotation::where('user_id', Auth::user()->id)->whereNotNull('quotation_id')->groupBy('quotation_id')->paginate(9);
         return view('frontend.user.quotation_history', compact('quotations'));
@@ -487,6 +496,7 @@ class GenerateQuoteController extends Controller
     public function quoteView(Request $request,$id)
     {
         $quotations_id = decrypt($id);
+
         //
         if (auth()->user() != null && !empty($quotations_id)) {
             $user_id = Auth::user()->id;
@@ -513,7 +523,7 @@ class GenerateQuoteController extends Controller
         }else{
             $direction = 'ltr';
             $text_align = 'left';
-            $not_text_align = 'right';            
+            $not_text_align = 'right';
         }
 
         if($currency_code == 'BDT' || $language_code == 'bd'){
