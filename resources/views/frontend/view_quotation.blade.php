@@ -1,14 +1,111 @@
 @extends('frontend.layouts.app')
 
+
 @section('content')
+<style>
+
+    <style>
+        body {
+            background: rgb(140, 214, 30);
+        }
+
+        [data-tab-info] {
+            display: none;
+        }
+
+        .active[data-tab-info] {
+            display: block;
+        }
+
+
+        .tabs {
+
+            color: rgb(255, 255, 255);
+            display: flex;
+            margin: 0;
+        }
+
+        .tabs span {
+            background: rgb(28, 145, 38);
+            padding: 10px;
+            border: 1px solid rgb(255, 255, 255);
+        }
+
+        .tabs span:hover {
+            background: rgb(29, 185, 112);
+            cursor: pointer;
+            color: black;
+        }
+
+        .quotation-login-container {
+    padding: 10px 20px 20px;
+}
+.quotation-login-container .pay-mode-notavailable {
+    margin-bottom: 40px;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    color: #444;
+    font-size: 12px;
+    float: left;
+    width: 100%;
+}
+.quotation-login-container .pay-mode-notavailable .not-avail-left {
+    background-color: #f0615d;
+    float: left;
+    width: 48px;
+    height: 46px;
+    text-align: center;
+}
+.quotation-login-container .pay-mode-notavailable .not-avail-left .fa-exclamation-triangle {
+    padding: 12px 0;
+    color: #fff;
+}
+.quotation-login-container .pay-mode-notavailable .not-avail-right {
+    background: #fff;
+    float: left;
+    padding: 6px 10px;
+}
+.quotation-login-container .signin-button button {
+    background: #fa8320;
+    padding: 12px 76px;
+    font-family: Open Sans Regular;
+    font-size: 13px;
+    color: #fff;
+    text-transform: none;
+    border: none;
+    width: auto;
+}
+.quotation-login-container .pay-mode-notavailable .logged-mssg span {
+    font-family: 'Open Sans Bold';
+    font-family: 'Open Sans Bold';
+    font-weight: 600;
+    font-size: x-large;
+}
+    </style>
+</style>
 
     <section class="pt-5 mb-4">
     </section>
 
     <section class="mb-4" id="cart-summary-quo">
         <div class="container">
-            @if ($quotation && count($quotation) > 0)
+            <div class="row">
+                <div class="col-xxl-8 col-xl-10 mx-auto">
+                    <div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
+                        <div class="tabs">
+                            <span data-tab-value="#tab_1">Quotation </span>
+                            <span data-tab-value="#tab_2">Saved Quotation </span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="tabs__tab active" id="tab_1" data-tab-info>
+
                 <div class="row">
+            @if ($quotation && count($quotation) > 0)
+
                     <div class="col-xxl-8 col-xl-10 mx-auto">
                         <div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
                             @php
@@ -31,7 +128,7 @@
                                 <ul class="list-group list-group-flush">
                                     @php
                                         $total = 0;
-                                        $subTotal = 0; 
+                                        $subTotal = 0;
                                     @endphp
                                     @foreach ($quotation as $key => $cartItem)
                                         @php
@@ -111,10 +208,10 @@
                                                     <span
                                                         class="fw-600 fs-16">{{ $cartItem->tax1_amount * $cartItem['quantity']}}</span>
                                                     @php
-                                                       $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
+                                                       $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'];
                                                     @endphp
                                                 </div>
-                                                
+
                                                 <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                     class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST %') }}</span>
@@ -205,18 +302,93 @@
                     </div>
                 </div>
             @else
-                <div class="row">
-                    <div class="col-xl-8 mx-auto">
-                        <div class="shadow-sm bg-white p-4 rounded">
+            </div>
+
+            <div class="col-xxl-8 col-xl-10 mx-auto mt-2">
+                        <div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
                             <div class="text-center p-3">
                                 <i class="las la-frown la-3x opacity-60 mb-3"></i>
                                 <h3 class="h4 fw-700">{{ translate('Your Quotation is empty') }}</h3>
                             </div>
                         </div>
                     </div>
-                </div>
+
+
             @endif
+            </div>
+            <div class="tabs__tab" id="tab_2" data-tab-info>
+                <div class="col-xxl-8 col-xl-10 mx-auto mt-2">
+                    <div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
+                        @if(count($savequotations) == 0)
+                        <div class="row quotation-login-container">
+                            <div class="pay-mode-notavailable">
+                                <div class="not-avail-left">
+                                    <i class="fa fa-exclamation-triangle fa-2x"></i>
+                                </div>
+                                <div class="not-avail-right">
+                                    <div class="logged-mssg"><span>Sorry! you are not logged In</span>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-7 nopad">
+                                <div class="signin-button">
+                                    <button type="button" data-action="QUOTE" name="submit" id="Quote_login_popup_link"><a href="{{ route('user.login') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('SIGN IN & CONTINUE')}}</a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0 h6">{{ translate('My Quotations') }}</h5>
         </div>
+        @if (count($savequotations) > 0)
+            <div class="card-body">
+                <table class="table aiz-table mb-0">
+                    <thead>
+                        <tr>
+                            <th data-breakpoints="md">{{ translate('id')}}</th>
+                            <th data-breakpoints="md">{{ translate('Date')}}</th>
+                            <th>{{ translate('Amount')}}</th>
+                            <th class="text-right">{{ translate('Options')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($savequotations as $key => $quotation)
+                            <tr>
+                                <td>{{ $quotation->quotation_id }}</td>
+                                <td>{{ date('d-m-Y',strtotime($quotation->created_at)) }}</td>
+                                <td>
+                                    {{ single_price($quotation->quote_total) }}
+                                </td>
+                                <td class="text-right">
+                                    <a href="{{route('quote-view-id', encrypt($quotation->quotation_id))}}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="{{ translate('Quotation Details') }}">
+                                        <i class="las la-eye"></i>
+                                    </a>
+                                    <a class="btn btn-soft-warning btn-icon btn-circle btn-sm" href="{{ route('quotationInvoice.download', $quotation->quotation_id) }}" title="{{ translate('Download Invoice') }}">
+                                        <i class="las la-download"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="aiz-pagination">
+                    {{ $savequotations->links() }}
+              	</div>
+            </div>
+                                        </div>
+                                        @endif
+
+                        @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
 
 @endsection
@@ -258,9 +430,24 @@
         </div>
     </div>
 @endsection
+@section('modal')
+    @include('modals.delete_modal')
+
+    <div class="modal fade" id="order_details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div id="order-details-modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
 
 @section('script')
     <script type="text/javascript">
+
         function removeFromCartView(e, key) {
             e.preventDefault();
             removeFromQuotation(key);
@@ -317,7 +504,7 @@
                     AIZ.plugins.notify('success', "Your quotation sent to email");
                     window.location.href = "{{ route('home')}}";
                 },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
                     $('.sendingMail').hide();
                     $('#getQuotationButton').show();
                     if(XMLHttpRequest?.responseJSON?.message){
@@ -325,7 +512,7 @@
                     } else{
                         AIZ.plugins.notify('danger', "Something went wrong");
                     }
-                }      
+                }
             });
         }
         // Country Code
@@ -378,5 +565,27 @@
                 $(el).html('{{ translate('Use Email Instead') }}');
             }
         }
+    </script>
+
+<script type="text/javascript">
+        const tabs = document.querySelectorAll('[data-tab-value]')
+        const tabInfos = document.querySelectorAll('[data-tab-info]')
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = document
+                    .querySelector(tab.dataset.tabValue);
+
+                tabInfos.forEach(tabInfo => {
+                    tabInfo.classList.remove('active')
+                })
+                target.classList.add('active');
+            })
+        })
+    </script>
+       <script type="text/javascript">
+        $('#order_details').on('hidden.bs.modal', function () {
+            location.reload();
+        })
     </script>
 @endsection
