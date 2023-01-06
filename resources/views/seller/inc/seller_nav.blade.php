@@ -56,7 +56,7 @@
                                                 @if($notification->type == 'App\Notifications\OrderNotification')
                                                     <p class="mb-1 text-truncate-2">
                                                         <a href="{{ route('seller.orders.show', encrypt($notification->data['order_id'])) }}">
-                                                            {{translate('Order code: ')}} {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
+                                                        @if (is_int($notification->data['order_id'])) {{translate('Order code: ')}}@else  {{translate('Welcome to Quicklab: ')}} @endif {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
                                                         </a>
                                                     </p>
                                                     <small class="text-muted">

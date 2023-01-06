@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Cart;
 use App\Models\Tax;
+use App\Models\Address;
 use Auth;
 use Session;
 use Cookie;
@@ -15,6 +16,7 @@ class CartController extends Controller
 {
     public function index(Request $request)
     {
+
         if(auth()->user() != null) {
             $user_id = Auth::user()->id;
             if($request->session()->get('temp_user_id')) {
@@ -35,7 +37,10 @@ class CartController extends Controller
             $carts = ($temp_user_id != null) ? Cart::where('temp_user_id', $temp_user_id)->get() : [] ;
         }
 
-        return view('frontend.view_cart', compact('carts'));
+        //Check user address within tamilnadu or outer state for GST Implementation
+        $checkUserAddress = $this->checkAuthUserAddress();
+
+        return view('frontend.view_cart', compact('carts','checkUserAddress'));
     }
 
     public function showCartModal(Request $request)
@@ -52,7 +57,6 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        
         $product = Product::find($request->id);
         $carts = array();
         $data = array();
@@ -127,6 +131,7 @@ class CartController extends Controller
                 );
             }
 
+           
             //discount calculation
             $discount_applicable = false;
 
@@ -156,25 +161,38 @@ class CartController extends Controller
             if ($request['quantity'] == null){
                 $data['quantity'] = 1;
             }
+
+
+            //Check user address within tamilnadu or outer state for GST Implementation
+            $checkUserAddress = $this->checkAuthUserAddress();
+            
             foreach ($product->taxes as $product_tax) {
                 $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+
                 if($product_tax->tax_type == 'percent'){
                     $tax += ($price * $product_tax->tax) / 100;
                 }
-                elseif($product_tax->tax_type == 'amount'){
+               /* elseif($product_tax->tax_type == 'amount'){
                     $tax += $product_tax->tax;
-                }
-                if(!empty($tax_name) && $tax_name->name == 'CGST'){
-                    $data['tax1'] =  $product_tax->tax;
+                }*/
+                
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax'] = $tax;
+                    $data['tax_percentage'] =  $product_tax->tax;
+                }  
+            
+                $splitTax = $product_tax->tax / 2;
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax1'] =  $splitTax;
                     $data['tax1_amount'] =(($price * $data['tax1']) / 100);
-                }
-                if(!empty($tax_name) && $tax_name->name == 'SGST'){
-                    $data['tax2'] =  $product_tax->tax;
+
+                    $data['tax2'] =  $splitTax;
                     $data['tax2_amount'] =(($price * $data['tax2']) / 100);
                 }
             }
+           
             $data['price'] = $price ;
-            $data['tax'] = $tax;
+            //$data['tax'] = $tax;
             //$data['shipping'] = 0;
             $data['shipping_cost'] = 0;
             $data['product_referral_code'] = null;
@@ -253,20 +271,41 @@ class CartController extends Controller
             );
         }
         else{
-            $price = $product->bids->max('amount');
 
+            //Check user address within tamilnadu or outer state for GST Implementation
+            $checkUserAddress = $this->checkAuthUserAddress();
+
+            $price = $product->bids->max('amount');
             foreach ($product->taxes as $product_tax) {
+
+                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+
                 if($product_tax->tax_type == 'percent'){
                     $tax += ($price * $product_tax->tax) / 100;
                 }
-                elseif($product_tax->tax_type == 'amount'){
+                /*elseif($product_tax->tax_type == 'amount'){
                     $tax += $product_tax->tax;
+                }*/
+                
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax'] = $tax;
+                    $data['tax_percentage'] =  $product_tax->tax;
+                }    
+
+                $splitTax = $product_tax->tax / 2;
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax1'] =  $splitTax;
+                    $data['tax1_amount'] =(($price * $data['tax1']) / 100);
+
+                    $data['tax2'] =  $splitTax;
+                    $data['tax2_amount'] =(($price * $data['tax2']) / 100);
                 }
+               
             }
 
             $data['quantity'] = 1;
             $data['price'] = $price;
-            $data['tax'] = $tax;
+            //$data['tax'] = $tax;
             $data['shipping_cost'] = 0;
             $data['product_referral_code'] = null;
             $data['cash_on_delivery'] = $product->cash_on_delivery;
@@ -303,9 +342,12 @@ class CartController extends Controller
             $carts = Cart::where('temp_user_id', $temp_user_id)->get();
         }
 
+        //Check user address within tamilnadu or outer state for GST Implementation
+        $checkUserAddress = $this->checkAuthUserAddress();
+
         return array(
             'cart_count' => count($carts),
-            'cart_view' => view('frontend.partials.cart_details', compact('carts'))->render(),
+            'cart_view' => view('frontend.partials.cart_details', compact('carts','checkUserAddress'))->render(),
             'nav_cart_view' => view('frontend.partials.cart')->render(),
         );
     }
@@ -368,10 +410,38 @@ class CartController extends Controller
             $carts = Cart::where('temp_user_id', $temp_user_id)->get();
         }
 
+        //Check user address within tamilnadu or outer state for GST Implementation
+        $checkUserAddress = $this->checkAuthUserAddress();
+
         return array(
             'cart_count' => count($carts),
-            'cart_view' => view('frontend.partials.cart_details', compact('carts'))->render(),
+            'cart_view' => view('frontend.partials.cart_details', compact('carts','checkUserAddress'))->render(),
             'nav_cart_view' => view('frontend.partials.cart')->render(),
         );
+    }
+
+    public function checkAuthUserAddress(){
+        $userWithinTamilnadu = "";
+        $tamilnaduStateId = 35;
+        if(auth()->user() != null) {
+            $userId = Auth::user()->id;
+            $carts = Cart::where('user_id', $userId)->first();
+            if(!empty($carts) && !empty($carts->address_id)){
+                $shipping_info = Address::where('id', $carts->address_id)->first();
+            }else{
+                $shipping_info = Address::where('user_id', $userId)->first();
+            }
+            if(!empty($shipping_info)){
+                if(!empty($shipping_info->postal_code) && !empty($shipping_info->state_id)){
+                    if($shipping_info->state_id == $tamilnaduStateId) {   //35-Tamilnadu state id
+                        $userWithinTamilnadu = 1;
+                    }else{
+                        $userWithinTamilnadu = 2;
+                    }
+                }
+            }
+        }
+
+        return $userWithinTamilnadu;
     }
 }

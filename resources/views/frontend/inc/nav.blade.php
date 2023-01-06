@@ -9,10 +9,11 @@
 </div>
 @endif
 <!-- Top Bar -->
+
 <div class="top-navbar border-bottom border-soft-secondary z-1035 h-35px h-sm-auto" style="background-color:#243824;">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6 col">
+            <div class="col-lg-4 col">
                 <ul class="list-inline d-flex justify-content-between justify-content-lg-start mb-0">
                     @if(get_setting('show_language_switcher') == 'on')
                  <li class="list-inline-item dropdown mr-3" id="lang-change">
@@ -66,22 +67,60 @@
                 </ul>
             </div>
 
-            <div class="col-lg-6 text-right d-none d-lg-block">
+
+
+
+            <div class="col-lg-8 text-right d-none d-lg-block">
                 <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
                     @if (get_setting('helpline_number'))
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                             <a href="tel:{{ get_setting('helpline_number') }}" class=" d-inline-block  py-2">
                                 <i class="la la-phone" style="color:#fff;"></i>
-                                <span style="color:#fff;">{{ translate('Contact')}} :  {{ get_setting('helpline_number') }}</span>  
+                                <span style="color:#fff;">{{ translate('Contact')}} :  {{ get_setting('helpline_number') }}</span>
                             </a>
                         </li>
                     @endif
+                    <div class="dropdown">
+  <button class="btn dropdown-toggle text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  Sign In
+  </button>
+  <div class="dropdown-menu list-inline-item mr-3 border-right border-left-0 pr-3 pl-0" aria-labelledby="dropdownMenuButton">
+     @if (auth()->user() != null)
+         <a href="{{ route('logout') }}" class="dropdown-item"> <i class="las la la-sign-out aiz-side-nav-icon"></i><span class="aiz-side-nav-text">{{ translate('Logout')}}</span></a>
+         @if(Auth::user()->user_type == 'customer')
+         <a class="dropdown-item" href="{{ route('quote-view') }}">
+        <i class="las la-file-alt aiz-side-nav-icon"></i>
+        <span class="aiz-side-nav-text">{{ translate('Quotations') }}</span>
+    </a>
+         @endif
+         @if (Auth::user()->user_type == 'seller')
+                                    <a href="{{ route('seller.dashboard') }}" class="dropdown-item" ><i class="las la la-dashboard aiz-side-nav-icon"></i><span class="aiz-side-nav-text">{{ translate('My Panel')}}</span></a>
+                                @else
+                                    <a href="{{ route('dashboard') }}" class="dropdown-item" ><i class="las la la-dashboard aiz-side-nav-icon"></i><span class="aiz-side-nav-text">{{ translate('My Panel')}}</span></a>
+                                @endif
+    @else
+    <a href="{{ route('user.login') }}" class="dropdown-item" ><i class="las la la-sign-in aiz-side-nav-icon"></i><span class="aiz-side-nav-text"> {{ translate('Login')}}<span></a>
+
+    <a class="dropdown-item" href="{{ route('quote-view') }}">
+        <i class="las la-file-alt aiz-side-nav-icon"></i>
+        <span class="aiz-side-nav-text">{{ translate('Quotations') }}</span>
+    </a>
+
+    @endif
+
+
+
+  </div>
+</div>
+
                     @auth
                         @if(isAdmin())
                             <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                                 <a href="{{ route('admin.dashboard') }}" class="text-reset d-inline-block opacity-60 py-2">{{ translate('My Panel')}}</a>
                             </li>
                         @else
+
+
 
                             <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0 dropdown">
                                 <a class="dropdown-toggle no-arrow text-reset" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
@@ -104,15 +143,20 @@
                                                 <li class="list-group-item">
                                                     @if($notification->type == 'App\Notifications\OrderNotification')
                                                         @if(Auth::user()->user_type == 'customer')
+                                                        @if (is_int($notification->data['order_id']))
                                                         <a href="{{route('purchase_history.details', encrypt($notification->data['order_id']))}}" class="text-reset">
                                                             <span class="ml-2">
-                                                                {{translate('Order code: ')}} {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
+                                                             {{translate('Order code: ')}} {{translate('Welcome to Quicklab: ')}} {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
                                                             </span>
                                                         </a>
+                                                        @else
+                                                        <span class="ml-2"> {{translate('Welcome to Quicklab')}} </span>
+
+                                                        @endif
                                                         @elseif (Auth::user()->user_type == 'seller')
                                                             <a href="{{ route('seller.orders.show', encrypt($notification->data['order_id'])) }}" class="text-reset">
                                                                 <span class="ml-2">
-                                                                    {{translate('Order code: ')}} {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
+                                                                @if (is_int($notification->data['order_id'])) {{translate('Order code: ')}}@else  {{translate('Welcome to Quicklab: ')}} @endif {{$notification->data['order_code']}} {{ translate('has been '. ucfirst(str_replace('_', ' ', $notification->data['status'])))}}
                                                                 </span>
                                                             </a>
                                                         @endif
@@ -135,24 +179,17 @@
                                 </div>
                             </li>
 
-                            <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                                @if (Auth::user()->user_type == 'seller')
-                                    <a href="{{ route('seller.dashboard') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('My Panel')}}</a>
-                                @else
-                                    <a href="{{ route('dashboard') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('My Panel')}}</a>
-                                @endif
-                            </li>
+
                         @endif
-                        <li class="list-inline-item">
-                            <a href="{{ route('logout') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('Logout')}}</a>
-                        </li>
+
                     @else
-                        <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+                        <!-- <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                             <a href="{{ route('user.login') }}" class="d-inline-block py-2" style="color:#fff;">{{ translate('Login')}}</a>
-                        </li>
+                        </li> -->
                         <li class="list-inline-item">
                             <a href="{{ route('franchisee.registration') }}" class="becomePartnerBtn">{{ translate('Become a Franchisee')}}</a>
                         </li>
+
                     @endauth
                 </ul>
             </div>
@@ -203,7 +240,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                        
+
                                 <div class="input-group">
                                     <input type="text" class="border-0 border-lg form-control" id="search" name="keyword" @isset($query)
                                         value="{{ $query }}"
@@ -258,7 +295,7 @@
 
             </div>
         </div>
-        
+
     </div>
 
 
@@ -291,7 +328,7 @@
 
 @section('script')
     <script type="text/javascript">
-        
+
         function show_order_details(order_id)
         {
             $('#order-details-modal-body').html(null);

@@ -165,6 +165,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
         Route::get('/customers/login/{id}', 'login')->name('customers.login');
         Route::get('/customers/destroy/{id}', 'destroy')->name('customers.destroy');
         Route::post('/bulk-customer-delete', 'bulk_customer_delete')->name('bulk-customer-delete');
+
+        Route::get('/moveftanchisee', 'moveftanchisee')->name('move_franchisee.moveftanchisee');
+        Route::post('/franchiseerejected', 'franchiseerejected')->name('franchisee.rejected');
+
+        //Franchisee list
+
+        Route::get('/franchisee', 'franchiseeindex')->name('franchisee.franchiseeindex');
+        Route::post('/franchiseeapproved', 'franchiseeapproved')->name('franchisee.approved');
+        Route::POST('/upgradefranchisee', 'upgradefranchisee')->name('customer.upgradefranchisee');
     });
 
     // Newsletter

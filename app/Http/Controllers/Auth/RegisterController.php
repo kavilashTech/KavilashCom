@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Utility\NotificationUtility;
 use Cookie;
 use Session;
 use Nexmo;
@@ -102,6 +103,7 @@ class RegisterController extends Controller
                     'password' => Hash::make($data['password']),
                 ]);
             }
+            NotificationUtility::sendFranchiseedNotification($user);
         }
         else {
             if (addon_is_activated('otp_system')){

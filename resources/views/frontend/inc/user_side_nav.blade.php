@@ -145,6 +145,18 @@
                                 <span class="aiz-side-nav-text">{{ translate('Wishlist') }}</span>
                             </a>
                         </li>
+                        @if(Auth::user()->user_type == 'partner')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('customer.franciesindex') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer.franciesindex'])}}">
+                                <i class="la la-user-o aiz-side-nav-icon"></i>
+                                <span class="aiz-side-nav-text">{{ translate('Customer') }}</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        
+
+                      
 
                       <!--   <li class="aiz-side-nav-item">
                             <a href="{{ route('compare') }}" class="aiz-side-nav-link {{ areActiveRoutes(['compare'])}}">

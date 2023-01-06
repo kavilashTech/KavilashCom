@@ -214,12 +214,14 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @if(Auth::user()->user_type != 'staff')
                             <div class="col-lg-1">
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input value="1" type="checkbox" name="colors_active" <?php if (count(json_decode($product->colors)) > 0) echo "checked"; ?> >
                                     <span></span>
                                 </label>
                             </div>
+                            @endif
                         </div>
 
                         <div class="form-group row gutters-5">
@@ -404,6 +406,7 @@
                             </div>
                             
                         </div>
+                        @if(Auth::user()->user_type != 'staff')
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">
                                 {{translate('External link')}}
@@ -422,6 +425,7 @@
                                 <small class="text-muted">{{translate('Leave it blank if you do not use external site link')}}</small>
                             </div>
                         </div>
+                        @endif
                         <br>
                         <div class="sku_combination" id="sku_combination">
 
@@ -450,7 +454,7 @@
 
                     </div>
                 </div>-->
-
+                @if(Auth::user()->user_type != 'staff')
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">{{translate('PDF Specification')}}</h5>
@@ -472,6 +476,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">{{translate('SEO Meta Tags')}}</h5>
@@ -514,7 +519,7 @@
             </div>
 
             <div class="col-lg-4">
-
+            @if(Auth::user()->user_type != 'staff')
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6" class="dropdown-toggle" data-toggle="collapse" data-target="#collapse_2">
@@ -571,6 +576,7 @@
                         @endif
                     </div>
                 </div>
+                @endif
 
                 <div class="card">
                     <div class="card-header">
@@ -657,6 +663,7 @@
                         @endif
                     </div>
                 </div>
+                @if(Auth::user()->user_type != 'staff')
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">{{translate('Featured')}}</h5>
@@ -771,7 +778,7 @@
                         </div>
                     </div>
                 </div>
-
+            @endif
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">{{translate('Estimate Shipping Time')}}</h5>
@@ -819,9 +826,9 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <select class="form-control aiz-selectpicker" name="tax_type[]">
-                                    <option value="amount" @if($tax_type == 'amount') selected @endif>
+                                    <!-- <option value="amount" @if($tax_type == 'amount') selected @endif>
                                         {{translate('Flat')}}
-                                    </option>
+                                    </option> -->
                                     <option value="percent" @if($tax_type == 'percent') selected @endif>
                                         {{translate('Percent')}}
                                     </option>

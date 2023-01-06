@@ -64,7 +64,7 @@
                                                 @endforeach
                                             @else
                                                 <li class="mb-2">
-                                                    <a class="text-reset fs-14 fw-600" href="{{ route('search') }}">
+                                                    <a class="text-reset fs-14 fw-600" href="{{ route('home') }}">
                                                         <i class="las la-angle-left"></i>
                                                         {{ translate('All Categories')}}
                                                     </a>

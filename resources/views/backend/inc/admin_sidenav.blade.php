@@ -408,7 +408,7 @@
                 @endif
 
                 <!-- Customers -->
-                @canany(['view_all_customers','view_classified_products','view_classified_packages'])
+                @canany(['view_all_customers','view_classified_products','view_classified_packages','move_franchisee'])
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-user-friends aiz-side-nav-icon"></i>
@@ -438,7 +438,39 @@
                                         </a>
                                     </li>
                                 @endcan
+                               
                             @endif
+                          
+                                @can('move_franchisee')
+                                    <li class="aiz-side-nav-item">
+                                        <a href="{{ route('move_franchisee.moveftanchisee') }}" class="aiz-side-nav-link {{ areActiveRoutes(['move_franchisee.moveftanchisee'])}}">
+                                            <span class="aiz-side-nav-text">{{ translate('Move Franchisee') }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                               
+                        </ul>
+                    </li>
+                @endcanany
+
+
+                   <!-- Customers -->
+                   @canany(['view_all_franchisee'])
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="las la-store aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{ translate('Franchisee') }}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+                        <ul class="aiz-side-nav-list level-2">
+                            @can('view_all_franchisee')
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{ route('franchisee.franchiseeindex') }}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{ translate('Franchisee list') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+                           
                         </ul>
                     </li>
                 @endcanany
