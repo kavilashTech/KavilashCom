@@ -551,7 +551,7 @@ class GenerateQuoteController extends Controller
                 'direction' => $direction,
                 'text_align' => $text_align,
                 'not_text_align' => $not_text_align
-            ], [], $config)->download('invoice-'.$id.'.pdf');
+            ], [], $config)->download('Quotation-'.$id.'.pdf');
         }
     }
 }
