@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{  translate('INVOICE') }}</title>
+    <title>{{  translate('Quotation') }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="UTF-8">
 	<style media="all">
@@ -127,11 +127,11 @@
 					@endphp
 						<tr class="">
 							<td>	
-								<span class="mr-2 ml-0">
+								<!-- <span class="mr-2 ml-0">
 									<img src="{{ uploaded_asset($product->thumbnail_img) }}"
 										class="img-fit size-60px rounded"
 										alt="{{ $product->getTranslation('name') }}">
-								</span><br>
+								</span><br> -->
 								<span class="d-block fs-14 opacity-60">{{ $product_name_with_choice }}</span>
 							</td>
 							<td>
