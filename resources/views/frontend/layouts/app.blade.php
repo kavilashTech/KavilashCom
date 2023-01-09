@@ -402,7 +402,8 @@
                 url: '{{ route("generate-quote.store") }}',
                 data: $('#option-choice-form').serializeArray(),
                 success: function(data){
-                    AIZ.plugins.notify('success', "Your item has been added to quotation <a href={{ route('quote-view') }}>View Quotation</a>");
+                    $('#quation_modal').modal('show');
+                    //AIZ.plugins.notify(' success', "Your item has been added to quotation <a href={{ route('quote-view') }}>View Quotation</a>");
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR?.responseJSON?.message){
@@ -522,7 +523,7 @@
                 AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the Cart.') }}");
                 return false;
             @endif
-            
+
             if(checkAddToCartValidity()) {
                 $('#addToCart-modal-body').html(null);
                 $('#addToCart').modal();

@@ -143,7 +143,7 @@
                                 </div>
                             </div>
                             @endif
-                            <hr>  
+                            <hr>
                             </hr>
                             <div class="row align-items-center">
                                 <!-- <div class="col-auto">
@@ -195,7 +195,7 @@
                                     </tbody>
                                 </table>
                             @else
-                               
+
                                 @if (home_price($detailedProduct) != home_discounted_price($detailedProduct))
                                     <div class="row no-gutters mt-3">
                                         <div class="col-sm-2">
@@ -492,7 +492,7 @@
                             </div>
                             @if($detailedProduct->returnable == 1)
                             <img src="{{ static_asset('assets/img/return_icon_green.jpg') }}">
-                            &nbsp;&nbsp;Returnable  
+                            &nbsp;&nbsp;Returnable
                             @endif
                             {{$detailedProduct->returnable_days}}
                         </div>
@@ -810,7 +810,7 @@
                                         <div class="form-group">
                                             <textarea class="form-control" rows="3" cols="40" name="question"
                                                 placeholder="{{ translate('Write your question here...') }}" style="resize: none;"></textarea>
-                                            
+
                                         </div>
                                         <button type="submit" class="btn btn-primary">{{ translate('Submit') }}</button>
                                     </form>
@@ -819,7 +819,7 @@
                                     $own_product_queries = Auth::user()->product_queries->where('product_id',$detailedProduct->id);
                                 @endphp
                                 @if ($own_product_queries->count() > 0)
-                                
+
                                     <div class="question-area my-4   mb-0 ml-3">
 
                                         <div class="border-bottom py-3">
@@ -871,7 +871,7 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                
+
                                 @endif
                             @endauth
 
@@ -889,6 +889,29 @@
 @endsection
 
 @section('modal')
+<div class="modal fade" id="quation_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size" role="document">
+            <div class="modal-content position-relative">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-600 h5">{{ translate('Any query about this product') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+               <span>Your item has been added to quotation <a view ="view_quote" href={{ route('quote-view') }} style="
+    color: green;
+    text-decoration: underline;
+    font-size: inherit;
+    font-size: 18px;
+    font-weight: 700;
+">View Quotation</a></span>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal fade" id="chat_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size" role="document">
@@ -1077,7 +1100,7 @@
                 $('.sku_main').hide();
             }
         });
-        
+
         // Pagination using ajax
         $(window).on('hashchange', function() {
             if (window.location.hash) {

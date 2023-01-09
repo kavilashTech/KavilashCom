@@ -15,25 +15,25 @@ class NotificationUtility
 {
 
     public static function sendFranchiseedNotification($user, $request = null)
-    {  
-       
-        
+    {
+        $status = ($user->user_type == 'partner' ? 'Franchisee' :'Customer' );
+
             $users = User::findMany([$user->id, \App\Models\User::where('user_type', 'admin')->first()->id]);
-        
+
 
         $order_notification = array();
         $order_notification['order_id'] = $user->name;
         $order_notification['order_code'] = $user->email;
         $order_notification['user_id'] = $user->user_id;
         $order_notification['seller_id'] = $user->seller_id;
-        $order_notification['status'] = 'New Franchisee';
+        $order_notification['status'] = $status;
 
         Notification::send($users, new OrderNotification($order_notification));
 
     }
-    
+
     public static function sendOrderPlacedNotification($order, $request = null)
-    {       
+    {
         //sends email to customer with the invoice pdf attached
         $array['view'] = 'emails.invoice';
         $array['subject'] = translate('A new order has been placed') . ' - ' . $order->code;
@@ -71,7 +71,7 @@ class NotificationUtility
     }
 
     public static function sendNotification($order, $order_status)
-    {        
+    {
         if ($order->seller_id == \App\Models\User::where('user_type', 'admin')->first()->id) {
             $users = User::findMany([$order->user->id, $order->seller_id]);
         } else {
@@ -89,7 +89,7 @@ class NotificationUtility
     }
 
     public static function sendFirebaseNotification($req)
-    {        
+    {
         $url = 'https://fcm.googleapis.com/fcm/send';
 
         $fields = array
