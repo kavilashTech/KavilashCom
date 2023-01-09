@@ -16,7 +16,10 @@ class PurchaseHistoryController extends Controller
      */
     public function index()
     {
-        $orders = Order::where('user_id', Auth::user()->id)->orderBy('code', 'desc')->paginate(9);
+        $orders = Order::whereHas('orderDetails' , function ($query) {
+            $query->where('id','>', 0);
+        })
+        ->where('user_id', Auth::user()->id)->orderBy('code', 'desc')->paginate(9);
         return view('frontend.user.purchase_history', compact('orders'));
     }
 
@@ -107,6 +110,46 @@ class PurchaseHistoryController extends Controller
     public function order_cancel($id)
     {
         $order = Order::where('id', $id)->where('user_id', auth()->user()->id)->first();
+        if($order && ($order->delivery_status == 'pending' && $order->payment_status == 'unpaid')) {
+            $order->delivery_status = 'cancelled';
+            $order->save();
+
+            flash(translate('Order has been canceled successfully'))->success();
+        } else {
+            flash(translate('Something went wrong'))->error();
+        }
+
+        return back();
+    }
+
+    public function purchase_history_franchise_index()
+    {
+        // $orders = Order::where('orders.franchisee_id', Auth::user()->id)
+        //         ->leftJoin('users', 'orders.user_id', '=', 'users.id')
+        //         ->orderBy('orders.code', 'desc')->paginate(9);
+        $orders = Order::select('orders.*', 'users.id as users_id','users.name as user_name')
+            ->whereHas('orderDetails' , function ($query) {
+                $query->where('id','>', 0);
+            })
+            ->where('orders.franchisee_id', Auth::user()->id)
+            ->leftJoin('users', 'orders.user_id', '=', 'users.id')
+            ->orderBy('orders.user_id', 'desc')->orderBy('orders.code', 'desc')->paginate(9);
+        return view('frontend.user.purchase_franchise_history', compact('orders'));
+    }
+    
+   
+    public function purchase_history_franchise_details($id)
+    {
+        $order = Order::findOrFail(decrypt($id));
+        $order->delivery_viewed = 1;
+        $order->payment_status_viewed = 1;
+        $order->save();
+        return view('frontend.user.order_details_customer', compact('order'));
+    }
+
+    public function order_cancel_franchise($id)
+    {
+        $order = Order::where('id', $id)->first();
         if($order && ($order->delivery_status == 'pending' && $order->payment_status == 'unpaid')) {
             $order->delivery_status = 'cancelled';
             $order->save();
