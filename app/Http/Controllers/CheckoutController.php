@@ -161,7 +161,11 @@ class CheckoutController extends Controller
             return redirect()->route('home');
         }
 
-        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
+        $shipping_info = Address::where(['id'=>$carts[0]['address_id'],'set_default'=>1])->first();
+        if(empty($shipping_info)){
+            $shipping_info = Address::where(['id'=>$carts[0]['address_id']])->first();
+        }
+        
         $total = 0;
         $tax = 0;
         $shipping = 0;
