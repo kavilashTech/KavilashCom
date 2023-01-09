@@ -426,14 +426,25 @@ class CartController extends Controller
         if(auth()->user() != null) {
             $userId = Auth::user()->id;
             $carts = Cart::where('user_id', $userId)->first();
+            $shippingAddress = "";
             if(!empty($carts) && !empty($carts->address_id)){
-                $shipping_info = Address::where('id', $carts->address_id)->first();
+                $shipping_info = Address::where(['id'=>$carts->address_id,'set_default'=>1])->first();
+                if(!empty($shipping_info)){
+                    $shippingAddress = $shipping_info;
+                }else{
+                    $shippingAddress = Address::where(['id'=>$carts->address_id])->first();
+                }
             }else{
-                $shipping_info = Address::where('user_id', $userId)->first();
+                $shipping_info = Address::where(['user_id'=>$userId,'set_default'=>1])->first();
+                if(!empty($shipping_info)){
+                    $shippingAddress = $shipping_info;
+                }else{
+                    $shippingAddress = Address::where(['user_id'=>$userId])->first();
+                }
             }
-            if(!empty($shipping_info)){
-                if(!empty($shipping_info->postal_code) && !empty($shipping_info->state_id)){
-                    if($shipping_info->state_id == $tamilnaduStateId) {   //35-Tamilnadu state id
+            if(!empty($shippingAddress)){
+                if(!empty($shippingAddress->postal_code) && !empty($shippingAddress->state_id)){
+                    if($shippingAddress->state_id == $tamilnaduStateId) {   //35-Tamilnadu state id
                         $userWithinTamilnadu = 1;
                     }else{
                         $userWithinTamilnadu = 2;
