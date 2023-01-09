@@ -242,7 +242,12 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
         Route::get('customerfornices', [CustomerController::class, 'franciesindex'])->name('customer.franciesindex');
         Route::post('customerfornices_register', [CustomerController::class, 'customerFranchiseeRegister'])->name('customer.franchiee_customer_register');
         
-     
+        // Purchase History Franchise
+        Route::controller(PurchaseHistoryController::class)->group(function () {
+            Route::get('/purchase_history_franchise/index', 'purchase_history_franchise_index')->name('purchase_history_franchise.index');
+            Route::get('/purchase_history_franchise/details/{id}', 'purchase_history_franchise_details')->name('purchase_history_franchise.details');
+            Route::get('/purchase_history_franchise/destroy/{id}', 'order_cancel_franchise')->name('purchase_history_franchise.destroy');
+        });
     });
     
     Route::get('/all-notifications', [NotificationController::class, 'index'])->name('all-notifications');

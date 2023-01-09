@@ -178,6 +178,7 @@ class OrderController extends Controller
             $order->payment_status_viewed = '0';
             $order->code = date('Ymd-His') . rand(10, 99);
             $order->date = strtotime('now');
+            $order->franchisee_id = Auth::user()->franchisee_id > 0 ? Auth::user()->franchisee_id : '' ;
             $order->save();
 
             $subtotal = 0;
