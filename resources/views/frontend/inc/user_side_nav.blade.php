@@ -146,18 +146,25 @@
                                 </a>
                             </li>
                         @endif
-                    
+                        @if(Auth::user()->user_type !== 'partner')
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('wishlists.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['wishlists.index'])}}">
                                 <i class="la la-heart-o aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">{{ translate('Wishlist') }}</span>
                             </a>
                         </li>
+                        @endif
                         @if(Auth::user()->user_type == 'partner')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('customer_list.franciesindex') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer_list.franciesindex'])}}">
+                                <i class="la la-user-o aiz-side-nav-icon"></i>
+                                <span class="aiz-side-nav-text">{{ translate('Customers') }}</span>
+                            </a>
+                        </li>
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('customer.franciesindex') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer.franciesindex'])}}">
                                 <i class="la la-user-o aiz-side-nav-icon"></i>
-                                <span class="aiz-side-nav-text">{{ translate('Customer') }}</span>
+                                <span class="aiz-side-nav-text">{{ translate('Add Customer') }}</span>
                             </a>
                         </li>
                         @endif
@@ -220,7 +227,7 @@
                     @endif
 
 
-                    @if (get_setting('wallet_system') == 1)
+                    @if (get_setting('wallet_system') == 1 && (Auth::user()->user_type !== 'partner'))
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('wallet.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['wallet.index'])}}">
                                 <i class="las la-dollar-sign aiz-side-nav-icon"></i>
@@ -229,7 +236,7 @@
                         </li>
                     @endif
 
-                    @if (addon_is_activated('club_point'))
+                    @if (addon_is_activated('club_point') && (Auth::user()->user_type !== 'partner'))
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('earnng_point_for_user') }}" class="aiz-side-nav-link {{ areActiveRoutes(['earnng_point_for_user'])}}">
                                 <i class="las la-dollar-sign aiz-side-nav-icon"></i>

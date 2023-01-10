@@ -51,6 +51,12 @@ class CustomerController extends Controller
     {
         return view('frontend.user.franchisee_customer');
     }
+    public function customerListindex(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $customers = \App\Models\user::where('franchisee_id', $user_id)->paginate(15);
+        return view('frontend.user.franchisee_customer_list', compact('customers'));
+    }
 
     protected function validator(array $data)
     {

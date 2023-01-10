@@ -1,4 +1,8 @@
+@if(Auth::user()->user_type == 'partner')
+<a href="javascript::void(0)" class="d-flex align-items-center text-reset" style="cursor: default">
+@else
 <a href="{{ route('wishlists.index') }}" class="d-flex align-items-center text-reset">
+@endif
     <i class="la la-heart-o la-2x opacity-80"></i>
     <span class="flex-grow-1 ml-1">
         @if(Auth::check())

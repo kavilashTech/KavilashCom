@@ -67,6 +67,15 @@
                     {{ $orders->links() }}
               	</div>
             </div>
+        @else
+        <div class="col-xxl-8 col-xl-10 mx-auto mt-2">
+            <div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
+                <div class="text-center p-3">
+                    <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                    <h3 class="h4 fw-700">{{ translate('No Records Available') }}</h3>
+                </div>
+            </div>
+        </div>
         @endif
     </div>
 @endsection

@@ -240,6 +240,7 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
     
     Route::controller(CustomerController::class)->group(function () {
         Route::get('customerfornices', [CustomerController::class, 'franciesindex'])->name('customer.franciesindex');
+        Route::get('customer_list', [CustomerController::class, 'customerListindex'])->name('customer_list.franciesindex');
         Route::post('customerfornices_register', [CustomerController::class, 'customerFranchiseeRegister'])->name('customer.franchiee_customer_register');
         
         // Purchase History Franchise

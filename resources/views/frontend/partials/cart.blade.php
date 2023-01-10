@@ -10,8 +10,13 @@ if (auth()->user() != null) {
 }
 
 @endphp
+@if(Auth::user()->user_type == 'partner')
+<a href="javascript::void(0)" class="d-flex align-items-center text-reset h-100" style="cursor: default">
+@else
 <a href="javascript:void(0)" class="d-flex align-items-center text-reset h-100" data-toggle="dropdown"
     data-display="static">
+@endif
+
     <i class="la la-shopping-cart la-2x opacity-80"></i>
     <span class="flex-grow-1 ml-1">
         @if (isset($cart) && count($cart) > 0)
